@@ -240,7 +240,7 @@
                             <tbody>
                                 <!-- صف منتج 1 -->
                                 <tr>
-                                    <td>
+                                    <td data-label="">
                                         <img src="https://via.placeholder.com/60" alt="برجر لحم" class="product-img-small" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                         <div class="product-img-placeholder" style="display: none;">
                                             <i class="fas fa-utensils"></i>
@@ -602,3 +602,151 @@
     </script>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ... الكود الحالي ...
+        
+        // تحسين الأداء: استخدام التمرير الافتراضي للجدول
+        const tableContainer = document.querySelector('.table-responsive');
+        let isScrolling;
+        
+        function debounce(func, delay) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+        
+        // تحسين الأداء: تأخير تطبيق الفلاتر أثناء الكتابة
+        searchInput.addEventListener('input', debounce(function() {
+            this.value = sanitizeInput(this.value);
+            applyFilters();
+        }, 300));
+        
+        // تحسين الأداء: تحميل الصور بشكل كسول
+        if ('IntersectionObserver' in window) {
+            const imgObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        const src = img.getAttribute('data-src');
+                        if (src) {
+                            img.src = src;
+                            img.removeAttribute('data-src');
+                        }
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.product-img-small').forEach(img => {
+                const currentSrc = img.src;
+                img.setAttribute('data-src', currentSrc);
+                img.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='; // صورة شفافة صغيرة
+                imgObserver.observe(img);
+            });
+        }
+        
+        // استخدام الدالة في البحث
+        searchInput.addEventListener('input', function() {
+            this.value = sanitizeInput(this.value);
+            applyFilters();
+        });
+        
+        // تحسين الأمان: التحقق من صحة معرفات المنتجات في الروابط
+        document.querySelectorAll('a[href^="product-edit.html"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const productId = new URLSearchParams(this.href.split('?')[1]).get('id');
+                if (!productId || isNaN(parseInt(productId))) {
+                    e.preventDefault();
+                    console.error('معرف المنتج غير صالح');
+                }
+            });
+        });
+        
+        // دالة تطبيق الفلاتر
+        function applyFilters() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const categoryValue = categoryFilter.value;
+            const statusValue = statusFilter.value;
+            
+            tableRows.forEach(row => {
+                const productName = row.cells[1].textContent.toLowerCase();
+                const categoryName = row.cells[2].textContent;
+                const statusElement = row.cells[5].querySelector('.status-badge');
+                const statusClass = statusElement ? statusElement.classList[1] : '';
+                const statusName = statusElement ? statusElement.textContent.trim() : '';
+                
+                // تحقق من تطابق البحث
+                const matchesSearch = searchTerm === '' || productName.includes(searchTerm);
+                
+                // تحقق من تطابق التصنيف
+                let matchesCategory = true;
+                if (categoryValue) {
+                    // تحويل قيمة التصنيف إلى اسم التصنيف
+                    const categoryMap = {
+                        '1': 'وجبات رئيسية',
+                        '2': 'مقبلات',
+                        '3': 'حلويات',
+                        '4': 'مشروبات'
+                    };
+                    matchesCategory = categoryMap[categoryValue] === categoryName;
+                }
+                
+                // تحقق من تطابق الحالة
+                let matchesStatus = true;
+                if (statusValue) {
+                    // تحويل قيمة الحالة إلى اسم الحالة أو الصنف
+                    matchesStatus = (statusValue === 'published' && statusClass === 'status-published') ||
+                                   (statusValue === 'inactive' && statusClass === 'status-inactive') ||
+                                   (statusValue === 'archived' && statusClass === 'status-archived');
+                }
+                
+                // إظهار أو إخفاء الصف بناءً على نتائج الفلترة
+                if (matchesSearch && matchesCategory && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // تحديث عرض ترقيم الصفحات بناءً على عدد النتائج المعروضة
+            updatePagination();
+        }
+        
+        // دالة تحديث ترقيم الصفحات
+        function updatePagination() {
+            const visibleRows = document.querySelectorAll('table tbody tr:not([style*="display: none"])');
+            const noResultsMessage = document.getElementById('no-results-message');
+            
+            if (visibleRows.length === 0 && !noResultsMessage) {
+                const tbody = document.querySelector('table tbody');
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.id = 'no-results-message';
+                noResultsRow.innerHTML = `<td colspan="7" class="text-center py-4">لا توجد نتائج مطابقة للبحث</td>`;
+                tbody.appendChild(noResultsRow);
+            } else if (visibleRows.length > 0 && noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
+        
+        // إضافة مستمعي الأحداث للفلاتر
+        searchInput.addEventListener('input', applyFilters);
+        categoryFilter.addEventListener('change', applyFilters);
+        statusFilter.addEventListener('change', applyFilters);
+        
+        // تحسين وظيفة إعادة تعيين الفلاتر
+        resetFiltersBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            categoryFilter.value = '';
+            statusFilter.value = '';
+            applyFilters();
+        });
+        
+        // ... باقي الكود الحالي ...
+    });
+</script>
