@@ -99,38 +99,6 @@
             color: white;
         }
         
-        .product-image-container {
-            height: 200px;
-            border: 2px dashed #dee2e6;
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #adb5bd;
-            cursor: pointer;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .product-image-container:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(13, 110, 253, 0.05);
-        }
-        
-        .product-image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        
-        .image-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
         .section-title {
             font-weight: 600;
             color: #444;
@@ -168,12 +136,6 @@
             height: 150px;
         }
         
-        /* تحسين حقل الوصف */
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        
         /* تحسين الأزرار الصغيرة */
         .btn-sm {
             padding: 0.25rem 0.5rem;
@@ -200,28 +162,25 @@
                     <div class="card mb-4">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">صفحة اضافة مكون جديد</h4>
-                            <button type="button" class="btn btn-outline-secondary" id="reset-category-btn">
+                            <button type="button" class="btn btn-outline-secondary" id="reset-component-btn">
                                 <i class="fas fa-redo-alt me-1"></i> إعادة تعيين
                             </button>
                         </div>
                     </div>
                     
-                    <!-- نموذج التصنيف -->
-                    <form id="category-form">
+                    <!-- نموذج المكون -->
+                    <form id="component-form">
                         <div class="row">
                             <!-- القسم الأول (4 أعمدة - ثلث الصفحة) -->
                             <div class="col-md-4">
-                                <!-- تم حذف جدول "رمز التصنيف" من هنا -->
-                                
                                 <!-- الحاله -->
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-tags me-2"></i> الحاله
                                     </div>
                                     <div class="card-body">
-                                        <!-- تم إزالة div.mt-4 لتقليل المسافة -->
-                                        <label for="category-status" class="form-label">حالة التصنيف</label>
-                                        <select class="form-select" id="category-status">
+                                        <label for="component-status" class="form-label">حالة المكون</label>
+                                        <select class="form-select" id="component-status">
                                             <option value="published" selected>منشور</option>
                                             <option value="inactive">غير مفعل</option>
                                             <option value="archived">مؤرشفة</option>
@@ -232,7 +191,7 @@
                             
                             <!-- القسم الثاني (8 أعمدة - ثلثي الصفحة) -->
                             <div class="col-md-8">
-                                <!-- معلومات التصنيف الأساسية -->
+                                <!-- معلومات المكون الأساسية -->
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-info-circle me-2"></i> معلومات المكون الأساسية
@@ -240,15 +199,14 @@
                                     <div class="card-body">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                <label for="category-name-ar" class="form-label required-field">اسم المكون (AR)</label>
-                                                <input type="text" class="form-control" id="category-name-ar" placeholder="حجم كبير" required>
+                                                <label for="component-name-ar" class="form-label required-field">اسم المكون (AR)</label>
+                                                <input type="text" class="form-control" id="component-name-ar" placeholder="حجم كبير" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="category-name-en" class="form-label required-field">اسم المكون (EN)</label>
-                                                <input type="text" class="form-control" id="category-name-en" placeholder="large size" required>
+                                                <label for="component-name-en" class="form-label required-field">اسم المكون (EN)</label>
+                                                <input type="text" class="form-control" id="component-name-en" placeholder="large size" required>
                                             </div>
                                         </div>
-                                        <!-- تم إزالة خانات وصف التصنيف باللغتين العربية والإنجليزية -->
                                     </div>
                                 </div>
                             </div>
@@ -259,8 +217,8 @@
                             <button type="button" class="btn btn-secondary">
                                 <i class="fas fa-times me-1"></i> إلغاء
                             </button>
-                            <button type="button" class="btn btn-primary" id="save-category-btn">
-                                <i class="fas fa-save me-1"></i> حفظ التصنيف
+                            <button type="button" class="btn btn-primary" id="save-component-btn">
+                                <i class="fas fa-save me-1"></i> حفظ المكون
                             </button>
                         </div>
                     </form>
@@ -275,10 +233,32 @@
     <!-- Custom JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // إضافة مستمعي الأحداث للصفحة
+            // إضافة مستمع الأحداث لزر إعادة التعيين
+            const resetButton = document.getElementById('reset-component-btn');
+            if (resetButton) {
+                resetButton.addEventListener('click', function() {
+                    document.getElementById('component-form').reset();
+                });
+            }
+            
+            // إضافة مستمع الأحداث لزر الحفظ
+            const saveButton = document.getElementById('save-component-btn');
+            if (saveButton) {
+                saveButton.addEventListener('click', function() {
+                    // التحقق من صحة النموذج
+                    const form = document.getElementById('component-form');
+                    if (form.checkValidity()) {
+                        // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
+                        alert('تم حفظ المكون بنجاح!');
+                    } else {
+                        // تفعيل التحقق من الصحة في النموذج
+                        form.classList.add('was-validated');
+                    }
+                });
+            }
         });
     </script>
     
-    <script src="categories-new.js"></script>
+    <script src="components.js"></script>
 </body>
 </html>
