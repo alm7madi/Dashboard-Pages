@@ -4,18 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صفحة اضافة منتج جديد</title>
-    
-    <!-- Google Font - Cairo -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap RTL CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --primary-color: #0d6efd;
@@ -24,26 +17,22 @@
             --light-bg: #f8f9fa;
             --border-radius: 8px;
         }
-        
         body {
             font-family: 'Cairo', sans-serif;
             background-color: #f0f2f5;
             color: #333;
         }
-        
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
-        
         .card {
             border: none;
             border-radius: var(--border-radius);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             margin-bottom: 1.5rem;
         }
-        
         .card-header {
             background-color: #fff;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -51,54 +40,44 @@
             font-weight: 600;
             color: var(--primary-color);
         }
-        
         .card-body {
             padding: 1.5rem;
         }
-        
         .form-label {
             font-weight: 500;
             margin-bottom: 0.5rem;
             color: #555;
         }
-        
         .form-control, .form-select {
             border-radius: var(--border-radius);
             padding: 0.6rem 1rem;
             border: 1px solid #ddd;
         }
-        
         .form-control:focus, .form-select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
         }
-        
         .btn {
             border-radius: var(--border-radius);
             padding: 0.5rem 1.25rem;
             font-weight: 500;
         }
-        
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
-        
         .btn-primary:hover {
             background-color: #0b5ed7;
             border-color: #0a58ca;
         }
-        
         .btn-outline-primary {
             color: var(--primary-color);
             border-color: var(--primary-color);
         }
-        
         .btn-outline-primary:hover {
             background-color: var(--primary-color);
             color: white;
         }
-        
         .product-image-container {
             height: 200px;
             border: 2px dashed #dee2e6;
@@ -111,26 +90,23 @@
             cursor: pointer;
             overflow: hidden;
             transition: all 0.3s ease;
+            background: #fff;
         }
-        
         .product-image-container:hover {
             border-color: var(--primary-color);
             background-color: rgba(13, 110, 253, 0.05);
         }
-        
         .product-image-container img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
         }
-        
         .image-actions {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 10px;
         }
-        
         .section-title {
             font-weight: 600;
             color: #444;
@@ -138,7 +114,6 @@
             padding-bottom: 0.5rem;
             border-bottom: 1px solid #eee;
         }
-        
         .option-card, .removal-card {
             border: 1px solid #eee;
             border-radius: var(--border-radius);
@@ -147,47 +122,44 @@
             background-color: #fff;
             transition: all 0.3s ease;
         }
-        
         .option-card:hover, .removal-card:hover {
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
-        
         .required-field::after {
             content: "*";
             color: #dc3545;
             margin-right: 4px;
         }
-        
         .price-display {
             font-weight: 600;
             color: var(--success-color);
         }
-        
-        /* تحسين القوائم المنسدلة */
         select[multiple] {
             height: 150px;
         }
-        
-        /* تحسين حقل الوصف */
         textarea {
             resize: vertical;
             min-height: 100px;
         }
-        
-        /* تحسين الأزرار الصغيرة */
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
         }
-        
-        /* تأثيرات حركية */
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
-        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+        /* Custom for allergens badge list */
+        #selected-allergens-list {
+            margin-top: 0.5rem;
+            min-height: 2rem;
+        }
+        .allergen-badge {
+            margin-left: 0.25rem;
+            margin-bottom: 0.25rem;
         }
     </style>
 </head>
@@ -196,20 +168,17 @@
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <!-- بطاقة العنوان -->
                     <div class="card mb-4">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">صفحة اضافة منتج جديد</h4>
-                            <button type="button" class="btn btn-outline-secondary" id="reset-product-btn">
+                            <button type="button" class="btn btn-outline-secondary" id="reset-product-btn" aria-label="إعادة تعيين النموذج">
                                 <i class="fas fa-redo-alt me-1"></i> إعادة تعيين
                             </button>
                         </div>
                     </div>
-                    
-                    <!-- نموذج المنتج -->
-                    <form id="product-form">
+                    <form id="product-form" autocomplete="off" novalidate>
                         <div class="row">
-                            <!-- القسم الأول (4 أعمدة - ثلث الصفحة) -->
+                            <!-- القسم الأول -->
                             <div class="col-md-4">
                                 <!-- صورة المنتج -->
                                 <div class="card mb-4">
@@ -219,8 +188,8 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="file" id="product-image-upload" class="d-none" accept="image/*">
-                                                <div class="product-image-container" onclick="document.getElementById('product-image-upload').click()">
+                                                <input type="file" id="product-image-upload" class="d-none" accept="image/*" aria-label="تحميل صورة المنتج">
+                                                <div class="product-image-container" id="product-image-preview" tabindex="0" role="button" aria-label="اختر صورة المنتج">
                                                     <i class="fas fa-cloud-upload-alt"></i>
                                                 </div>
                                                 <div class="image-actions mt-3">
@@ -235,7 +204,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <!-- خيارات المنتج -->
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -245,14 +213,14 @@
                                         <div class="mb-3">
                                             <label for="product-category" class="form-label required-field">التصنيف</label>
                                             <div class="input-group">
-                                                <select class="form-select" id="product-category" required>
+                                                <select class="form-select" id="product-category" required aria-required="true">
                                                     <option value="" selected disabled>اختر التصنيف</option>
                                                     <option value="1">وجبات رئيسية</option>
                                                     <option value="2">مقبلات</option>
                                                     <option value="3">حلويات</option>
                                                     <option value="4">مشروبات</option>
                                                 </select>
-                                                <button class="btn btn-outline-primary" type="button" id="add-category-btn">
+                                                <button class="btn btn-outline-primary" type="button" id="add-category-btn" aria-label="إضافة تصنيف">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </div>
@@ -295,11 +263,11 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="product-name-ar" class="form-label required-field">اسم المنتج (AR)</label>
-                                                <input type="text" class="form-control" id="product-name-ar" placeholder="برجر لحم" required>
+                                                <input type="text" class="form-control" id="product-name-ar" placeholder="برجر لحم" required aria-required="true">
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="product-name-en" class="form-label required-field">اسم المنتج (EN)</label>
-                                                <input type="text" class="form-control" id="product-name-en" placeholder="Beef Burger" required>
+                                                <input type="text" class="form-control" id="product-name-en" placeholder="Beef Burger" required aria-required="true">
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -312,7 +280,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <!-- البطاقة الصحية -->
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -350,7 +317,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <!-- مسببات الحساسية -->
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -370,111 +336,17 @@
                                                                 <button type="button" class="btn btn-sm btn-outline-secondary" id="deselect-all-allergens">إلغاء التحديد</button>
                                                             </div>
                                                         </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="gluten" id="allergen-gluten">
-                                                                <label class="form-check-label" for="allergen-gluten">
-                                                                    الحبوب التي تحتوي على مادة الجلوتين
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="peanuts" id="allergen-peanuts">
-                                                                <label class="form-check-label" for="allergen-peanuts">
-                                                                    الفول السوداني ومنتجاته
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="milk" id="allergen-milk">
-                                                                <label class="form-check-label" for="allergen-milk">
-                                                                    الحليب ومنتجاته (التي تحتوي على لاكتوز)
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="eggs" id="allergen-eggs">
-                                                                <label class="form-check-label" for="allergen-eggs">
-                                                                    البيض ومنتجاته
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="mustard" id="allergen-mustard">
-                                                                <label class="form-check-label" for="allergen-mustard">
-                                                                    الخردل ومنتجاته
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="celery" id="allergen-celery">
-                                                                <label class="form-check-label" for="allergen-celery">
-                                                                    الكرفس ومنتجاته
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="fish" id="allergen-fish">
-                                                                <label class="form-check-label" for="allergen-fish">
-                                                                    الأسماك ومنتجاتها
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="crustaceans" id="allergen-crustaceans">
-                                                                <label class="form-check-label" for="allergen-crustaceans">
-                                                                    القشريات ومنتجاتها
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="nuts" id="allergen-nuts">
-                                                                <label class="form-check-label" for="allergen-nuts">
-                                                                    المكسرات ومنتجاتها
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="sulphites" id="allergen-sulphites">
-                                                                <label class="form-check-label" for="allergen-sulphites">
-                                                                    الكبريتات بتركيز 10 جزء في المليون أو أكثر
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="sesame" id="allergen-sesame">
-                                                                <label class="form-check-label" for="allergen-sesame">
-                                                                    بذور السمسم ومنتجاتها
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="molluscs" id="allergen-molluscs">
-                                                                <label class="form-check-label" for="allergen-molluscs">
-                                                                    الرخويات ومنتجاتها
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="lupin" id="allergen-lupin">
-                                                                <label class="form-check-label" for="allergen-lupin">
-                                                                    لوبين (الترمس) ومنتجاتها
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                        <li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="gluten" id="allergen-gluten"><label class="form-check-label" for="allergen-gluten">الحبوب التي تحتوي على مادة الجلوتين</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="peanuts" id="allergen-peanuts"><label class="form-check-label" for="allergen-peanuts">الفول السوداني ومنتجاته</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="milk" id="allergen-milk"><label class="form-check-label" for="allergen-milk">الحليب ومنتجاته (التي تحتوي على لاكتوز)</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="eggs" id="allergen-eggs"><label class="form-check-label" for="allergen-eggs">البيض ومنتجاته</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="mustard" id="allergen-mustard"><label class="form-check-label" for="allergen-mustard">الخردل ومنتجاته</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="celery" id="allergen-celery"><label class="form-check-label" for="allergen-celery">الكرفس ومنتجاته</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="fish" id="allergen-fish"><label class="form-check-label" for="allergen-fish">الأسماك ومنتجاتها</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="crustaceans" id="allergen-crustaceans"><label class="form-check-label" for="allergen-crustaceans">القشريات ومنتجاتها</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="nuts" id="allergen-nuts"><label class="form-check-label" for="allergen-nuts">المكسرات ومنتجاتها</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="sulphites" id="allergen-sulphites"><label class="form-check-label" for="allergen-sulphites">الكبريتات بتركيز 10 جزء في المليون أو أكثر</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="sesame" id
                                                             <div class="form-check">
                                                                 <input class="form-check-input allergen-checkbox" type="checkbox" value="soy" id="allergen-soy">
                                                                 <label class="form-check-label" for="allergen-soy">
@@ -556,27 +428,26 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="tax-rate" class="form-label">نسبة الضريبة</label>
+                                                <label for="tax-rate" class="form-label required-field">نسبة الضريبة (%)</label>
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control" id="tax-rate" min="0" max="100" step="1" value="15">
+                                                    <input type="number" class="form-control" id="tax-rate" min="0" step="0.01" placeholder="0" required>
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="final-price-display" class="form-text price-display mt-2">
+                                        <div class="alert alert-info mt-3" id="final-price-display">
                                             السعر المعروض في القائمة سيكون 0.00 ريال شامل الضريبة
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
                         <!-- أزرار الحفظ والإلغاء -->
                         <div class="d-flex justify-content-end gap-2 mt-4">
-                            <button type="button" class="btn btn-secondary">
+                            <button type="button" class="btn btn-secondary" id="cancel-product-btn">
                                 <i class="fas fa-times me-1"></i> إلغاء
                             </button>
-                            <button type="button" class="btn btn-primary" id="save-product-btn">
+                            <button type="submit" class="btn btn-primary" id="save-product-btn">
                                 <i class="fas fa-save me-1"></i> حفظ المنتج
                             </button>
                         </div>
@@ -585,16 +456,116 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmModalLabel">تأكيد العملية</h5>
+            <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+          </div>
+          <div class="modal-body" id="confirmModalBody">
+            <!-- سيتم تعبئة النص برمجياً -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            <button type="button" class="btn btn-primary" id="confirmModalYesBtn">تأكيد</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- دمج ملف JavaScript -->
     <script>
-    // وظائف إضافة الاختيارات والإضافات
     document.addEventListener('DOMContentLoaded', function() {
-        // إضافة اختيار جديد
+        // صورة المنتج: عرض المعاينة وتغيير/حذف الصورة
+        const imageInput = document.getElementById('product-image-upload');
+        const imagePreview = document.querySelector('.product-image-container');
+        const changeImageBtn = document.getElementById('change-image-btn');
+        const removeImageBtn = document.getElementById('remove-image-btn');
+        let imageDataUrl = '';
+
+        function showImagePreview(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imageDataUrl = e.target.result;
+                imagePreview.innerHTML = `<img src="${imageDataUrl}" alt="صورة المنتج">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                showImagePreview(this.files[0]);
+            }
+        });
+
+        imagePreview.addEventListener('click', function() {
+            imageInput.click();
+        });
+
+        changeImageBtn.addEventListener('click', function() {
+            imageInput.click();
+        });
+
+        removeImageBtn.addEventListener('click', function() {
+            imageInput.value = '';
+            imageDataUrl = '';
+            imagePreview.innerHTML = `<i class="fas fa-cloud-upload-alt"></i>`;
+        });
+
+        // إعادة تعيين النموذج
+        document.getElementById('reset-product-btn').addEventListener('click', function() {
+            document.getElementById('product-form').reset();
+            imagePreview.innerHTML = `<i class="fas fa-cloud-upload-alt"></i>`;
+            document.getElementById('selected-allergens').textContent = 'لم يتم تحديد أي مسببات للحساسية';
+            document.getElementById('options-container').innerHTML = '';
+            document.getElementById('addons-container').innerHTML = '';
+            document.getElementById('removals-container').innerHTML = '';
+        });
+
+        // إلغاء (نفس إعادة التعيين)
+        document.getElementById('cancel-product-btn').addEventListener('click', function() {
+            document.getElementById('reset-product-btn').click();
+        });
+
+        // تحديث نص مسببات الحساسية المحددة
+        function updateSelectedAllergensText() {
+            const selectedCheckboxes = document.querySelectorAll('.allergen-checkbox:checked');
+            const selectedAllergensText = document.getElementById('selected-allergens');
+            if (selectedCheckboxes.length > 0) {
+                const allergenNames = Array.from(selectedCheckboxes).map(checkbox =>
+                    checkbox.nextElementSibling.textContent.trim()
+                );
+                if (allergenNames.length <= 3) {
+                    selectedAllergensText.textContent = `المسببات المحددة: ${allergenNames.join('، ')}`;
+                } else {
+                    const firstThree = allergenNames.slice(0, 3);
+                    const remaining = allergenNames.length - 3;
+                    selectedAllergensText.textContent = `المسببات المحددة: ${firstThree.join('، ')} و${remaining} أخرى`;
+                }
+            } else {
+                selectedAllergensText.textContent = 'لم يتم تحديد أي مسببات للحساسية';
+            }
+        }
+
+        // تحديد الكل/إلغاء التحديد
+        document.getElementById('select-all-allergens').addEventListener('click', function() {
+            document.querySelectorAll('.allergen-checkbox').forEach(cb => cb.checked = true);
+            updateSelectedAllergensText();
+        });
+        document.getElementById('deselect-all-allergens').addEventListener('click', function() {
+            document.querySelectorAll('.allergen-checkbox').forEach(cb => cb.checked = false);
+            updateSelectedAllergensText();
+        });
+        document.querySelectorAll('.allergen-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateSelectedAllergensText);
+        });
+
+        // إضافة اختيار/إضافة/إزالة (نفس الكود السابق)
         document.getElementById('add-option-btn').addEventListener('click', function() {
             const optionsContainer = document.getElementById('options-container');
             const optionId = 'option-' + Date.now();
-            
             const optionHTML = `
                 <div class="option-card mb-3 fade-in" id="${optionId}">
                     <div class="row align-items-center">
@@ -622,20 +593,15 @@
                     </div>
                 </div>
             `;
-            
             optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
-            
-            // إضافة مستمع حدث لزر الحذف
             document.querySelector(`#${optionId} .delete-option-btn`).addEventListener('click', function() {
                 document.getElementById(optionId).remove();
             });
         });
-        
-        // إضافة عنصر جديد (إضافة)
+
         document.getElementById('add-addon-btn').addEventListener('click', function() {
             const addonsContainer = document.getElementById('addons-container');
             const addonId = 'addon-' + Date.now();
-            
             const addonHTML = `
                 <div class="option-card mb-3 fade-in" id="${addonId}">
                     <div class="row align-items-center">
@@ -663,20 +629,15 @@
                     </div>
                 </div>
             `;
-            
             addonsContainer.insertAdjacentHTML('beforeend', addonHTML);
-            
-            // إضافة مستمع حدث لزر الحذف
             document.querySelector(`#${addonId} .delete-addon-btn`).addEventListener('click', function() {
                 document.getElementById(addonId).remove();
             });
         });
-        
-        // إضافة إزالة جديدة
+
         document.getElementById('add-removal-btn').addEventListener('click', function() {
             const removalsContainer = document.getElementById('removals-container');
             const removalId = 'removal-' + Date.now();
-            
             const removalHTML = `
                 <div class="removal-card mb-3 fade-in" id="${removalId}">
                     <div class="row align-items-center">
@@ -691,107 +652,70 @@
                     </div>
                 </div>
             `;
-            
             removalsContainer.insertAdjacentHTML('beforeend', removalHTML);
-            
-            // إضافة مستمع حدث لزر الحذف
             document.querySelector(`#${removalId} .delete-removal-btn`).addEventListener('click', function() {
                 document.getElementById(removalId).remove();
             });
         });
-        
-        // إضافة مسببات الحساسية المحددة
-        document.getElementById('allergens-dropdown').addEventListener('click', function(e) {
-            e.stopPropagation(); // منع إغلاق القائمة المنسدلة عند النقر عليها
-        });
-        
-        // إضافة وظائف أزرار تحديد الكل وإلغاء التحديد
-        document.getElementById('select-all-allergens').addEventListener('click', function() {
-            const allergenCheckboxes = document.querySelectorAll('.allergen-checkbox');
-            allergenCheckboxes.forEach(checkbox => {
-                checkbox.checked = true;
-            });
-            
-            // تحديث النص ليعرض أسماء مسببات الحساسية المحددة
-            updateSelectedAllergensText();
-        });
-        
-        document.getElementById('deselect-all-allergens').addEventListener('click', function() {
-            const allergenCheckboxes = document.querySelectorAll('.allergen-checkbox');
-            allergenCheckboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            
-            // تحديث النص عند إلغاء التحديد
-            const selectedAllergensText = document.getElementById('selected-allergens');
-            selectedAllergensText.textContent = 'لم يتم تحديد أي مسببات للحساسية';
-        });
-        
-        // وظيفة لتحديث نص مسببات الحساسية المحددة
-        function updateSelectedAllergensText() {
-            const selectedCheckboxes = document.querySelectorAll('.allergen-checkbox:checked');
-            const selectedAllergensText = document.getElementById('selected-allergens');
-            
-            if (selectedCheckboxes.length === 0) {
-                selectedAllergensText.textContent = 'لم يتم تحديد أي مسببات للحساسية';
-            } else {
-                const allergenNames = Array.from(selectedCheckboxes).map(checkbox => {
-                    return checkbox.nextElementSibling.textContent.trim();
-                });
-                selectedAllergensText.textContent = 'تم تحديد: ' + allergenNames.join('، ');
-            }
+
+        // تحديث السعر النهائي مع الضريبة
+        function updateFinalPrice() {
+            const basePrice = parseFloat(document.getElementById('base-price').value) || 0;
+            const taxRate = parseFloat(document.getElementById('tax-rate').value) || 0;
+            const finalPrice = basePrice * (1 + taxRate / 100);
+            document.getElementById('final-price-display').textContent =
+                `السعر المعروض في القائمة سيكون ${finalPrice.toFixed(2)} ريال شامل الضريبة`;
         }
-        
-        // إضافة مستمع حدث لكل مربع اختيار لتحديث النص عند التغيير
-        document.querySelectorAll('.allergen-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', updateSelectedAllergensText);
+        document.getElementById('base-price').addEventListener('input', updateFinalPrice);
+        document.getElementById('tax-rate').addEventListener('input', updateFinalPrice);
+
+        // منع إرسال النموذج الافتراضي (للتجربة فقط)
+        document.getElementById('product-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('تم حفظ المنتج (محاكاة)');
         });
-        
-        // إضافة مستمع حدث لزر إضافة مسببات الحساسية
-        document.getElementById('add-allergens-btn').addEventListener('click', function() {
-            const selectedCheckboxes = document.querySelectorAll('.allergen-checkbox:checked');
-            const allergensContainer = document.getElementById('selected-allergens-container');
-            
-            // إضافة كل مسبب حساسية محدد كعنصر منفصل
-            selectedCheckboxes.forEach(checkbox => {
-                const allergenId = 'allergen-item-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-                const allergenName = checkbox.nextElementSibling.textContent.trim();
-                const allergenValue = checkbox.value;
-                
-                const allergenHTML = `
-                    <div class="allergen-item mb-2 fade-in" id="${allergenId}">
-                        <div class="d-flex align-items-center">
-                            <span class="badge bg-info me-2">${allergenName}</span>
-                            <button type="button" class="btn btn-sm btn-outline-danger delete-allergen-btn" data-allergen-id="${allergenId}">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            <input type="hidden" name="selected-allergens[]" value="${allergenValue}">
-                        </div>
-                    </div>
-                `;
-                
-                // تحقق مما إذا كان مسبب الحساسية موجود بالفعل
-                const existingAllergen = document.querySelector(`input[name="selected-allergens[]"][value="${allergenValue}"]`);
-                if (!existingAllergen) {
-                    allergensContainer.insertAdjacentHTML('beforeend', allergenHTML);
-                    
-                    // إضافة مستمع حدث لزر الحذف
-                    document.querySelector(`#${allergenId} .delete-allergen-btn`).addEventListener('click', function() {
-                        document.getElementById(allergenId).remove();
-                    });
-                }
-            });
-            
-            // إغلاق القائمة المنسدلة بعد الإضافة
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-            const dropdownToggle = document.getElementById('allergens-dropdown');
-            dropdownToggle.classList.remove('show');
-            dropdownMenu.classList.remove('show');
+
+        // Confirmation Modal Logic
+        let confirmAction = null;
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        const confirmModalBody = document.getElementById('confirmModalBody');
+        const confirmModalYesBtn = document.getElementById('confirmModalYesBtn');
+
+        // Save Product Button
+        document.getElementById('save-product-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            confirmModalBody.textContent = 'هل أنت متأكد أنك تريد حفظ المنتج؟';
+            confirmAction = 'save';
+            confirmModal.show();
+        });
+
+        // Cancel Product Button
+        document.getElementById('cancel-product-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            confirmModalBody.textContent = 'هل أنت متأكد أنك تريد إلغاء العملية؟ سيتم فقدان جميع البيانات غير المحفوظة.';
+            confirmAction = 'cancel';
+            confirmModal.show();
+        });
+
+        // Modal Confirm Button
+        confirmModalYesBtn.addEventListener('click', function() {
+            if (confirmAction === 'save') {
+                // Submit the form (simulate submit)
+                // You can replace this with actual form submission logic
+                confirmModal.hide();
+                setTimeout(function() {
+                    // alert('تم حفظ المنتج (محاكاة)'); // <--- Removed as requested
+                    // document.getElementById('product-form').submit(); // Uncomment for real submit
+                }, 200);
+            } else if (confirmAction === 'cancel') {
+                confirmModal.hide();
+                setTimeout(function() {
+                    document.getElementById('reset-product-btn').click();
+                }, 200);
+            }
         });
     });
     </script>
-    
-    <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
