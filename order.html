@@ -707,6 +707,26 @@
         </div>
     </div>
 
+    <!-- نافذة تأكيد إكمال الطلب -->
+    <div class="modal fade" id="confirmCompleteModal" tabindex="-1" aria-labelledby="confirmCompleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmCompleteModalLabel">تأكيد إكمال الطلب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <div class="modal-body">
+                    <p>هل أنت متأكد من إكمال الطلب رقم <span id="orderIdToComplete"></span>؟</p>
+                    <p>بعد الإكمال، سيتم نقل الطلب إلى قائمة الطلبات المكتملة وإشعار العميل بذلك.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-success" id="confirmCompleteBtn">تأكيد الإكمال</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -717,32 +737,158 @@
             const orderIdToAccept = document.getElementById('orderIdToAccept');
             const confirmAcceptBtn = document.getElementById('confirmAcceptBtn');
             
-            let currentOrderId = '';
+            const confirmCompleteModal = document.getElementById('confirmCompleteModal');
+            const orderIdToComplete = document.getElementById('orderIdToComplete');
+            const confirmCompleteBtn = document.getElementById('confirmCompleteBtn');
             
-            // عند فتح النافذة المنبثقة
+            let currentOrderId = '';
+            let currentOrderCard = null;
+            
+            // عند فتح نافذة تأكيد القبول
             confirmAcceptModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
                 currentOrderId = button.getAttribute('data-order-id');
                 orderIdToAccept.textContent = currentOrderId;
+                
+                // حفظ بطاقة الطلب الحالية للتعديل عليها لاحقاً
+                currentOrderCard = button.closest('.order-card');
             });
             
             // عند النقر على زر تأكيد القبول
             confirmAcceptBtn.addEventListener('click', function() {
-                // هنا يمكنك إضافة الكود الخاص بمعالجة قبول الطلب
-                console.log('تم قبول الطلب رقم: ' + currentOrderId);
-                
                 // إغلاق النافذة المنبثقة
                 const modal = bootstrap.Modal.getInstance(confirmAcceptModal);
                 modal.hide();
                 
-                // يمكنك هنا إضافة كود لتحديث حالة الطلب في واجهة المستخدم
-                // على سبيل المثال: تغيير لون البطاقة وتحديث النص
-                
-                // مثال على تحديث واجهة المستخدم (يمكنك تعديله حسب احتياجاتك)
-                alert('تم قبول الطلب بنجاح!');
-                // يمكنك استبدال السطر السابق بتحديث فعلي للواجهة أو إعادة تحميل الصفحة
+                // تحدية الطلب في واجهة المستخدم
+                if (currentOrderCard) {
+                    // تغيير لون البطاقة إلى لون "يجهز"
+                    currentOrderCard.classList.remove('order-new');
+                    currentOrderCard.classList.add('order-processing');
+                    
+                    // تحديث شارة الحالة
+                    const statusBadge = currentOrderCard.querySelector('.status-badge');
+                    if (statusBadge) {
+                        statusBadge.classList.remove('status-new');
+                        statusBadge.classList.add('status-processing');
+                        statusBadge.textContent = 'يجهز';
+                    }
+                    
+                    // تحديث أزرار الإجراءات
+                    const cardFooter = currentOrderCard.querySelector('.card-footer');
+                    if (cardFooter) {
+                        const actionButtons = cardFooter.querySelector('div');
+                        if (actionButtons) {
+                            actionButtons.innerHTML = `
+                                <button class="btn btn-sm btn-success" title="إكمال الطلب" data-order-id="${currentOrderId}" data-bs-toggle="modal" data-bs-target="#confirmCompleteModal">
+                                    <i class="fas fa-check-double"></i> إكمال
+                                </button>
+                            `;
+                        }
+                    }
+                }
             });
+            
+            // عند فتح نافذة تأكيد الإكمال
+            confirmCompleteModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                currentOrderId = button.getAttribute('data-order-id');
+                orderIdToComplete.textContent = currentOrderId;
+                
+                // حفظ بطاقة الطلب الحالية للتعديل عليها لاحقاً
+                currentOrderCard = button.closest('.order-card');
+            });
+            
+            // عند النقر على زر تأكيد الإكمال
+            confirmCompleteBtn.addEventListener('click', function() {
+                // إغلاق النافذة المنبثقة
+                const modal = bootstrap.Modal.getInstance(confirmCompleteModal);
+                modal.hide();
+                
+                // تغيير حالة البطاقة إلى مكتملة
+                if (currentOrderCard) {
+                    currentOrderCard.classList.remove('order-processing');
+                    currentOrderCard.classList.add('order-completed');
+                    
+                    // تحديث شارة الحالة
+                    const statusBadge = currentOrderCard.querySelector('.status-badge');
+                    if (statusBadge) {
+                        statusBadge.classList.remove('status-processing');
+                        statusBadge.classList.add('status-completed');
+                        statusBadge.textContent = 'مكتمل';
+                    }
+                    
+                    // تحديث أزرار الإجراءات - تغيير من توسيط الزر إلى محاذاة لليسار
+                    const cardFooter = currentOrderCard.querySelector('.card-footer');
+                    if (cardFooter) {
+                        cardFooter.innerHTML = `
+                            <div class="d-flex justify-content-between">
+                                <a href="order-details.html?id=${currentOrderId}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                </a>
+                                <div></div>
+                            </div>
+                        `;
+                    }
+                    
+                    // نقل البطاقة إلى تبويب الطلبات المكتملة
+                    const completedOrdersTab = document.getElementById('completed-orders');
+                    const completedOrdersRow = completedOrdersTab.querySelector('.row');
+                    
+                    // إضافة البطاقة إلى بداية قائمة الطلبات المكتملة
+                    completedOrdersRow.prepend(currentOrderCard.parentNode);
+                    
+                    // تحديث عدد الطلبات في التبويبات
+                    updateOrderCounts();
+                }
+            });
+            
+            // تحديث أزرار الإكمال الموجودة مسبقاً
+            updateExistingCompleteButtons();
+            
+            // دالة تحديث أزرار الإكمال الموجودة مسبقاً
+            function updateExistingCompleteButtons() {
+                // الحصول على جميع أزرار الإكمال الموجودة
+                const completeButtons = document.querySelectorAll('.order-processing .card-footer .btn-success');
+                
+                // تحديث كل زر
+                completeButtons.forEach(button => {
+                    // الحصول على معرف الطلب من البطاقة
+                    const orderCard = button.closest('.order-card');
+                    const orderId = orderCard.querySelector('.order-id').textContent;
+                    
+                    // تحديث خصائص الزر
+                    button.setAttribute('data-bs-toggle', 'modal');
+                    button.setAttribute('data-bs-target', '#confirmCompleteModal');
+                    button.setAttribute('data-order-id', orderId);
+                    button.removeAttribute('onclick');
+                });
+                
+                // تحديث تنسيق أزرار عرض التفاصيل في الطلبات المكتملة والمرفوضة
+                const completedOrderFooters = document.querySelectorAll('.order-completed .card-footer, .order-rejected .card-footer');
+                completedOrderFooters.forEach(footer => {
+                    const orderId = footer.closest('.order-card').querySelector('.order-id').textContent;
+                    footer.className = 'card-footer';
+                    footer.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <a href="order-details.html?id=${orderId}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                            </a>
+                            <div></div>
+                        </div>
+                    `;
+                });
+            }
         });
+        
+        // دالة تحديث عدد الطلبات في التبويبات
+        function updateOrderCounts() {
+            const activeOrdersCount = document.getElementById('active-orders').querySelectorAll('.order-card').length;
+            const completedOrdersCount = document.getElementById('completed-orders').querySelectorAll('.order-card').length;
+            
+            document.querySelector('#active-tab .badge').textContent = activeOrdersCount;
+            document.querySelector('#completed-tab .badge').textContent = completedOrdersCount;
+        }
     </script>
 </body>
 </html>
