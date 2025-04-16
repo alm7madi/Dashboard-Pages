@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة الطلبات</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Font - Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --border-radius: 0.375rem;
+        }
+        
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .main-container {
+            padding: 2rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* تصميم بطاقات الطلبات */
+        .order-card {
+            height: 100%;
+        }
+        
+        .order-card .card-header {
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+        }
+        
+        .order-card .card-body {
+            padding: 1rem;
+        }
+        
+        .order-card .card-footer {
+            background-color: transparent;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 0.75rem 1rem;
+        }
+        
+        /* ألوان حالات الطلبات */
+        .order-new {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-right: 4px solid var(--warning-color);
+        }
+        
+        .order-new .card-header {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #856404;
+        }
+        
+        .order-processing {
+            background-color: rgba(25, 135, 84, 0.1);
+            border-right: 4px solid var(--success-color);
+        }
+        
+        .order-processing .card-header {
+            background-color: rgba(25, 135, 84, 0.2);
+            color: #155724;
+        }
+        
+        .order-completed {
+            background-color: rgba(108, 117, 125, 0.1);
+            border-right: 4px solid var(--secondary-color);
+        }
+        
+        .order-completed .card-header {
+            background-color: rgba(108, 117, 125, 0.2);
+            color: #383d41;
+        }
+        
+        .order-rejected {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-right: 4px solid var(--danger-color);
+        }
+        
+        .order-rejected .card-header {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+        }
+        
+        /* تصميم شارات حالة الطلب */
+        .status-badge {
+            padding: 0.35rem 0.65rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-new {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #856404;
+        }
+        
+        .status-processing {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-completed {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .status-rejected {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        /* تصميم شارات نوع التوصيل */
+        .delivery-badge {
+            padding: 0.35rem 0.65rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(13, 110, 253, 0.1);
+            color: var(--primary-color);
+        }
+        
+        /* تصميم شريط البحث والفلترة */
+        .search-filter-container {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            padding: 0.6rem 1rem;
+            border: 1px solid #ddd;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+        
+        /* تصميم التبويبات */
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .nav-tabs .nav-link {
+            margin-bottom: -1px;
+            border: 1px solid transparent;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            border-color: #e9ecef #e9ecef #dee2e6;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+            font-weight: 600;
+        }
+        
+        /* تأثيرات حركية */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* تصميم معلومات الطلب */
+        .order-info {
+            margin-bottom: 0.5rem;
+        }
+        
+        .order-info-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        .order-info-value {
+            font-weight: 600;
+        }
+        
+        .order-id {
+            font-family: monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .order-price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .order-dates {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <!-- بطاقة العنوان -->
+                    <div class="card mb-4">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">قائمة الطلبات</h4>
+                            <a href="order-new.html" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i> إضافة طلب جديد
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- شريط البحث والفلترة -->
+                    <div class="search-filter-container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="بحث عن طلب..." id="search-input">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="delivery-filter">
+                                    <option value="" selected>جميع أنواع التوصيل</option>
+                                    <option value="local">محلي</option>
+                                    <option value="delivery">توصيل</option>
+                                    <option value="pickup">استلام</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="date-filter">
+                                    <option value="" selected>جميع التواريخ</option>
+                                    <option value="today">اليوم</option>
+                                    <option value="yesterday">أمس</option>
+                                    <option value="week">هذا الأسبوع</option>
+                                    <option value="month">هذا الشهر</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-primary w-100" id="reset-filters-btn">
+                                    <i class="fas fa-redo-alt me-1"></i> إعادة تعيين
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- تبويبات الطلبات -->
+                    <ul class="nav nav-tabs" id="orderTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="active-tab" data-bs-toggle="tab" data-bs-target="#active-orders" type="button" role="tab" aria-controls="active-orders" aria-selected="true">
+                                <i class="fas fa-clock me-1"></i> الطلبات النشطة
+                                <span class="badge bg-primary ms-1">6</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed-orders" type="button" role="tab" aria-controls="completed-orders" aria-selected="false">
+                                <i class="fas fa-check-circle me-1"></i> الطلبات المكتملة والمرفوضة
+                                <span class="badge bg-secondary ms-1">4</span>
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <!-- محتوى التبويبات -->
+                    <div class="tab-content" id="orderTabsContent">
+                        <!-- تبويب الطلبات النشطة (الجديدة والتي يتم تجهيزها) -->
+                        <div class="tab-pane fade show active" id="active-orders" role="tabpanel" aria-labelledby="active-tab">
+                            <div class="row">
+                                <!-- طلب جديد 1 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-new">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315948</span>
+                                            <span class="status-badge status-new">طلب جديد</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">محمد أحمد</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">85.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-motorcycle me-1"></i> توصيل
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 10:25</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 10:25</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-between">
+                                            <a href="order-details.html?id=QR250315948" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                            <div>
+                                                <button class="btn btn-sm btn-success me-1" title="قبول الطلب" data-bs-toggle="modal" data-bs-target="#confirmAcceptModal" data-order-id="QR250315948">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <!-- زر الرفض تم حذفه -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب جديد 2 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-new">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315949</span>
+                                            <span class="status-badge status-new">طلب جديد</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">سارة خالد</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">120.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-store me-1"></i> استلام
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 11:05</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 11:05</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-between">
+                                            <a href="order-details.html?id=QR250315949" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                            <div>
+                                                <button class="btn btn-sm btn-success me-1" title="قبول الطلب" data-bs-toggle="modal" data-bs-target="#confirmAcceptModal" data-order-id="QR250315949">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <!-- زر الرفض تم حذفه -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب جديد 3 تم حذفه -->
+                                
+                                <!-- طلب يجهز 1 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-processing">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315945</span>
+                                            <span class="status-badge status-processing">يجهز</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">عبدالرحمن محمد</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">150.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-motorcycle me-1"></i> توصيل
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 09:45</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 10:00</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-between">
+                                            <a href="order-details.html?id=QR250315945" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                            <button class="btn btn-sm btn-success" title="إكمال الطلب">
+                                                <i class="fas fa-check-double"></i> إكمال
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب يجهز 2 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-processing">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315946</span>
+                                            <span class="status-badge status-processing">يجهز</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">نورة سعد</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">95.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-store me-1"></i> استلام
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 09:50</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 10:05</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-between">
+                                            <a href="order-details.html?id=QR250315946" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                            <button class="btn btn-sm btn-success" title="إكمال الطلب">
+                                                <i class="fas fa-check-double"></i> إكمال
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب يجهز 3 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-processing">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315947</span>
+                                            <span class="status-badge status-processing">يجهز</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">خالد عمر</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">110.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-utensils me-1"></i> محلي
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 10:00</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 10:15</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-between">
+                                            <a href="order-details.html?id=QR250315947" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                            <button class="btn btn-sm btn-success" title="إكمال الطلب">
+                                                <i class="fas fa-check-double"></i> إكمال
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- تبويب الطلبات المكتملة والمرفوضة -->
+                        <div class="tab-pane fade" id="completed-orders" role="tabpanel" aria-labelledby="completed-tab">
+                            <div class="row">
+                                <!-- طلب مكتمل 1 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-completed">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315940</span>
+                                            <span class="status-badge status-completed">مكتمل</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">أحمد علي</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">75.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-motorcycle me-1"></i> توصيل
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 08:30</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 09:15</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-center">
+                                            <a href="order-details.html?id=QR250315940" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب مكتمل 2 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-completed">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315941</span>
+                                            <span class="status-badge status-completed">مكتمل</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">سارة محمد</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">90.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-store me-1"></i> استلام
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 08:45</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 09:30</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-center">
+                                            <a href="order-details.html?id=QR250315941" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب مرفوض 1 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-rejected">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315942</span>
+                                            <span class="status-badge status-rejected">مرفوض</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">عبدالله محمد</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">55.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-motorcycle me-1"></i> توصيل
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 09:00</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 09:10</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-center">
+                                            <a href="order-details.html?id=QR250315942" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب مرفوض 2 -->
+                                <div class="col-md-4 mb-4">
+                                    <div class="card order-card order-rejected">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span class="order-id">QR250315943</span>
+                                            <span class="status-badge status-rejected">مرفوض</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="order-info">
+                                                <span class="order-info-label">العميل:</span>
+                                                <span class="order-info-value">ليلى أحمد</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">السعر:</span>
+                                                <span class="order-price">70.00 ريال</span>
+                                            </div>
+                                            <div class="order-info">
+                                                <span class="order-info-label">نوع التوصيل:</span>
+                                                <span class="delivery-badge">
+                                                    <i class="fas fa-utensils me-1"></i> محلي
+                                                </span>
+                                            </div>
+                                            <div class="order-dates mt-2">
+                                                <div><i class="far fa-calendar-alt me-1"></i> تاريخ الإنشاء: 15/03/2023 - 09:15</div>
+                                                <div><i class="far fa-clock me-1"></i> آخر تحديث: 15/03/2023 - 09:25</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-center">
+                                            <a href="order-details.html?id=QR250315943" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i> عرض التفاصيل
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- خيارات عرض الصفحة وترقيم الصفحات -->
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <!-- إحصائيات الطلبات -->
+                        <div class="d-flex align-items-center">
+                            <span class="me-3">إجمالي الطلبات: <strong>10</strong></span>
+                            <span class="me-3">طلبات جديدة: <strong>3</strong></span>
+                            <span class="me-3">قيد التجهيز: <strong>3</strong></span>
+                            <span class="me-3">مكتملة: <strong>2</strong></span>
+                            <span>مرفوضة: <strong>2</strong></span>
+                        </div>
+                        
+                        <!-- ترقيم الصفحات -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center m-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">السابق</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">التالي</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- نافذة تأكيد قبول الطلب -->
+    <div class="modal fade" id="confirmAcceptModal" tabindex="-1" aria-labelledby="confirmAcceptModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmAcceptModalLabel">تأكيد قبول الطلب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <div class="modal-body">
+                    <p>هل أنت متأكد من قبول الطلب رقم <span id="orderIdToAccept"></span>؟</p>
+                    <p>بعد القبول، سيتم تحويل الطلب إلى حالة "يجهز" وإشعار العميل بذلك.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-success" id="confirmAcceptBtn">تأكيد القبول</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // كود التعامل مع نافذة تأكيد قبول الطلب
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmAcceptModal = document.getElementById('confirmAcceptModal');
+            const orderIdToAccept = document.getElementById('orderIdToAccept');
+            const confirmAcceptBtn = document.getElementById('confirmAcceptBtn');
+            
+            let currentOrderId = '';
+            
+            // عند فتح النافذة المنبثقة
+            confirmAcceptModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                currentOrderId = button.getAttribute('data-order-id');
+                orderIdToAccept.textContent = currentOrderId;
+            });
+            
+            // عند النقر على زر تأكيد القبول
+            confirmAcceptBtn.addEventListener('click', function() {
+                // هنا يمكنك إضافة الكود الخاص بمعالجة قبول الطلب
+                console.log('تم قبول الطلب رقم: ' + currentOrderId);
+                
+                // إغلاق النافذة المنبثقة
+                const modal = bootstrap.Modal.getInstance(confirmAcceptModal);
+                modal.hide();
+                
+                // يمكنك هنا إضافة كود لتحديث حالة الطلب في واجهة المستخدم
+                // على سبيل المثال: تغيير لون البطاقة وتحديث النص
+                
+                // مثال على تحديث واجهة المستخدم (يمكنك تعديله حسب احتياجاتك)
+                alert('تم قبول الطلب بنجاح!');
+                // يمكنك استبدال السطر السابق بتحديث فعلي للواجهة أو إعادة تحميل الصفحة
+            });
+        });
+    </script>
+</body>
+</html>
