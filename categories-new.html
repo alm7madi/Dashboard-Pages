@@ -99,37 +99,7 @@
             color: white;
         }
         
-        .product-image-container {
-            height: 200px;
-            border: 2px dashed #dee2e6;
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #adb5bd;
-            cursor: pointer;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .product-image-container:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(13, 110, 253, 0.05);
-        }
-        
-        .product-image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        
-        .image-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
+        /* حذف كل ما يتعلق بالصورة */
         
         .section-title {
             font-weight: 600;
@@ -275,7 +245,29 @@
     <!-- Custom JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // إضافة مستمعي الأحداث للصفحة
+            // إضافة مستمع الأحداث لزر إعادة التعيين
+            const resetButton = document.getElementById('reset-category-btn');
+            if (resetButton) {
+                resetButton.addEventListener('click', function() {
+                    document.getElementById('category-form').reset();
+                });
+            }
+            
+            // إضافة مستمع الأحداث لزر الحفظ
+            const saveButton = document.getElementById('save-category-btn');
+            if (saveButton) {
+                saveButton.addEventListener('click', function() {
+                    // التحقق من صحة النموذج
+                    const form = document.getElementById('category-form');
+                    if (form.checkValidity()) {
+                        // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
+                        alert('تم حفظ التصنيف بنجاح!');
+                    } else {
+                        // تفعيل التحقق من الصحة في النموذج
+                        form.classList.add('was-validated');
+                    }
+                });
+            }
         });
     </script>
     
