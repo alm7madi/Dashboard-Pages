@@ -732,24 +732,13 @@
             const selectedCheckboxes = document.querySelectorAll('.allergen-checkbox:checked');
             const selectedAllergensText = document.getElementById('selected-allergens');
             
-            if (selectedCheckboxes.length > 0) {
-                // جمع أسماء مسببات الحساسية المحددة
-                const allergenNames = Array.from(selectedCheckboxes).map(checkbox => 
-                    checkbox.nextElementSibling.textContent.trim()
-                );
-                
-                // عرض الأسماء مع فواصل
-                if (allergenNames.length <= 3) {
-                    // إذا كان العدد قليل، اعرض كل الأسماء
-                    selectedAllergensText.textContent = `المسببات المحددة: ${allergenNames.join('، ')}`;
-                } else {
-                    // إذا كان العدد كبير، اعرض أول 3 مع عدد المتبقي
-                    const firstThree = allergenNames.slice(0, 3);
-                    const remaining = allergenNames.length - 3;
-                    selectedAllergensText.textContent = `المسببات المحددة: ${firstThree.join('، ')} و${remaining} أخرى`;
-                }
-            } else {
+            if (selectedCheckboxes.length === 0) {
                 selectedAllergensText.textContent = 'لم يتم تحديد أي مسببات للحساسية';
+            } else {
+                const allergenNames = Array.from(selectedCheckboxes).map(checkbox => {
+                    return checkbox.nextElementSibling.textContent.trim();
+                });
+                selectedAllergensText.textContent = 'تم تحديد: ' + allergenNames.join('، ');
             }
         }
         
