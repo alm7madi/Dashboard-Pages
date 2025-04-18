@@ -11,13 +11,13 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* أنماط عامة */
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f8f9fa;
         }
-        .navbar-brand {
-            font-weight: 700;
-        }
+        
+        /* أنماط البطاقات */
         .card {
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -29,6 +29,8 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.125);
             font-weight: 600;
         }
+        
+        /* أنماط بطاقات الإحصائيات */
         .stat-card {
             transition: transform 0.3s;
         }
@@ -47,28 +49,40 @@
             font-size: 0.9rem;
             color: #6c757d;
         }
+        
+        /* أنماط الجداول */
         .table th {
             font-weight: 600;
         }
-        /* تحديث أسلوب الشارات ليتوافق مع Bootstrap 5 */
-        .badge-pending {
-            background-color: #ffc107 !important;
-            color: #212529 !important;
+        .table-responsive {
+            max-height: 300px; 
+            overflow-y: auto;
+        }
+        thead {
+            position: sticky; 
+            top: 0; 
+            background-color: white; 
+            z-index: 1;
+        }
+        
+        /* أنماط الشارات */
+        .badge-pending, .badge-preparing {
             padding: 0.35em 0.65em;
             font-size: 0.75em;
             font-weight: 700;
             border-radius: 0.25rem;
             display: inline-block;
+        }
+        .badge-pending {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
         }
         .badge-preparing {
             background-color: #17a2b8 !important;
             color: #fff !important;
-            padding: 0.35em 0.65em;
-            font-size: 0.75em;
-            font-weight: 700;
-            border-radius: 0.25rem;
-            display: inline-block;
         }
+        
+        /* أنماط الأزرار */
         .btn-view {
             background-color: #6c757d;
             color: white;
@@ -77,6 +91,8 @@
             background-color: #5a6268;
             color: white;
         }
+        
+        /* أنماط الرسوم البيانية */
         .chart-container {
             height: 300px;
             max-height: 300px;
@@ -126,34 +142,25 @@
             transform: translateX(30px);
         }
         
-        /* تعديلات للجداول في الوضع المظلم */
-        [data-theme="dark"] .table {
-            border-color: var(--table-border);
-        }
-        [data-theme="dark"] .table thead th {
+        /* أنماط الوضع المظلم */
+        [data-theme="dark"] .table,
+        [data-theme="dark"] .table thead th,
+        [data-theme="dark"] .table td, 
+        [data-theme="dark"] .table th {
             border-color: var(--table-border);
         }
         [data-theme="dark"] .table-hover tbody tr:hover {
             background-color: var(--table-hover);
         }
-        [data-theme="dark"] .table td, [data-theme="dark"] .table th {
-            border-color: var(--table-border);
-        }
         [data-theme="dark"] thead {
             background-color: var(--table-header-bg) !important;
         }
-        
-        /* تعديلات للرسوم البيانية في الوضع المظلم */
         [data-theme="dark"] .chartjs-render-monitor {
             filter: brightness(0.8) contrast(1.2);
         }
-        
-        /* تعديلات للنص في الوضع المظلم */
         [data-theme="dark"] .text-muted {
             color: #adb5bd !important;
         }
-        
-        /* تعديلات للأزرار في الوضع المظلم */
         [data-theme="dark"] .btn-outline-secondary {
             color: #adb5bd;
             border-color: #6c757d;
@@ -163,7 +170,10 @@
             color: #fff;
         }
         
-        /* أيقونات الوضع المظلم والفاتح */
+        /* أيقونات وعناصر أخرى */
+        .navbar-brand {
+            font-weight: 700;
+        }
         .theme-icon {
             margin-right: 5px;
         }
@@ -216,6 +226,7 @@
         
         <!-- Stats Cards -->
         <div class="row mb-4">
+            <!-- بطاقات الإحصائيات -->
             <div class="col-md-3">
                 <div class="card stat-card text-center h-100">
                     <div class="card-body">
@@ -269,9 +280,9 @@
                 <button class="btn btn-sm btn-outline-secondary">تحديث <i class="fas fa-sync-alt ms-1"></i></button>
             </div>
             <div class="card-body">
-                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                <div class="table-responsive">
                     <table class="table table-hover">
-                        <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
+                        <thead>
                             <tr>
                                 <th>رقم الطلب</th>
                                 <th>اسم العميل</th>
@@ -293,7 +304,6 @@
                                 <td><span class="badge bg-info text-white">يجهز</span></td>
                                 <td><button class="btn btn-sm btn-view">مشاهدة</button></td>
                             </tr>
-                            <!-- باقي الصفوف -->
                             <tr>
                                 <td>QR25040002</td>
                                 <td>سارة عبدالله</td>
@@ -407,9 +417,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                        <div class="table-responsive">
                             <table class="table">
-                                <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
+                                <thead>
                                     <tr>
                                         <th>الصنف</th>
                                         <th>الفئة</th>
@@ -424,6 +434,7 @@
                                         <td>85</td>
                                         <td>1,275 ر.س</td>
                                     </tr>
+                                    <!-- باقي الصفوف -->
                                     <tr>
                                         <td>بيتزا خضار</td>
                                         <td>بيتزا</td>
@@ -514,8 +525,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div style="max-height: 300px; overflow-y: auto;">
-                            <canvas id="deliveryChart" class="chart-container"></canvas>
+                        <div class="chart-container">
+                            <canvas id="deliveryChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -538,153 +549,52 @@
     <script>
         // Initialize charts when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Category Sales Chart - Data for different time periods
-            const categoryData = {
-                daily: {
-                    labels: ['برجر', 'بيتزا', 'مشروبات', 'سلطات', 'حلويات', 'أطباق رئيسية'],
-                    data: [25, 20, 15, 10, 15, 15]
+            // بيانات الرسوم البيانية لفترات زمنية مختلفة
+            const chartData = {
+                category: {
+                    daily: {
+                        labels: ['برجر', 'بيتزا', 'مشروبات', 'سلطات', 'حلويات', 'أطباق رئيسية'],
+                        data: [25, 20, 15, 10, 15, 15]
+                    },
+                    weekly: {
+                        labels: ['برجر', 'بيتزا', 'مشروبات', 'سلطات', 'حلويات', 'أطباق رئيسية'],
+                        data: [150, 120, 90, 60, 80, 100]
+                    },
+                    monthly: {
+                        labels: ['برجر', 'بيتزا', 'مشروبات', 'سلطات', 'حلويات', 'أطباق رئيسية'],
+                        data: [600, 480, 350, 250, 320, 400]
+                    }
                 },
-                weekly: {
-                    labels: ['برجر', 'بيتزا', 'مشروبات', 'سلطات', 'حلويات', 'أطباق رئيسية'],
-                    data: [150, 120, 90, 60, 80, 100]
+                salesTrend: {
+                    weekly: {
+                        labels: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                        data: [3200, 3800, 3500, 4200, 4500, 5200, 4250]
+                    },
+                    monthly: {
+                        labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
+                        data: [15000, 17500, 16800, 19200]
+                    },
+                    quarterly: {
+                        labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                        data: [45000, 42000, 50000, 55000, 60000, 58000, 65000, 68000, 62000, 59000, 73000, 80000]
+                    }
                 },
-                monthly: {
-                    labels: ['برجر', 'بيتزا', 'مشروبات', 'سلطات', 'حلويات', 'أطباق رئيسية'],
-                    data: [600, 480, 350, 250, 320, 400]
-                }
-            };
-            
-            // Category Sales Chart
-            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-            let categoryChart = new Chart(categoryCtx, {
-                type: 'pie',
-                data: {
-                    labels: categoryData.daily.labels,
-                    datasets: [{
-                        data: categoryData.daily.data,
-                        backgroundColor: [
-                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                        }
+                delivery: {
+                    daily: {
+                        labels: ['توصيل', 'استلام', 'محلي'],
+                        data: [65, 40, 23]
+                    },
+                    weekly: {
+                        labels: ['توصيل', 'استلام', 'محلي'],
+                        data: [320, 180, 120]
+                    },
+                    monthly: {
+                        labels: ['توصيل', 'استلام', 'محلي'],
+                        data: [1200, 750, 450]
                     }
                 }
-            });
-            
-            // Handle category time period change
-            document.querySelectorAll('[data-period]').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Update dropdown button text
-                    document.getElementById('categoryTimeDropdown').textContent = this.textContent;
-                    
-                    // Update active state
-                    document.querySelectorAll('[data-period]').forEach(el => {
-                        el.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Get selected period
-                    const period = this.getAttribute('data-period');
-                    
-                    // Update chart data
-                    categoryChart.data.labels = categoryData[period].labels;
-                    categoryChart.data.datasets[0].data = categoryData[period].data;
-                    categoryChart.update();
-                });
-            });
-            
-            // Sales Trend Chart - Data for different time periods
-            const salesTrendData = {
-                weekly: {
-                    labels: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
-                    data: [3200, 3800, 3500, 4200, 4500, 5200, 4250]
-                },
-                monthly: {
-                    labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
-                    data: [15000, 17500, 16800, 19200]
-                },
-                quarterly: {
-                    labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-                    data: [45000, 42000, 50000, 55000, 60000, 58000, 65000, 68000, 62000, 59000, 73000, 80000]
-                }
             };
             
-            // Sales Trend Chart
-            const salesTrendCtx = document.getElementById('salesTrendChart').getContext('2d');
-            const salesTrendChart = new Chart(salesTrendCtx, {
-                type: 'line',
-                data: {
-                    labels: salesTrendData.weekly.labels,
-                    datasets: [{
-                        label: 'المبيعات (ر.س)',
-                        data: salesTrendData.weekly.data,
-                        borderColor: '#36A2EB',
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-            
-            // Handle sales trend time period change
-            document.querySelectorAll('[data-trend-period]').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Update dropdown button text
-                    document.getElementById('salesTrendDropdown').textContent = this.textContent;
-                    
-                    // Update active state
-                    document.querySelectorAll('[data-trend-period]').forEach(el => {
-                        el.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Get selected period
-                    const period = this.getAttribute('data-trend-period');
-                    
-                    // Update chart data
-                    salesTrendChart.data.labels = salesTrendData[period].labels;
-                    salesTrendChart.data.datasets[0].data = salesTrendData[period].data;
-                    salesTrendChart.update();
-                });
-            });
-            
-            // Delivery Chart - Data for different time periods
-            const deliveryData = {
-                daily: {
-                    labels: ['توصيل', 'استلام', 'محلي'],
-                    data: [65, 40, 23]
-                },
-                weekly: {
-                    labels: ['توصيل', 'استلام', 'محلي'],
-                    data: [320, 180, 120]
-                },
-                monthly: {
-                    labels: ['توصيل', 'استلام', 'محلي'],
-                    data: [1200, 750, 450]
-                }
-            };
-            
-            // Top selling items data for different time periods
             // Top selling items data for different time periods
             const topItemsData = {
                 daily: [
@@ -731,40 +641,102 @@
                 ]
             };
             
-            // Delivery Chart
-            const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
-            const deliveryChart = new Chart(deliveryCtx, {
-                type: 'bar',
-                data: {
-                    labels: deliveryData.daily.labels,
-                    datasets: [{
-                        label: 'عدد الطلبات',
-                        data: deliveryData.daily.data,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
+            // تهيئة الرسوم البيانية
+            initCharts();
+            
+            // تهيئة معالجات الأحداث
+            setupEventHandlers();
+            
+            // تحديث جدول الأصناف الأكثر مبيعاً
+            updateTopItemsTable('daily');
+            
+            // دالة تهيئة الرسوم البيانية
+            function initCharts() {
+                // رسم بياني للمبيعات حسب الفئة
+                const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+                window.categoryChart = new Chart(categoryCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: chartData.category.daily.labels,
+                        datasets: [{
+                            data: chartData.category.daily.data,
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            }
                         }
                     }
-                }
-            });
+                });
+                
+                // رسم بياني لاتجاه المبيعات
+                const salesTrendCtx = document.getElementById('salesTrendChart').getContext('2d');
+                window.salesTrendChart = new Chart(salesTrendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.salesTrend.weekly.labels,
+                        datasets: [{
+                            label: 'المبيعات (ر.س)',
+                            data: chartData.salesTrend.weekly.data,
+                            borderColor: '#36A2EB',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+                
+                // رسم بياني لإحصائيات التوصيل
+                const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+                window.deliveryChart = new Chart(deliveryCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartData.delivery.daily.labels,
+                        datasets: [{
+                            label: 'عدد الطلبات',
+                            data: chartData.delivery.daily.data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 206, 86, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
             
-            // Function to update top items table
+            // دالة تحديث جدول الأصناف الأكثر مبيعاً
             function updateTopItemsTable(period) {
                 const tableBody = document.getElementById('topItemsTable');
                 tableBody.innerHTML = '';
@@ -781,51 +753,58 @@
                 });
             }
             
-            // Handle top items time period change
-            document.querySelectorAll('[data-items-period]').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Update dropdown button text
-                    document.getElementById('topItemsDropdown').textContent = this.textContent;
-                    
-                    // Update active state
-                    document.querySelectorAll('[data-items-period]').forEach(el => {
-                        el.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Get selected period
-                    const period = this.getAttribute('data-items-period');
-                    
-                    // Update table data
+            // دالة إعداد معالجات الأحداث
+            function setupEventHandlers() {
+                // معالج تغيير فترة المبيعات حسب الفئة
+                setupPeriodChangeHandler('[data-period]', 'categoryTimeDropdown', function(period) {
+                    categoryChart.data.labels = chartData.category[period].labels;
+                    categoryChart.data.datasets[0].data = chartData.category[period].data;
+                    categoryChart.update();
+                });
+                
+                // معالج تغيير فترة اتجاه المبيعات
+                setupPeriodChangeHandler('[data-trend-period]', 'salesTrendDropdown', function(period) {
+                    salesTrendChart.data.labels = chartData.salesTrend[period].labels;
+                    salesTrendChart.data.datasets[0].data = chartData.salesTrend[period].data;
+                    salesTrendChart.update();
+                });
+                
+                // معالج تغيير فترة الأصناف الأكثر مبيعاً
+                setupPeriodChangeHandler('[data-items-period]', 'topItemsDropdown', function(period) {
                     updateTopItemsTable(period);
                 });
-            });
-            
-            // Handle delivery stats time period change
-            document.querySelectorAll('[data-delivery-period]').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Update dropdown button text
-                    document.getElementById('deliveryStatsDropdown').textContent = this.textContent;
-                    
-                    // Update active state
-                    document.querySelectorAll('[data-delivery-period]').forEach(el => {
-                        el.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Get selected period
-                    const period = this.getAttribute('data-delivery-period');
-                    
-                    // Update chart data
-                    deliveryChart.data.labels = deliveryData[period].labels;
-                    deliveryChart.data.datasets[0].data = deliveryData[period].data;
+                
+                // معالج تغيير فترة إحصائيات التوصيل
+                setupPeriodChangeHandler('[data-delivery-period]', 'deliveryStatsDropdown', function(period) {
+                    deliveryChart.data.labels = chartData.delivery[period].labels;
+                    deliveryChart.data.datasets[0].data = chartData.delivery[period].data;
                     deliveryChart.update();
                 });
-            });
+            }
+            
+            // دالة مساعدة لإعداد معالجات تغيير الفترة
+            function setupPeriodChangeHandler(selector, dropdownId, updateCallback) {
+                document.querySelectorAll(selector).forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // تحديث نص زر القائمة المنسدلة
+                        document.getElementById(dropdownId).textContent = this.textContent;
+                        
+                        // تحديث حالة العنصر النشط
+                        document.querySelectorAll(selector).forEach(el => {
+                            el.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // الحصول على الفترة المحددة
+                        const period = this.getAttribute(selector.replace(/\[|\]/g, ''));
+                        
+                        // تحديث البيانات
+                        updateCallback(period);
+                    });
+                });
+            }
         });
     </script>
 </body>
