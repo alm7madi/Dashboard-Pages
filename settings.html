@@ -178,8 +178,8 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false">
-                    <i class="fas fa-users me-1"></i> المستخدمين
+                <button class="nav-link" id="working-hours-tab" data-bs-toggle="tab" data-bs-target="#working-hours" type="button" role="tab" aria-controls="working-hours" aria-selected="false">
+                    <i class="fas fa-clock me-1"></i> ساعات العمل
                 </button>
             </li>
         </ul>
@@ -417,9 +417,119 @@
                 </div>
             </div>
             
-            <!-- Users Tab -->
-            <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
-                <!-- محتوى التبويب الرابع -->
+            <!-- Working Hours Tab -->
+            <div class="tab-pane fade" id="working-hours" role="tabpanel" aria-labelledby="working-hours-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-clock me-2"></i> ساعات العمل
+                    </div>
+                    <div class="card-body">
+                        <form id="workingHoursForm">
+                            <!-- اختيار البلد -->
+                            <div class="mb-4">
+                                <label for="storeCountry" class="form-label">بلد المتجر</label>
+                                <select class="form-select" id="storeCountry">
+                                    <option value="SA">المملكة العربية السعودية</option>
+                                    <option value="EG">مصر</option>
+                                    <option value="BH">البحرين</option>
+                                </select>
+                            </div>
+
+                            <!-- جدول ساعات العمل -->
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>اليوم</th>
+                                            <th>من</th>
+                                            <th>إلى</th>
+                                            <th>يوم عطلة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>الأحد</td>
+                                            <td><input type="time" class="form-control" id="sundayStart" value="09:00"></td>
+                                            <td><input type="time" class="form-control" id="sundayEnd" value="22:00"></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="sundayClosed">
+                                                    <label class="form-check-label" for="sundayClosed">عطلة</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>الإثنين</td>
+                                            <td><input type="time" class="form-control" id="mondayStart" value="09:00"></td>
+                                            <td><input type="time" class="form-control" id="mondayEnd" value="22:00"></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="mondayClosed">
+                                                    <label class="form-check-label" for="mondayClosed">عطلة</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>الثلاثاء</td>
+                                            <td><input type="time" class="form-control" id="tuesdayStart" value="09:00"></td>
+                                            <td><input type="time" class="form-control" id="tuesdayEnd" value="22:00"></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="tuesdayClosed">
+                                                    <label class="form-check-label" for="tuesdayClosed">عطلة</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>الأربعاء</td>
+                                            <td><input type="time" class="form-control" id="wednesdayStart" value="09:00"></td>
+                                            <td><input type="time" class="form-control" id="wednesdayEnd" value="22:00"></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="wednesdayClosed">
+                                                    <label class="form-check-label" for="wednesdayClosed">عطلة</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>الخميس</td>
+                                            <td><input type="time" class="form-control" id="thursdayStart" value="09:00"></td>
+                                            <td><input type="time" class="form-control" id="thursdayEnd" value="22:00"></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="thursdayClosed">
+                                                    <label class="form-check-label" for="thursdayClosed">عطلة</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>الجمعة</td>
+                                            <td><input type="time" class="form-control" id="fridayStart" value="16:00"></td>
+                                            <td><input type="time" class="form-control" id="fridayEnd" value="22:00"></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="fridayClosed">
+                                                    <label class="form-check-label" for="fridayClosed">عطلة</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>السبت</td>
+                                            <td><input type="time" class="form-control" id="saturdayStart" value="09:00"></td>
+                                            <td><input type="time" class="form-control" id="saturdayEnd" value="22:00"></td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="saturdayClosed">
+                                                    <label class="form-check-label" for="saturdayClosed">عطلة</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
         
