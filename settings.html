@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإعدادات - نظام إدارة المطعم</title>
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- Google Tajawal Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* أنماط عامة */
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        /* تحديد العرض الأقصى للحاويات */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* أنماط البطاقات */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            font-weight: 600;
+        }
+        
+        /* أنماط الأزرار */
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+        /* أنماط التبويبات */
+        .nav-tabs .nav-link {
+            color: #6c757d;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-tabs .nav-link.active {
+            color: #3498db;
+            background-color: transparent;
+            border-bottom: 2px solid #3498db;
+        }
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        /* أنماط النموذج */
+        .form-label {
+            font-weight: 500;
+        }
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        }
+        
+        /* أنماط الشريط العلوي */
+        .navbar-brand {
+            font-weight: 700;
+        }
+        
+        /* أنماط زر الحفظ الثابت */
+        .settings-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        /* إضافة هامش سفلي للمحتوى الرئيسي لتجنب تداخله مع شريط الحفظ الثابت */
+        .container.py-4 {
+            margin-bottom: 140px; /* زيادة الهامش ليشمل الفوتر أيضًا */
+        }
+        
+        /* أنماط الفوتر الثابت */
+        footer.bg-dark {
+            position: fixed;
+            bottom: 60px; /* وضع الفوتر فوق شريط الحفظ */
+            left: 0;
+            right: 0;
+            z-index: 999;
+            padding: 0.75rem 0;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">نظام إدارة المطعم</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt me-1"></i> لوحة التحكم</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="settings.html"><i class="fas fa-cog me-1"></i> الإعدادات</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="الذهاب إلى قائمة الطعام">
+                            <i class="fas fa-utensils me-1"></i> قائمة الطعام
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> مدير الحساب
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-1"></i> الإعدادات</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-bell me-1"></i> الإشعارات</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-1"></i> تسجيل الخروج</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="تسجيل الخروج">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-cog me-2"></i> إعدادات النظام</h2>
+        </div>
+        
+        <!-- Settings Tabs -->
+        <ul class="nav nav-tabs mb-4" id="settingsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">
+                    <i class="fas fa-sliders-h me-1"></i> الإعدادات العامة
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="appearance-tab" data-bs-toggle="tab" data-bs-target="#appearance" type="button" role="tab" aria-controls="appearance" aria-selected="false">
+                    <i class="fas fa-qrcode me-1"></i> تكوين رمز الاستجابة السريع
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications" type="button" role="tab" aria-controls="notifications" aria-selected="false">
+                    <i class="fas fa-share-alt me-1"></i> مواقع التواصل الاجتماعي
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false">
+                    <i class="fas fa-users me-1"></i> المستخدمين
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="settingsTabContent">
+            <!-- General Settings Tab -->
+            <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle me-2"></i> معلومات العمل الأساسية
+                    </div>
+                    <div class="card-body">
+                        <form id="generalSettingsForm">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="businessNameAr" class="form-label">اسم العمل (بالعربية)</label>
+                                    <input type="text" class="form-control" id="businessNameAr" placeholder="أدخل اسم العمل بالعربية">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="businessNameEn" class="form-label">اسم العمل (بالإنجليزية)</label>
+                                    <input type="text" class="form-control" id="businessNameEn" placeholder="Enter business name in English">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="descriptionAr" class="form-label">الوصف (بالعربية)</label>
+                                    <textarea class="form-control" id="descriptionAr" rows="3" placeholder="أدخل وصف العمل بالعربية"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="descriptionEn" class="form-label">الوصف (بالإنجليزية)</label>
+                                    <textarea class="form-control" id="descriptionEn" rows="3" placeholder="Enter business description in English"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="businessPhone" class="form-label">هاتف العمل</label>
+                                    <input type="tel" class="form-control" id="businessPhone" placeholder="9665xxxxxxxx">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="businessEmail" class="form-label">بريد العمل</label>
+                                    <input type="email" class="form-control" id="businessEmail" placeholder="email@email.com">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="businessAddress" class="form-label">العنوان</label>
+                                <textarea class="form-control" id="businessAddress" rows="2" placeholder="أدخل عنوان العمل"></textarea>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="card-header bg-transparent px-0 mb-3">
+                                <i class="fas fa-money-bill-wave me-2"></i> إعدادات المالية
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="deliveryFees" class="form-label">رسوم التوصيل (ر.س)</label>
+                                    <input type="number" class="form-control" id="deliveryFees" placeholder="أدخل رسوم التوصيل" value="0" min="0" step="0.01">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="deliveryTax" class="form-label">الضريبة على التوصيل (%)</label>
+                                    <input type="number" class="form-control" id="deliveryTax" placeholder="أدخل نسبة الضريبة" value="15" min="0" max="100" step="0.01">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="taxNumber" class="form-label">الرقم الضريبي</label>
+                                    <input type="text" class="form-control" id="taxNumber" placeholder="أدخل الرقم الضريبي" value="300000000000003">
+                                </div>
+                            </div>
+                            
+                            <!-- إضافة حقل لعرض ناتج رسوم التوصيل مع الضريبة -->
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <span id="deliveryTotalDisplay">سعر التوصيل سيكون 0.00 ريال شامل الضريبة</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- QR Code Tab (previously Appearance Tab) -->
+            <div class="tab-pane fade" id="appearance" role="tabpanel" aria-labelledby="appearance-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-qrcode me-2"></i> تكوين رمز الاستجابة السريع
+                    </div>
+                    <div class="card-body">
+                        <!-- تم حذف المحتوى ليتم إنشاؤه لاحقًا -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Media Tab (previously Notifications Tab) -->
+            <div class="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-share-alt me-2"></i> مواقع التواصل الاجتماعي
+                    </div>
+                    <div class="card-body">
+                        <form id="socialMediaForm">
+                            <!-- Google -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">
+                                        <i class="fab fa-google me-2 text-danger"></i> رابط موقعك على قوقل
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input social-toggle" type="checkbox" id="googleEnabled" checked data-target="googleUrl">
+                                        <label class="form-check-label" for="googleEnabled">تفعيل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="url" class="form-control" id="googleUrl" placeholder="قم بتفعيل الخانة اولاً" value="https://g.page/r/">
+                                </div>
+                            </div>
+                            
+                            <!-- Facebook -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">
+                                        <i class="fab fa-facebook me-2 text-primary"></i> حساب الفيسبوك
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input social-toggle" type="checkbox" id="facebookEnabled" checked data-target="facebookUrl">
+                                        <label class="form-check-label" for="facebookEnabled">تفعيل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="url" class="form-control" id="facebookUrl" placeholder="قم بتفعيل الخانة اولاً" value="https://www.facebook.com/">
+                                </div>
+                            </div>
+                            
+                            <!-- Snapchat -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">
+                                        <i class="fab fa-snapchat me-2 text-warning"></i> حساب السناب شات
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input social-toggle" type="checkbox" id="snapchatEnabled" data-target="snapchatUrl">
+                                        <label class="form-check-label" for="snapchatEnabled">تفعيل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="url" class="form-control" id="snapchatUrl" placeholder="قم بتفعيل الخانة اولاً" value="https://www.snapchat.com/add/" disabled>
+                                </div>
+                            </div>
+                            
+                            <!-- Twitter/X -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">
+                                        <i class="fab fa-x-twitter me-2"></i> حساب X (تويتر)
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input social-toggle" type="checkbox" id="twitterEnabled" checked data-target="twitterUrl">
+                                        <label class="form-check-label" for="twitterEnabled">تفعيل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="url" class="form-control" id="twitterUrl" placeholder="قم بتفعيل الخانة اولاً" value="https://twitter.com/">
+                                </div>
+                            </div>
+                            
+                            <!-- TikTok -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">
+                                        <i class="fab fa-tiktok me-2"></i> حساب التيك توك
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input social-toggle" type="checkbox" id="tiktokEnabled" data-target="tiktokUrl">
+                                        <label class="form-check-label" for="tiktokEnabled">تفعيل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="url" class="form-control" id="tiktokUrl" placeholder="قم بتفعيل الخانة اولاً" value="https://www.tiktok.com/@" disabled>
+                                </div>
+                            </div>
+                            
+                            <!-- Instagram -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">
+                                        <i class="fab fa-instagram me-2 text-danger"></i> حساب الانستقرام
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input social-toggle" type="checkbox" id="instagramEnabled" checked data-target="instagramUrl">
+                                        <label class="form-check-label" for="instagramEnabled">تفعيل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="url" class="form-control" id="instagramUrl" placeholder="قم بتفعيل الخانة اولاً" value="https://www.instagram.com/">
+                                </div>
+                            </div>
+                            
+                            <!-- WhatsApp -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">
+                                        <i class="fab fa-whatsapp me-2 text-success"></i> رقم الواتساب
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input social-toggle" type="checkbox" id="whatsappEnabled" checked data-target="whatsappNumber">
+                                        <label class="form-check-label" for="whatsappEnabled">تفعيل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="tel" class="form-control" id="whatsappNumber" placeholder="أدخل رقم الواتساب مع كود الدولة (مثال: 966500000000) بعد التفعيل" value="966">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users Tab -->
+            <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <!-- محتوى التبويب الرابع -->
+            </div>
+        </div>
+        
+        <!-- Fixed Save Button -->
+        <div class="settings-footer">
+            <div class="container">
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary me-2">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveSettings">
+                        <i class="fas fa-save me-1"></i> حفظ الإعدادات
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-4">
+        <div class="container text-center">
+            <p>جميع الحقوق محفوظة &copy; 2023 - نظام إدارة المطعم</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // نظام إدارة الإشعارات
+            const notificationSystem = {
+                activeNotifications: [],
+                maxNotifications: 3,
+                
+                // إضافة إشعار جديد
+                addNotification: function(notificationElement, duration) {
+                    // إزالة الإشعارات القديمة إذا تجاوزنا الحد الأقصى
+                    if (this.activeNotifications.length >= this.maxNotifications) {
+                        const oldestNotification = this.activeNotifications.shift();
+                        document.body.removeChild(oldestNotification.element);
+                        clearTimeout(oldestNotification.timerId);
+                    }
+                    
+                    // إضافة الإشعار الجديد
+                    document.body.appendChild(notificationElement);
+                    
+                    // ضبط موضع الإشعارات
+                    this.updateNotificationsPosition();
+                    
+                    // إعداد مؤقت لإزالة الإشعار
+                    const timerId = setTimeout(() => {
+                        this.removeNotification(notificationElement);
+                    }, duration);
+                    
+                    // تخزين الإشعار النشط
+                    this.activeNotifications.push({
+                        element: notificationElement,
+                        timerId: timerId
+                    });
+                    
+                    // إضافة مستمع حدث لزر الإغلاق
+                    const closeButton = notificationElement.querySelector('.btn-close');
+                    if (closeButton) {
+                        closeButton.addEventListener('click', () => {
+                            this.removeNotification(notificationElement);
+                        });
+                    }
+                    
+                    return notificationElement;
+                },
+                
+                // إزالة إشعار
+                removeNotification: function(notificationElement) {
+                    const index = this.activeNotifications.findIndex(n => n.element === notificationElement);
+                    if (index !== -1) {
+                        // إزالة من المصفوفة
+                        const notification = this.activeNotifications.splice(index, 1)[0];
+                        
+                        // إزالة من DOM مع تأثير تلاشي
+                        notificationElement.classList.add('fade');
+                        setTimeout(() => {
+                            if (notificationElement.parentNode) {
+                                document.body.removeChild(notificationElement);
+                            }
+                        }, 150);
+                        
+                        // إلغاء المؤقت
+                        clearTimeout(notification.timerId);
+                        
+                        // تحديث موضع الإشعارات المتبقية
+                        this.updateNotificationsPosition();
+                    }
+                },
+                
+                // تحديث موضع الإشعارات
+                updateNotificationsPosition: function() {
+                    this.activeNotifications.forEach((notification, index) => {
+                        notification.element.style.top = `${index * 70 + 10}px`;
+                    });
+                }
+            };
+            
+            // إضافة التحقق الإلزامي للحقول المطلوبة
+            const fieldsToMonitor = [
+                'businessNameAr',    // اسم العمل (بالعربية)
+                'businessNameEn',    // اسم العمل (بالإنجليزية)
+                'descriptionAr',     // الوصف (بالعربية)
+                'descriptionEn',     // الوصف (بالإنجليزية)
+                'businessPhone',     // هاتف العمل
+                'businessEmail',     // بريد العمل
+                'businessAddress'    // العنوان
+            ];
+            
+            // تخزين القيم الأصلية للحقول
+            const originalValues = {};
+            
+            // إعداد حساب رسوم التوصيل مع الضريبة
+            function setupDeliveryFeeCalculation() {
+                console.log("تم استدعاء دالة حساب رسوم التوصيل"); // للتأكد من استدعاء الدالة
+                
+                const deliveryFeesInput = document.getElementById('deliveryFees');
+                const deliveryTaxInput = document.getElementById('deliveryTax');
+                const deliveryTotalDisplay = document.getElementById('deliveryTotalDisplay');
+                
+                if (!deliveryFeesInput || !deliveryTaxInput || !deliveryTotalDisplay) {
+                    console.error("لم يتم العثور على عناصر حساب رسوم التوصيل");
+                    return;
+                }
+                
+                console.log("تم العثور على جميع عناصر حساب رسوم التوصيل");
+                
+                // تعيين قيم افتراضية إذا كانت فارغة
+                if (!deliveryFeesInput.value) deliveryFeesInput.value = "0";
+                if (!deliveryTaxInput.value) deliveryTaxInput.value = "15";
+                
+                // دالة لحساب وتحديث إجمالي رسوم التوصيل
+                function updateDeliveryTotal() {
+                    const fees = parseFloat(deliveryFeesInput.value) || 0;
+                    const taxRate = parseFloat(deliveryTaxInput.value) || 0;
+                    
+                    console.log(`حساب الرسوم: ${fees} ر.س، نسبة الضريبة: ${taxRate}%`);
+                    
+                    // حساب الضريبة
+                    const taxAmount = fees * (taxRate / 100);
+                    
+                    // إجمالي المبلغ مع الضريبة
+                    const total = fees + taxAmount;
+                    
+                    console.log(`مبلغ الضريبة: ${taxAmount.toFixed(2)} ر.س، الإجمالي: ${total.toFixed(2)} ر.س`);
+                    
+                    // تحديث النص
+                    deliveryTotalDisplay.textContent = `سعر التوصيل سيكون ${total.toFixed(2)} ريال شامل الضريبة`;
+                }
+                
+                // تحديث القيمة عند تحميل الصفحة
+                updateDeliveryTotal();
+                
+                // إضافة مستمعي الأحداث للحقول
+                deliveryFeesInput.addEventListener('input', updateDeliveryTotal);
+                deliveryTaxInput.addEventListener('input', updateDeliveryTotal);
+                
+                console.log("تم إعداد مستمعي الأحداث لحساب رسوم التوصيل");
+            }
+            
+            // حفظ القيم الأصلية وإضافة مستمعي الأحداث
+            fieldsToMonitor.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field) {
+                    console.error(`العنصر بالمعرف ${fieldId} غير موجود`);
+                    return;
+                }
+                
+                originalValues[fieldId] = field.value;
+                
+                // إضافة خاصية required للحقول المطلوبة
+                field.setAttribute('required', 'required');
+                
+                // إضافة مستمع حدث للتغيير
+                field.addEventListener('change', function() {
+                    handleFieldChange(fieldId, this.value);
+                });
+                
+                // إضافة مستمع حدث للكتابة (للمدخلات النصية)
+                if (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA') {
+                    field.addEventListener('input', function() {
+                        // تحدية الواجهة بناءً على التغييرات
+                        updateFieldStatus(fieldId, this.value !== originalValues[fieldId]);
+                        
+                        // إزالة فئة الخطأ إذا تم إدخال قيمة
+                        if (this.value.trim() !== '') {
+                            this.classList.remove('is-invalid');
+                        }
+                    });
+                }
+            });
+            
+            // حفظ الإعدادات
+            document.getElementById('saveSettings').addEventListener('click', function() {
+                // التحقق من الحقول المطلوبة
+                const emptyFields = [];
+                let hasValidationErrors = false;
+                
+                fieldsToMonitor.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field) return;
+                    
+                    if (field.value.trim() === '') {
+                        field.classList.add('is-invalid');
+                        emptyFields.push(getFieldLabel(fieldId));
+                    } else if (fieldId === 'businessEmail' && !validateEmail(field, false)) {
+                        hasValidationErrors = true;
+                    } else if (fieldId === 'businessPhone' && !validatePhone(field, false)) {
+                        hasValidationErrors = true;
+                    }
+                });
+                
+                // إذا كانت هناك حقول فارغة، عرض رسالة خطأ والخروج
+                if (emptyFields.length > 0) {
+                    showErrorNotification(`يرجى تعبئة الحقول المطلوبة: ${emptyFields.join('، ')}`);
+                    return;
+                }
+                
+                // إذا كانت هناك أخطاء في التحقق، الخروج
+                if (hasValidationErrors) {
+                    return;
+                }
+                
+                // التحقق من وجود تغييرات قبل الحفظ
+                const changedFields = fieldsToMonitor.filter(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    return field && field.value !== originalValues[fieldId];
+                });
+                
+                if (changedFields.length > 0) {
+                    // هناك تغييرات للحفظ
+                    // هنا يمكن إضافة كود لحفظ الإعدادات في قاعدة البيانات
+                    
+                    // تحديث القيم الأصلية بعد الحفظ
+                    fieldsToMonitor.forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        if (field) {
+                            originalValues[fieldId] = field.value;
+                            updateFieldStatus(fieldId, false);
+                        }
+                    });
+                    
+                    showSaveNotification(`تم حفظ التغييرات بنجاح (${changedFields.length} حقل)`);
+                } else {
+                    // لا توجد تغييرات للحفظ
+                    showInfoNotification("لم يتم إجراء أي تغييرات للحفظ");
+                }
+            });
+            
+            // إضافة مستمع حدث لزر الإلغاء
+            document.querySelector('.btn-secondary').addEventListener('click', function() {
+                // التحقق من وجود تغييرات قبل الإلغاء
+                const changedFields = fieldsToMonitor.filter(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    return field && field.value !== originalValues[fieldId];
+                });
+                
+                if (changedFields.length > 0) {
+                    // عرض تأكيد قبل الإلغاء
+                    if (confirm('هناك تغييرات لم يتم حفظها. هل أنت متأكد من رغبتك في الإلغاء؟')) {
+                        resetFormToOriginalValues();
+                    }
+                } else {
+                    // لا توجد تغييرات، إعادة تعيين النموذج
+                    resetFormToOriginalValues();
+                }
+            });
+            
+            // إعادة تعيين النموذج إلى القيم الأصلية
+            function resetFormToOriginalValues() {
+                fieldsToMonitor.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.value = originalValues[fieldId];
+                        field.classList.remove('is-invalid', 'border-primary');
+                    }
+                });
+                
+                showInfoNotification("تم إلغاء التغييرات");
+            }
+            
+            // التحقق من صحة البريد الإلكتروني
+            function validateEmail(field, showNotification = true) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const isValid = emailRegex.test(field.value);
+                
+                if (!isValid && field.value.trim() !== '') {
+                    field.classList.add('is-invalid');
+                    if (showNotification) {
+                        showErrorNotification("يرجى إدخال بريد إلكتروني صحيح");
+                    }
+                    return false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    return true;
+                }
+            }
+            
+            // التحقق من صحة رقم الهاتف
+            function validatePhone(field, showNotification = true) {
+                // تحقق بسيط من رقم الهاتف (يمكن تعديله حسب متطلبات التنسيق)
+                const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+                const isValid = phoneRegex.test(field.value.replace(/\s+/g, ''));
+                
+                if (!isValid && field.value.trim() !== '') {
+                    field.classList.add('is-invalid');
+                    if (showNotification) {
+                        showErrorNotification("يرجى إدخال رقم هاتف صحيح");
+                    }
+                    return false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    return true;
+                }
+            }
+            
+            // معالجة تغيير قيمة الحقل
+            function handleFieldChange(fieldId, newValue) {
+                console.log(`تم تغيير ${getFieldLabel(fieldId)} من "${originalValues[fieldId]}" إلى "${newValue}"`);
+                
+                // عرض إشعار بالتغيير
+                showFieldChangeNotification(fieldId, newValue);
+            }
+            
+            // تحديث حالة الحقل في الواجهة
+            function updateFieldStatus(fieldId, isChanged) {
+                const field = document.getElementById(fieldId);
+                if (!field) return;
+                
+                // إضافة أو إزالة فئة CSS للإشارة إلى التغيير
+                if (isChanged) {
+                    field.classList.add('border-primary');
+                } else {
+                    field.classList.remove('border-primary');
+                }
+            }
+            
+            // الحصول على تسمية الحقل المناسبة
+            function getFieldLabel(fieldId) {
+                const labels = {
+                    'businessNameAr': 'اسم العمل (بالعربية)',
+                    'businessNameEn': 'اسم العمل (بالإنجليزية)',
+                    'descriptionAr': 'الوصف (بالعربية)',
+                    'descriptionEn': 'الوصف (بالإنجليزية)',
+                    'businessPhone': 'هاتف العمل',
+                    'businessEmail': 'بريد العمل',
+                    'businessAddress': 'العنوان'
+                };
+                
+                return labels[fieldId] || fieldId;
+            }
+            
+            // عرض إشعار بتغيير الحقل
+            function showFieldChangeNotification(fieldId, newValue) {
+                // إنشاء عنصر الإشعار
+                const notification = document.createElement('div');
+                notification.className = 'position-fixed top-0 end-0 p-3';
+                notification.style.zIndex = '5000';
+                notification.style.transition = 'opacity 0.15s';
+                
+                notification.innerHTML = `
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto"><i class="fas fa-info-circle text-info me-1"></i> تم التعديل</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            تم تعديل ${getFieldLabel(fieldId)} بنجاح.
+                        </div>
+                    </div>
+                `;
+                
+                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
+                notificationSystem.addNotification(notification, 2000);
+            }
+            
+            // عرض إشعار معلومات
+            function showInfoNotification(message) {
+                // إنشاء عنصر الإشعار
+                const notification = document.createElement('div');
+                notification.className = 'position-fixed top-0 end-0 p-3';
+                notification.style.zIndex = '5000';
+                notification.style.transition = 'opacity 0.15s';
+                
+                notification.innerHTML = `
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto"><i class="fas fa-info-circle text-info me-1"></i> معلومات</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                    </div>
+                `;
+                
+                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
+                notificationSystem.addNotification(notification, 3000);
+            }
+            
+            // عرض إشعار الخطأ
+            function showErrorNotification(message) {
+                // إنشاء عنصر الإشعار
+                const notification = document.createElement('div');
+                notification.className = 'position-fixed top-0 end-0 p-3';
+                notification.style.zIndex = '5000';
+                notification.style.transition = 'opacity 0.15s';
+                
+                notification.innerHTML = `
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header bg-danger text-white">
+                            <strong class="me-auto"><i class="fas fa-exclamation-circle me-1"></i> خطأ</strong>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                    </div>
+                `;
+                
+                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
+                notificationSystem.addNotification(notification, 5000);
+            }
+            
+            // عرض إشعار الحفظ
+            function showSaveNotification(message = "تم حفظ الإعدادات بنجاح.") {
+                // إنشاء عنصر الإشعار
+                const notification = document.createElement('div');
+                notification.className = 'position-fixed top-0 end-0 p-3';
+                notification.style.zIndex = '5000';
+                notification.style.transition = 'opacity 0.15s';
+                
+                notification.innerHTML = `
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto"><i class="fas fa-check-circle text-success me-1"></i> تم الحفظ</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                    </div>
+                `;
+                
+                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
+                notificationSystem.addNotification(notification, 3000);
+            }
+            
+            // استدعاء دالة إعداد حساب رسوم التوصيل
+            setupDeliveryFeeCalculation();
+            
+            // إضافة مستمعي الأحداث للبريد الإلكتروني ورقم الهاتف
+            const emailField = document.getElementById('businessEmail');
+            if (emailField) {
+                emailField.addEventListener('blur', function() {
+                    validateEmail(this);
+                });
+            }
+            
+            const phoneField = document.getElementById('businessPhone');
+            if (phoneField) {
+                phoneField.addEventListener('blur', function() {
+                    validatePhone(this);
+                });
+            }
+        });
+    </script>
+    <!-- JavaScript for Social Media Toggle Switches -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all social media toggle switches
+            const toggles = document.querySelectorAll('.social-toggle');
+            
+            // Add event listener to each toggle
+            toggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    // Get the target input field
+                    const targetId = this.getAttribute('data-target');
+                    const targetInput = document.getElementById(targetId);
+                    
+                    if (targetInput) {
+                        // Enable/disable the input field based on toggle state
+                        targetInput.disabled = !this.checked;
+                        
+                        // Clear the input value when disabled
+                        if (!this.checked) {
+                            targetInput.value = '';
+                        } else {
+                            // Restore default value based on social media type
+                            switch(targetId) {
+                                case 'googleUrl':
+                                    targetInput.value = 'https://g.page/r/';
+                                    break;
+                                case 'facebookUrl':
+                                    targetInput.value = 'https://www.facebook.com/';
+                                    break;
+                                case 'snapchatUrl':
+                                    targetInput.value = 'https://www.snapchat.com/add/';
+                                    break;
+                                case 'twitterUrl':
+                                    targetInput.value = 'https://twitter.com/';
+                                    break;
+                                case 'tiktokUrl':
+                                    targetInput.value = 'https://www.tiktok.com/@';
+                                    break;
+                            }
+                        }
+                    }
+                });
+                
+                // Initialize input states
+                const targetId = toggle.getAttribute('data-target');
+                const targetInput = document.getElementById(targetId);
+                if (targetInput) {
+                    targetInput.disabled = !toggle.checked;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
