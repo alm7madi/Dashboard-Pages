@@ -80,33 +80,23 @@
             font-weight: 700;
         }
         
-        /* أنماط زر الحفظ الثابت */
-        .settings-footer {
+        /* إضافة هامش سفلي للمحتوى الرئيسي */
+        .container.py-4 {
+            margin-bottom: 100px;
+        }
+        /* أنماط الفوتر */
+        .footer {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: #fff;
-            padding: 1rem;
-            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+            background-color: #343a40;
+            color: #fff;
+            padding: 1rem 0;
             z-index: 1000;
-            border-top: 1px solid #e9ecef;
         }
-        
-        /* إضافة هامش سفلي للمحتوى الرئيسي لتجنب تداخله مع شريط الحفظ الثابت */
-        .container.py-4 {
-            margin-bottom: 140px; /* زيادة الهامش ليشمل الفوتر أيضًا */
-        }
-        
-        /* أنماط الفوتر الثابت */
-        footer.bg-dark {
-            position: fixed;
-            bottom: 60px; /* وضع الفوتر فوق شريط الحفظ */
-            left: 0;
-            right: 0;
-            z-index: 999;
-            padding: 0.75rem 0;
-            margin-top: 0;
+        .footer p {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -262,6 +252,8 @@
                                     </div>
                                 </div>
                             </div>
+                            
+
                         </form>
                     </div>
                 </div>
@@ -412,6 +404,8 @@
                                     <input type="tel" class="form-control" id="whatsappNumber" placeholder="أدخل رقم الواتساب مع كود الدولة (مثال: 966500000000) بعد التفعيل" value="966">
                                 </div>
                             </div>
+                            
+
                         </form>
                     </div>
                 </div>
@@ -527,6 +521,8 @@
                                     </tbody>
                                 </table>
                             </div>
+                            
+
                         </form>
                     </div>
                 </div>
@@ -547,508 +543,49 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-4">
-        <div class="container text-center">
-            <p>جميع الحقوق محفوظة &copy; 2023 - نظام إدارة المطعم</p>
+    <footer class="footer">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <p>جميع الحقوق محفوظة © 2024</p>
+                <p>نظام إدارة المطعم</p>
+            </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
+        // تحديث حالة حقول الإدخال عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
-            // نظام إدارة الإشعارات
-            const notificationSystem = {
-                activeNotifications: [],
-                maxNotifications: 3,
-                
-                // إضافة إشعار جديد
-                addNotification: function(notificationElement, duration) {
-                    // إزالة الإشعارات القديمة إذا تجاوزنا الحد الأقصى
-                    if (this.activeNotifications.length >= this.maxNotifications) {
-                        const oldestNotification = this.activeNotifications.shift();
-                        document.body.removeChild(oldestNotification.element);
-                        clearTimeout(oldestNotification.timerId);
-                    }
-                    
-                    // إضافة الإشعار الجديد
-                    document.body.appendChild(notificationElement);
-                    
-                    // ضبط موضع الإشعارات
-                    this.updateNotificationsPosition();
-                    
-                    // إعداد مؤقت لإزالة الإشعار
-                    const timerId = setTimeout(() => {
-                        this.removeNotification(notificationElement);
-                    }, duration);
-                    
-                    // تخزين الإشعار النشط
-                    this.activeNotifications.push({
-                        element: notificationElement,
-                        timerId: timerId
-                    });
-                    
-                    // إضافة مستمع حدث لزر الإغلاق
-                    const closeButton = notificationElement.querySelector('.btn-close');
-                    if (closeButton) {
-                        closeButton.addEventListener('click', () => {
-                            this.removeNotification(notificationElement);
-                        });
-                    }
-                    
-                    return notificationElement;
-                },
-                
-                // إزالة إشعار
-                removeNotification: function(notificationElement) {
-                    const index = this.activeNotifications.findIndex(n => n.element === notificationElement);
-                    if (index !== -1) {
-                        // إزالة من المصفوفة
-                        const notification = this.activeNotifications.splice(index, 1)[0];
-                        
-                        // إزالة من DOM مع تأثير تلاشي
-                        notificationElement.classList.add('fade');
-                        setTimeout(() => {
-                            if (notificationElement.parentNode) {
-                                document.body.removeChild(notificationElement);
-                            }
-                        }, 150);
-                        
-                        // إلغاء المؤقت
-                        clearTimeout(notification.timerId);
-                        
-                        // تحديث موضع الإشعارات المتبقية
-                        this.updateNotificationsPosition();
-                    }
-                },
-                
-                // تحديث موضع الإشعارات
-                updateNotificationsPosition: function() {
-                    this.activeNotifications.forEach((notification, index) => {
-                        notification.element.style.top = `${index * 70 + 10}px`;
-                    });
-                }
-            };
-            
-            // إضافة التحقق الإلزامي للحقول المطلوبة
-            const fieldsToMonitor = [
-                'businessNameAr',    // اسم العمل (بالعربية)
-                'businessNameEn',    // اسم العمل (بالإنجليزية)
-                'descriptionAr',     // الوصف (بالعربية)
-                'descriptionEn',     // الوصف (بالإنجليزية)
-                'businessPhone',     // هاتف العمل
-                'businessEmail',     // بريد العمل
-                'businessAddress'    // العنوان
-            ];
-            
-            // تخزين القيم الأصلية للحقول
-            const originalValues = {};
-            
-            // إعداد حساب رسوم التوصيل مع الضريبة
-            function setupDeliveryFeeCalculation() {
-                console.log("تم استدعاء دالة حساب رسوم التوصيل"); // للتأكد من استدعاء الدالة
-                
-                const deliveryFeesInput = document.getElementById('deliveryFees');
-                const deliveryTaxInput = document.getElementById('deliveryTax');
-                const deliveryTotalDisplay = document.getElementById('deliveryTotalDisplay');
-                
-                if (!deliveryFeesInput || !deliveryTaxInput || !deliveryTotalDisplay) {
-                    console.error("لم يتم العثور على عناصر حساب رسوم التوصيل");
-                    return;
-                }
-                
-                console.log("تم العثور على جميع عناصر حساب رسوم التوصيل");
-                
-                // تعيين قيم افتراضية إذا كانت فارغة
-                if (!deliveryFeesInput.value) deliveryFeesInput.value = "0";
-                if (!deliveryTaxInput.value) deliveryTaxInput.value = "15";
-                
-                // دالة لحساب وتحديث إجمالي رسوم التوصيل
-                function updateDeliveryTotal() {
-                    const fees = parseFloat(deliveryFeesInput.value) || 0;
-                    const taxRate = parseFloat(deliveryTaxInput.value) || 0;
-                    
-                    console.log(`حساب الرسوم: ${fees} ر.س، نسبة الضريبة: ${taxRate}%`);
-                    
-                    // حساب الضريبة
-                    const taxAmount = fees * (taxRate / 100);
-                    
-                    // إجمالي المبلغ مع الضريبة
-                    const total = fees + taxAmount;
-                    
-                    console.log(`مبلغ الضريبة: ${taxAmount.toFixed(2)} ر.س، الإجمالي: ${total.toFixed(2)} ر.س`);
-                    
-                    // تحديث النص
-                    deliveryTotalDisplay.textContent = `سعر التوصيل سيكون ${total.toFixed(2)} ريال شامل الضريبة`;
-                }
-                
-                // تحديث القيمة عند تحميل الصفحة
-                updateDeliveryTotal();
-                
-                // إضافة مستمعي الأحداث للحقول
-                deliveryFeesInput.addEventListener('input', updateDeliveryTotal);
-                deliveryTaxInput.addEventListener('input', updateDeliveryTotal);
-                
-                console.log("تم إعداد مستمعي الأحداث لحساب رسوم التوصيل");
-            }
-            
-            // حفظ القيم الأصلية وإضافة مستمعي الأحداث
-            fieldsToMonitor.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (!field) {
-                    console.error(`العنصر بالمعرف ${fieldId} غير موجود`);
-                    return;
-                }
-                
-                originalValues[fieldId] = field.value;
-                
-                // إضافة خاصية required للحقول المطلوبة
-                field.setAttribute('required', 'required');
-                
-                // إضافة مستمع حدث للتغيير
-                field.addEventListener('change', function() {
-                    handleFieldChange(fieldId, this.value);
-                });
-                
-                // إضافة مستمع حدث للكتابة (للمدخلات النصية)
-                if (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA') {
-                    field.addEventListener('input', function() {
-                        // تحدية الواجهة بناءً على التغييرات
-                        updateFieldStatus(fieldId, this.value !== originalValues[fieldId]);
-                        
-                        // إزالة فئة الخطأ إذا تم إدخال قيمة
-                        if (this.value.trim() !== '') {
-                            this.classList.remove('is-invalid');
-                        }
-                    });
-                }
-            });
-            
-            // حفظ الإعدادات
-            document.getElementById('saveSettings').addEventListener('click', function() {
-                // التحقق من الحقول المطلوبة
-                const emptyFields = [];
-                let hasValidationErrors = false;
-                
-                fieldsToMonitor.forEach(fieldId => {
-                    const field = document.getElementById(fieldId);
-                    if (!field) return;
-                    
-                    if (field.value.trim() === '') {
-                        field.classList.add('is-invalid');
-                        emptyFields.push(getFieldLabel(fieldId));
-                    } else if (fieldId === 'businessEmail' && !validateEmail(field, false)) {
-                        hasValidationErrors = true;
-                    } else if (fieldId === 'businessPhone' && !validatePhone(field, false)) {
-                        hasValidationErrors = true;
-                    }
-                });
-                
-                // إذا كانت هناك حقول فارغة، عرض رسالة خطأ والخروج
-                if (emptyFields.length > 0) {
-                    showErrorNotification(`يرجى تعبئة الحقول المطلوبة: ${emptyFields.join('، ')}`);
-                    return;
-                }
-                
-                // إذا كانت هناك أخطاء في التحقق، الخروج
-                if (hasValidationErrors) {
-                    return;
-                }
-                
-                // التحقق من وجود تغييرات قبل الحفظ
-                const changedFields = fieldsToMonitor.filter(fieldId => {
-                    const field = document.getElementById(fieldId);
-                    return field && field.value !== originalValues[fieldId];
-                });
-                
-                if (changedFields.length > 0) {
-                    // هناك تغييرات للحفظ
-                    // هنا يمكن إضافة كود لحفظ الإعدادات في قاعدة البيانات
-                    
-                    // تحديث القيم الأصلية بعد الحفظ
-                    fieldsToMonitor.forEach(fieldId => {
-                        const field = document.getElementById(fieldId);
-                        if (field) {
-                            originalValues[fieldId] = field.value;
-                            updateFieldStatus(fieldId, false);
-                        }
-                    });
-                    
-                    showSaveNotification(`تم حفظ التغييرات بنجاح (${changedFields.length} حقل)`);
-                } else {
-                    // لا توجد تغييرات للحفظ
-                    showInfoNotification("لم يتم إجراء أي تغييرات للحفظ");
-                }
-            });
-            
-            // إضافة مستمع حدث لزر الإلغاء
-            document.querySelector('.btn-secondary').addEventListener('click', function() {
-                // التحقق من وجود تغييرات قبل الإلغاء
-                const changedFields = fieldsToMonitor.filter(fieldId => {
-                    const field = document.getElementById(fieldId);
-                    return field && field.value !== originalValues[fieldId];
-                });
-                
-                if (changedFields.length > 0) {
-                    // عرض تأكيد قبل الإلغاء
-                    if (confirm('هناك تغييرات لم يتم حفظها. هل أنت متأكد من رغبتك في الإلغاء؟')) {
-                        resetFormToOriginalValues();
-                    }
-                } else {
-                    // لا توجد تغييرات، إعادة تعيين النموذج
-                    resetFormToOriginalValues();
-                }
-            });
-            
-            // إعادة تعيين النموذج إلى القيم الأصلية
-            function resetFormToOriginalValues() {
-                fieldsToMonitor.forEach(fieldId => {
-                    const field = document.getElementById(fieldId);
-                    if (field) {
-                        field.value = originalValues[fieldId];
-                        field.classList.remove('is-invalid', 'border-primary');
-                    }
-                });
-                
-                showInfoNotification("تم إلغاء التغييرات");
-            }
-            
-            // التحقق من صحة البريد الإلكتروني
-            function validateEmail(field, showNotification = true) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                const isValid = emailRegex.test(field.value);
-                
-                if (!isValid && field.value.trim() !== '') {
-                    field.classList.add('is-invalid');
-                    if (showNotification) {
-                        showErrorNotification("يرجى إدخال بريد إلكتروني صحيح");
-                    }
-                    return false;
-                } else {
-                    field.classList.remove('is-invalid');
-                    return true;
-                }
-            }
-            
-            // التحقق من صحة رقم الهاتف
-            function validatePhone(field, showNotification = true) {
-                // تحقق بسيط من رقم الهاتف (يمكن تعديله حسب متطلبات التنسيق)
-                const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
-                const isValid = phoneRegex.test(field.value.replace(/\s+/g, ''));
-                
-                if (!isValid && field.value.trim() !== '') {
-                    field.classList.add('is-invalid');
-                    if (showNotification) {
-                        showErrorNotification("يرجى إدخال رقم هاتف صحيح");
-                    }
-                    return false;
-                } else {
-                    field.classList.remove('is-invalid');
-                    return true;
-                }
-            }
-            
-            // معالجة تغيير قيمة الحقل
-            function handleFieldChange(fieldId, newValue) {
-                console.log(`تم تغيير ${getFieldLabel(fieldId)} من "${originalValues[fieldId]}" إلى "${newValue}"`);
-                
-                // عرض إشعار بالتغيير
-                showFieldChangeNotification(fieldId, newValue);
-            }
-            
-            // تحديث حالة الحقل في الواجهة
-            function updateFieldStatus(fieldId, isChanged) {
-                const field = document.getElementById(fieldId);
-                if (!field) return;
-                
-                // إضافة أو إزالة فئة CSS للإشارة إلى التغيير
-                if (isChanged) {
-                    field.classList.add('border-primary');
-                } else {
-                    field.classList.remove('border-primary');
-                }
-            }
-            
-            // الحصول على تسمية الحقل المناسبة
-            function getFieldLabel(fieldId) {
-                const labels = {
-                    'businessNameAr': 'اسم العمل (بالعربية)',
-                    'businessNameEn': 'اسم العمل (بالإنجليزية)',
-                    'descriptionAr': 'الوصف (بالعربية)',
-                    'descriptionEn': 'الوصف (بالإنجليزية)',
-                    'businessPhone': 'هاتف العمل',
-                    'businessEmail': 'بريد العمل',
-                    'businessAddress': 'العنوان'
-                };
-                
-                return labels[fieldId] || fieldId;
-            }
-            
-            // عرض إشعار بتغيير الحقل
-            function showFieldChangeNotification(fieldId, newValue) {
-                // إنشاء عنصر الإشعار
-                const notification = document.createElement('div');
-                notification.className = 'position-fixed top-0 end-0 p-3';
-                notification.style.zIndex = '5000';
-                notification.style.transition = 'opacity 0.15s';
-                
-                notification.innerHTML = `
-                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong class="me-auto"><i class="fas fa-info-circle text-info me-1"></i> تم التعديل</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            تم تعديل ${getFieldLabel(fieldId)} بنجاح.
-                        </div>
-                    </div>
-                `;
-                
-                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
-                notificationSystem.addNotification(notification, 2000);
-            }
-            
-            // عرض إشعار معلومات
-            function showInfoNotification(message) {
-                // إنشاء عنصر الإشعار
-                const notification = document.createElement('div');
-                notification.className = 'position-fixed top-0 end-0 p-3';
-                notification.style.zIndex = '5000';
-                notification.style.transition = 'opacity 0.15s';
-                
-                notification.innerHTML = `
-                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong class="me-auto"><i class="fas fa-info-circle text-info me-1"></i> معلومات</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            ${message}
-                        </div>
-                    </div>
-                `;
-                
-                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
-                notificationSystem.addNotification(notification, 3000);
-            }
-            
-            // عرض إشعار الخطأ
-            function showErrorNotification(message) {
-                // إنشاء عنصر الإشعار
-                const notification = document.createElement('div');
-                notification.className = 'position-fixed top-0 end-0 p-3';
-                notification.style.zIndex = '5000';
-                notification.style.transition = 'opacity 0.15s';
-                
-                notification.innerHTML = `
-                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header bg-danger text-white">
-                            <strong class="me-auto"><i class="fas fa-exclamation-circle me-1"></i> خطأ</strong>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            ${message}
-                        </div>
-                    </div>
-                `;
-                
-                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
-                notificationSystem.addNotification(notification, 5000);
-            }
-            
-            // عرض إشعار الحفظ
-            function showSaveNotification(message = "تم حفظ الإعدادات بنجاح.") {
-                // إنشاء عنصر الإشعار
-                const notification = document.createElement('div');
-                notification.className = 'position-fixed top-0 end-0 p-3';
-                notification.style.zIndex = '5000';
-                notification.style.transition = 'opacity 0.15s';
-                
-                notification.innerHTML = `
-                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong class="me-auto"><i class="fas fa-check-circle text-success me-1"></i> تم الحفظ</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            ${message}
-                        </div>
-                    </div>
-                `;
-                
-                // إضافة الإشعار باستخدام نظام إدارة الإشعارات
-                notificationSystem.addNotification(notification, 3000);
-            }
-            
-            // استدعاء دالة إعداد حساب رسوم التوصيل
-            setupDeliveryFeeCalculation();
-            
-            // إضافة مستمعي الأحداث للبريد الإلكتروني ورقم الهاتف
-            const emailField = document.getElementById('businessEmail');
-            if (emailField) {
-                emailField.addEventListener('blur', function() {
-                    validateEmail(this);
-                });
-            }
-            
-            const phoneField = document.getElementById('businessPhone');
-            if (phoneField) {
-                phoneField.addEventListener('blur', function() {
-                    validatePhone(this);
-                });
-            }
-        });
-    </script>
-    <!-- JavaScript for Social Media Toggle Switches -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all social media toggle switches
+            // العثور على جميع أزرار التبديل
             const toggles = document.querySelectorAll('.social-toggle');
             
-            // Add event listener to each toggle
+            // إضافة مستمع الحدث لكل زر تبديل
             toggles.forEach(toggle => {
+                // تحديث حالة حقل الإدخال عند تحميل الصفحة
+                const inputId = toggle.dataset.target;
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.disabled = !toggle.checked;
+                    // تحديث مظهر حقل الإدخال
+                    input.style.backgroundColor = toggle.checked ? '#ffffff' : '#e9ecef';
+                    input.style.cursor = toggle.checked ? 'text' : 'not-allowed';
+                }
+
+                // إضافة مستمع لحدث التغيير
                 toggle.addEventListener('change', function() {
-                    // Get the target input field
-                    const targetId = this.getAttribute('data-target');
-                    const targetInput = document.getElementById(targetId);
-                    
-                    if (targetInput) {
-                        // Enable/disable the input field based on toggle state
-                        targetInput.disabled = !this.checked;
-                        
-                        // Clear the input value when disabled
+                    const inputId = this.dataset.target;
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        // تحديث حالة التعطيل
+                        input.disabled = !this.checked;
+                        // تحديث مظهر حقل الإدخال
+                        input.style.backgroundColor = this.checked ? '#ffffff' : '#e9ecef';
+                        input.style.cursor = this.checked ? 'text' : 'not-allowed';
+                        // مسح القيمة عند التعطيل
                         if (!this.checked) {
-                            targetInput.value = '';
-                        } else {
-                            // Restore default value based on social media type
-                            switch(targetId) {
-                                case 'googleUrl':
-                                    targetInput.value = 'https://g.page/r/';
-                                    break;
-                                case 'facebookUrl':
-                                    targetInput.value = 'https://www.facebook.com/';
-                                    break;
-                                case 'snapchatUrl':
-                                    targetInput.value = 'https://www.snapchat.com/add/';
-                                    break;
-                                case 'twitterUrl':
-                                    targetInput.value = 'https://twitter.com/';
-                                    break;
-                                case 'tiktokUrl':
-                                    targetInput.value = 'https://www.tiktok.com/@';
-                                    break;
-                            }
+                            input.value = '';
                         }
                     }
                 });
-                
-                // Initialize input states
-                const targetId = toggle.getAttribute('data-target');
-                const targetInput = document.getElementById(targetId);
-                if (targetInput) {
-                    targetInput.disabled = !toggle.checked;
-                }
             });
         });
     </script>
