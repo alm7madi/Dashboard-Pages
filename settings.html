@@ -84,6 +84,36 @@
         .container.py-4 {
             margin-bottom: 20px; /* تم تقليل الهامش من 80px إلى 20px */
         }
+        
+        /* أنماط عرض الوقت الحالي */
+        .current-time-container {
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .current-time-container:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .time-display {
+            font-size: 1.2rem;
+            font-family: monospace;
+            color: #3498db;
+            display: inline-block;
+            min-width: 80px;
+        }
+        
+        /* تحسين التجاوب للموبايل */
+        @media (max-width: 767.98px) {
+            .current-time-container {
+                margin-top: 15px;
+            }
+            
+            .time-display {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -385,12 +415,23 @@
                         <form id="workingHoursForm">
                             <!-- اختيار البلد -->
                             <div class="mb-4">
-                                <label for="storeCountry" class="form-label">بلد المتجر</label>
-                                <select class="form-select" id="storeCountry">
-                                    <option value="SA">المملكة العربية السعودية</option>
-                                    <option value="EG">مصر</option>
-                                    <option value="BH">البحرين</option>
-                                </select>
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <label for="storeCountry" class="form-label">بلد المتجر</label>
+                                        <select class="form-select" id="storeCountry">
+                                            <option value="SA">المملكة العربية السعودية</option>
+                                            <option value="EG">مصر</option>
+                                            <option value="BH">البحرين</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="current-time-container bg-light rounded p-3 text-center">
+                                            <i class="fas fa-clock me-2 text-primary"></i>
+                                            <span>الوقت الحالي: </span>
+                                            <strong id="currentTime" class="time-display">--:--:--</strong>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- جدول ساعات العمل -->
@@ -566,6 +607,167 @@
             
             // تحديث القيمة الأولية
             updateDeliveryTotal();
+
+            // ===== إضافة التحقق من الحقول =====
+            
+            // 1. التحقق من الإعدادات العامة
+            const saveGeneralSettings = document.getElementById('saveGeneralSettings');
+            saveGeneralSettings.addEventListener('click', function() {
+                const requiredFields = [
+                    { id: 'businessNameAr', label: 'اسم العمل (بالعربية)' },
+                    { id: 'businessNameEn', label: 'اسم العمل (بالإنجليزية)' },
+                    { id: 'businessPhone', label: 'هاتف العمل' },
+                    { id: 'businessEmail', label: 'بريد العمل' },
+                    { id: 'businessAddress', label: 'العنوان' }
+                ];
+                
+                let isValid = true;
+                let firstInvalidField = null;
+                
+                // التحقق من كل حقل مطلوب
+                requiredFields.forEach(field => {
+                    const input = document.getElementById(field.id);
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                        if (!firstInvalidField) firstInvalidField = input;
+                        
+                        // إضافة رسالة خطأ إذا لم تكن موجودة
+                        let nextElement = input.nextElementSibling;
+                        if (!nextElement || !nextElement.classList.contains('invalid-feedback')) {
+                            const feedback = document.createElement('div');
+                            feedback.className = 'invalid-feedback';
+                            feedback.textContent = `الرجاء إدخال ${field.label}`;
+                            input.parentNode.insertBefore(feedback, input.nextSibling);
+                        }
+                    } else {
+                        input.classList.remove('is-invalid');
+                        // إزالة رسالة الخطأ إن وجدت
+                        let nextElement = input.nextElementSibling;
+                        if (nextElement && nextElement.classList.contains('invalid-feedback')) {
+                            nextElement.remove();
+                        }
+                    }
+                });
+                
+                // التمرير إلى أول حقل غير صالح
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                    return;
+                }
+                
+                if (isValid) {
+                    // إذا كانت جميع الحقول صالحة، يمكن إرسال النموذج أو حفظ البيانات
+                    alert('تم حفظ الإعدادات العامة بنجاح!');
+                    // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
+                }
+            });
+            
+            // 2. التحقق من حقول مواقع التواصل الاجتماعي
+            const saveSocialSettings = document.getElementById('saveSocialSettings');
+            saveSocialSettings.addEventListener('click', function() {
+                const socialToggles = document.querySelectorAll('.social-toggle');
+                let isValid = true;
+                let firstInvalidField = null;
+                
+                socialToggles.forEach(toggle => {
+                    if (toggle.checked) {
+                        const inputId = toggle.dataset.target;
+                        const input = document.getElementById(inputId);
+                        
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.classList.add('is-invalid');
+                            if (!firstInvalidField) firstInvalidField = input;
+                            
+                            // إضافة رسالة خطأ
+                            let nextElement = input.nextElementSibling;
+                            if (!nextElement || !nextElement.classList.contains('invalid-feedback')) {
+                                const feedback = document.createElement('div');
+                                feedback.className = 'invalid-feedback';
+                                feedback.textContent = 'هذا الحقل مطلوب';
+                                input.parentNode.insertBefore(feedback, input.nextSibling);
+                            }
+                        } else {
+                            input.classList.remove('is-invalid');
+                            // إزالة رسالة الخطأ إن وجدت
+                            let nextElement = input.nextElementSibling;
+                            if (nextElement && nextElement.classList.contains('invalid-feedback')) {
+                                nextElement.remove();
+                            }
+                        }
+                    }
+                });
+                
+                // التمرير إلى أول حقل غير صالح
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                    return;
+                }
+                
+                if (isValid) {
+                    // إذا كانت جميع الحقول صالحة، يمكن إرسال النموذج أو حفظ البيانات
+                    alert('تم حفظ إعدادات مواقع التواصل الاجتماعي بنجاح!');
+                    // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
+                }
+            });
+            
+            // 3. التحقق من ساعات العمل وتعطيل حقول الساعات عند اختيار يوم عطلة
+            const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            
+            daysOfWeek.forEach(day => {
+                const checkbox = document.getElementById(`${day}Closed`);
+                const startInput = document.getElementById(`${day}Start`);
+                const endInput = document.getElementById(`${day}End`);
+                
+                // تحديث حالة حقول الإدخال عند تحميل الصفحة
+                if (checkbox.checked) {
+                    startInput.disabled = true;
+                    endInput.disabled = true;
+                    startInput.style.backgroundColor = '#e9ecef';
+                    endInput.style.backgroundColor = '#e9ecef';
+                }
+                
+                // إضافة مستمع لحدث التغيير
+                checkbox.addEventListener('change', function() {
+                    startInput.disabled = this.checked;
+                    endInput.disabled = this.checked;
+                    startInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
+                    endInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
+                });
+            });
+            
+            // حفظ ساعات العمل
+            const saveHoursSettings = document.getElementById('saveHoursSettings');
+            saveHoursSettings.addEventListener('click', function() {
+                // يمكن إضافة تحقق إضافي هنا إذا لزم الأمر
+                alert('تم حفظ ساعات العمل بنجاح!');
+                // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
+            });
+            
+            // إضافة عرض الوقت الحالي وتحديثه كل ثانية
+            function updateCurrentTime() {
+                const currentTimeElement = document.getElementById('currentTime');
+                if (currentTimeElement) {
+                    const now = new Date();
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    const seconds = now.getSeconds().toString().padStart(2, '0');
+                    
+                    // تحديث النص مع تأثير بسيط
+                    currentTimeElement.style.opacity = '0.5';
+                    setTimeout(() => {
+                        currentTimeElement.textContent = `${hours}:${minutes}:${seconds}`;
+                        currentTimeElement.style.opacity = '1';
+                    }, 200);
+                }
+            }
+            
+            // تحديث الوقت عند تحميل الصفحة
+            updateCurrentTime();
+            
+            // تحديث الوقت كل ثانية
+            setInterval(updateCurrentTime, 1000);
         });
     </script>
 </body>
