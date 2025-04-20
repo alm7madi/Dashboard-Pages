@@ -17,6 +17,22 @@
             background-color: #f8f9fa;
         }
         
+        /* تعديل الحاوية الرئيسية لتكون بعرض ثابت 1200px */
+        .container {
+            max-width: 1200px;
+            width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* تجاوب الحاوية للشاشات الصغيرة */
+        @media (max-width: 1200px) {
+            .container {
+                width: 100%;
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+        }
+        
         /* أنماط البطاقات */
         .card {
             border-radius: 10px;
@@ -100,126 +116,13 @@
             width: 100%;
         }
         
-        /* أنماط زر التبديل بين الوضع الفاتح والمظلم */
-        .theme-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-            margin: 0 10px;
-        }
-        .theme-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 30px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #2196F3;
-        }
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-        
-        /* أنماط الوضع المظلم */
-        [data-theme="dark"] .table,
-        [data-theme="dark"] .table thead th,
-        [data-theme="dark"] .table td, 
-        [data-theme="dark"] .table th {
-            border-color: var(--table-border);
-        }
-        [data-theme="dark"] .table-hover tbody tr:hover {
-            background-color: var(--table-hover);
-        }
-        [data-theme="dark"] thead {
-            background-color: var(--table-header-bg) !important;
-        }
-        [data-theme="dark"] .chartjs-render-monitor {
-            filter: brightness(0.8) contrast(1.2);
-        }
-        [data-theme="dark"] .text-muted {
-            color: #adb5bd !important;
-        }
-        [data-theme="dark"] .btn-outline-secondary {
-            color: #adb5bd;
-            border-color: #6c757d;
-        }
-        [data-theme="dark"] .btn-outline-secondary:hover {
-            background-color: #6c757d;
-            color: #fff;
-        }
-        
         /* أيقونات وعناصر أخرى */
         .navbar-brand {
             font-weight: 700;
         }
-        .theme-icon {
-            margin-right: 5px;
-        }
     </style>
 </head>
 <body>
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">نظام إدارة المطعم</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-tachometer-alt me-1"></i> لوحة التحكم</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="الذهاب إلى قائمة الطعام">
-                            <i class="fas fa-utensils me-1"></i> قائمة الطعام
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i> مدير الحساب
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-1"></i> الإعدادات</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-bell me-1"></i> الإشعارات</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-1"></i> تسجيل الخروج</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="تسجيل الخروج">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- Main Content -->
     <div class="container py-4">
         <h2 class="mb-4">لوحة التحكم</h2>
@@ -434,7 +337,6 @@
                                         <td>85</td>
                                         <td>1,275 ر.س</td>
                                     </tr>
-                                    <!-- باقي الصفوف -->
                                     <tr>
                                         <td>بيتزا خضار</td>
                                         <td>بيتزا</td>
@@ -458,48 +360,6 @@
                                         <td>برجر</td>
                                         <td>40</td>
                                         <td>600 ر.س</td>
-                                    </tr>
-                                    <tr>
-                                        <td>بيتزا لحم</td>
-                                        <td>بيتزا</td>
-                                        <td>38</td>
-                                        <td>684 ر.س</td>
-                                    </tr>
-                                    <tr>
-                                        <td>عصير برتقال</td>
-                                        <td>مشروبات</td>
-                                        <td>35</td>
-                                        <td>175 ر.س</td>
-                                    </tr>
-                                    <tr>
-                                        <td>كيكة الشوكولاتة</td>
-                                        <td>حلويات</td>
-                                        <td>32</td>
-                                        <td>480 ر.س</td>
-                                    </tr>
-                                    <tr>
-                                        <td>دجاج مشوي</td>
-                                        <td>أطباق رئيسية</td>
-                                        <td>30</td>
-                                        <td>600 ر.س</td>
-                                    </tr>
-                                    <tr>
-                                        <td>سلطة يونانية</td>
-                                        <td>سلطات</td>
-                                        <td>28</td>
-                                        <td>420 ر.س</td>
-                                    </tr>
-                                    <tr>
-                                        <td>آيس كريم</td>
-                                        <td>حلويات</td>
-                                        <td>25</td>
-                                        <td>250 ر.س</td>
-                                    </tr>
-                                    <tr>
-                                        <td>شاورما دجاج</td>
-                                        <td>أطباق رئيسية</td>
-                                        <td>22</td>
-                                        <td>330 ر.س</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -533,13 +393,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-4">
-        <div class="container text-center">
-            <p>جميع الحقوق محفوظة &copy; 2023 - نظام إدارة المطعم</p>
-        </div>
-    </footer>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -602,42 +455,21 @@
                     { item: 'بيتزا خضار', category: 'بيتزا', sales: 64, revenue: '1,152 ر.س' },
                     { item: 'مشروب الليمون', category: 'مشروبات', sales: 58, revenue: '290 ر.س' },
                     { item: 'سلطة سيزر', category: 'سلطات', sales: 42, revenue: '630 ر.س' },
-                    { item: 'برجر دجاج', category: 'برجر', sales: 40, revenue: '600 ر.س' },
-                    { item: 'بيتزا لحم', category: 'بيتزا', sales: 38, revenue: '684 ر.س' },
-                    { item: 'عصير برتقال', category: 'مشروبات', sales: 35, revenue: '175 ر.س' },
-                    { item: 'كيكة الشوكولاتة', category: 'حلويات', sales: 32, revenue: '480 ر.س' },
-                    { item: 'دجاج مشوي', category: 'أطباق رئيسية', sales: 30, revenue: '600 ر.س' },
-                    { item: 'سلطة يونانية', category: 'سلطات', sales: 28, revenue: '420 ر.س' },
-                    { item: 'آيس كريم', category: 'حلويات', sales: 25, revenue: '250 ر.س' },
-                    { item: 'شاورما دجاج', category: 'أطباق رئيسية', sales: 22, revenue: '330 ر.س' }
+                    { item: 'برجر دجاج', category: 'برجر', sales: 40, revenue: '600 ر.س' }
                 ],
                 weekly: [
                     { item: 'برجر لحم', category: 'برجر', sales: 420, revenue: '6,300 ر.س' },
                     { item: 'بيتزا خضار', category: 'بيتزا', sales: 350, revenue: '6,300 ر.س' },
                     { item: 'دجاج مشوي', category: 'أطباق رئيسية', sales: 280, revenue: '5,600 ر.س' },
                     { item: 'مشروب الليمون', category: 'مشروبات', sales: 250, revenue: '1,250 ر.س' },
-                    { item: 'برجر دجاج', category: 'برجر', sales: 220, revenue: '3,300 ر.س' },
-                    { item: 'كيكة الشوكولاتة', category: 'حلويات', sales: 200, revenue: '3,000 ر.س' },
-                    { item: 'سلطة سيزر', category: 'سلطات', sales: 180, revenue: '2,700 ر.س' },
-                    { item: 'بيتزا لحم', category: 'بيتزا', sales: 170, revenue: '3,060 ر.س' },
-                    { item: 'عصير برتقال', category: 'مشروبات', sales: 160, revenue: '800 ر.س' },
-                    { item: 'شاورما دجاج', category: 'أطباق رئيسية', sales: 150, revenue: '2,250 ر.س' },
-                    { item: 'سلطة يونانية', category: 'سلطات', sales: 140, revenue: '2,100 ر.س' },
-                    { item: 'آيس كريم', category: 'حلويات', sales: 130, revenue: '1,300 ر.س' }
+                    { item: 'برجر دجاج', category: 'برجر', sales: 220, revenue: '3,300 ر.س' }
                 ],
                 monthly: [
                     { item: 'برجر لحم', category: 'برجر', sales: 1800, revenue: '27,000 ر.س' },
                     { item: 'دجاج مشوي', category: 'أطباق رئيسية', sales: 1500, revenue: '30,000 ر.س' },
                     { item: 'بيتزا خضار', category: 'بيتزا', sales: 1400, revenue: '25,200 ر.س' },
                     { item: 'كيكة الشوكولاتة', category: 'حلويات', sales: 1200, revenue: '18,000 ر.س' },
-                    { item: 'مشروب الليمون', category: 'مشروبات', sales: 1100, revenue: '5,500 ر.س' },
-                    { item: 'برجر دجاج', category: 'برجر', sales: 1000, revenue: '15,000 ر.س' },
-                    { item: 'سلطة سيزر', category: 'سلطات', sales: 900, revenue: '13,500 ر.س' },
-                    { item: 'بيتزا لحم', category: 'بيتزا', sales: 850, revenue: '15,300 ر.س' },
-                    { item: 'شاورما دجاج', category: 'أطباق رئيسية', sales: 800, revenue: '12,000 ر.س' },
-                    { item: 'عصير برتقال', category: 'مشروبات', sales: 750, revenue: '3,750 ر.س' },
-                    { item: 'سلطة يونانية', category: 'سلطات', sales: 700, revenue: '10,500 ر.س' },
-                    { item: 'آيس كريم', category: 'حلويات', sales: 650, revenue: '6,500 ر.س' }
+                    { item: 'مشروب الليمون', category: 'مشروبات', sales: 1100, revenue: '5,500 ر.س' }
                 ]
             };
             
@@ -805,6 +637,54 @@
                     });
                 });
             }
+            
+            // إضافة وظيفة التبديل بين الوضع الفاتح والمظلم
+            const themeToggle = document.querySelector('.theme-switch input');
+            if (themeToggle) {
+                themeToggle.addEventListener('change', function(e) {
+                    if (e.target.checked) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.setAttribute('data-theme', 'light');
+                        localStorage.setItem('theme', 'light');
+                    }
+                });
+                
+                // التحقق من الوضع المحفوظ
+                const currentTheme = localStorage.getItem('theme');
+                if (currentTheme) {
+                    document.documentElement.setAttribute('data-theme', currentTheme);
+                    if (currentTheme === 'dark') {
+                        themeToggle.checked = true;
+                    }
+                }
+            }
+            
+            // إضافة وظيفة تحديث البيانات
+            // إزالة كود الوضع المظلم
+            
+            // إضافة وظيفة تحديث البيانات
+            document.querySelector('.btn-outline-secondary').addEventListener('click', function() {
+                // هنا يمكن إضافة كود لتحديث البيانات من الخادم
+                // للتوضيح، سنقوم فقط بإظهار رسالة وإعادة تحميل الصفحة
+                this.innerHTML = '<i class="fas fa-spinner fa-spin ms-1"></i> جاري التحديث...';
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            });
+            
+            // إضافة وظيفة لأزرار المشاهدة
+            document.querySelectorAll('.btn-view').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderRow = this.closest('tr');
+                    const orderId = orderRow.cells[0].textContent;
+                    const customerName = orderRow.cells[1].textContent;
+                    
+                    // هنا يمكن إضافة كود لعرض تفاصيل الطلب
+                    alert(`تفاصيل الطلب: ${orderId}\nالعميل: ${customerName}`);
+                });
+            });
         });
     </script>
 </body>
