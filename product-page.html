@@ -30,106 +30,44 @@
             color: #333;
         }
         .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-            position: relative;
-            margin-bottom: 50px;
+            padding: 20px 0;
         }
         .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
             border: none;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            margin-bottom: 1.5rem;
         }
         .card-header {
             background-color: #fff;
             border-bottom: 1px solid rgba(0, 0, 0, 0.125);
             font-weight: 600;
-            padding: 1rem 1.5rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        .card-body {
-            padding: 1.5rem;
-        }
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: #555;
-        }
-        .form-control, .form-select {
-            border-radius: var(--border-radius);
-            padding: 0.6rem 1rem;
-            border: 1px solid #ddd;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
-        }
-        .btn {
-            border-radius: var(--border-radius);
-            padding: 0.5rem 1.25rem;
-            font-weight: 500;
-        }
-        .btn-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-        .btn-outline-primary {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        .btn-outline-primary:hover {
-            background-color: var(--primary-color);
-            color: white;
         }
         .product-image-container {
+            width: 100%;
             height: 200px;
             border: 2px dashed #dee2e6;
-            border-radius: var(--border-radius);
+            border-radius: 8px;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            overflow: hidden;
+        }
+        .product-image-container i {
             font-size: 3rem;
             color: #adb5bd;
-            cursor: pointer;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            background: #fff;
-        }
-        .product-image-container:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(13, 110, 253, 0.05);
         }
         .product-image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .image-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .section-title {
-            font-weight: 600;
-            color: #444;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #eee;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .option-card, .removal-card {
-            border: 1px solid #eee;
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background-color: #fff;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
             transition: all 0.3s ease;
         }
         .option-card:hover, .removal-card:hover {
@@ -171,43 +109,10 @@
             margin-left: 0.25rem;
             margin-bottom: 0.25rem;
         }
-
-        /* أنماط الشريط العلوي */
-        .navbar-brand {
-            font-weight: 700;
-        }
         
-        /* أنماط زر الحفظ الثابت */
-        .settings-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #fff;
-            padding: 1rem;
-            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
-            z-index: 1002;
-            border-top: 1px solid #e9ecef;
-        }
-        
-        /* إضافة هامش سفلي للمحتوى الرئيسي لتجنب تداخله مع شريط الحفظ الثابت */
-        .container.py-4 {
-            margin-bottom: 220px;
-        }
-        
-        /* أنماط الفوتر */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #343a40;
-            color: #fff;
-            padding: 1rem 0;
-            z-index: 1000;
-        }
-        .footer p {
-            margin-bottom: 0;
+        /* إضافة هامش سفلي للمحتوى الرئيسي */
+        .container-fluid {
+            margin-bottom: 50px;
         }
     </style>
 </head>
@@ -221,92 +126,6 @@
             </div>
         </div>
     </div>
-
-    <!-- نظام التحقق من البيانات -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('product-form');
-            const requiredFields = form.querySelectorAll('[required]');
-
-            // دالة عرض الإشعارات
-            function showNotification(message, type) {
-                const toast = document.getElementById('notification-toast');
-                toast.classList.remove('bg-success', 'bg-danger');
-                toast.classList.add(type === 'success' ? 'bg-success' : 'bg-danger');
-                toast.querySelector('.toast-body').textContent = message;
-                const bsToast = new bootstrap.Toast(toast);
-                bsToast.show();
-            }
-
-            // التحقق من الحقول المطلوبة
-            requiredFields.forEach(field => {
-                field.addEventListener('invalid', (e) => {
-                    e.preventDefault();
-                    field.classList.add('is-invalid');
-                    showNotification('يرجى ملء جميع الحقول المطلوبة', 'error');
-                });
-
-                field.addEventListener('input', () => {
-                    if (field.validity.valid) {
-                        field.classList.remove('is-invalid');
-                    }
-                });
-            });
-
-            // معالجة تقديم النموذج
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (form.checkValidity()) {
-                    showNotification('تم حفظ المنتج بنجاح', 'success');
-                    // هنا يمكن إضافة كود حفظ المنتج
-                } else {
-                    showNotification('يرجى التحقق من صحة البيانات المدخلة', 'error');
-                }
-            });
-        });
-    </script>
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">نظام إدارة المطعم</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt me-1"></i> لوحة التحكم</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="settings.html"><i class="fas fa-cog me-1"></i> الإعدادات</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="الذهاب إلى قائمة الطعام">
-                            <i class="fas fa-utensils me-1"></i> قائمة الطعام
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i> مدير الحساب
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-1"></i> الإعدادات</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-bell me-1"></i> الإشعارات</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-1"></i> تسجيل الخروج</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="تسجيل الخروج">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <div class="main-container">
         <div class="container-fluid">
@@ -490,14 +309,8 @@
                                                         <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="crustaceans" id="allergen-crustaceans"><label class="form-check-label" for="allergen-crustaceans">القشريات ومنتجاتها</label></div></li>
                                                         <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="nuts" id="allergen-nuts"><label class="form-check-label" for="allergen-nuts">المكسرات ومنتجاتها</label></div></li>
                                                         <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="sulphites" id="allergen-sulphites"><label class="form-check-label" for="allergen-sulphites">الكبريتات بتركيز 10 جزء في المليون أو أكثر</label></div></li>
-                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="sesame" id
-                                                            <div class="form-check">
-                                                                <input class="form-check-input allergen-checkbox" type="checkbox" value="soy" id="allergen-soy">
-                                                                <label class="form-check-label" for="allergen-soy">
-                                                                    فول الصويا ومنتجاته
-                                                                </label>
-                                                            </div>
-                                                        </li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="sesame" id="allergen-sesame"><label class="form-check-label" for="allergen-sesame">بذور السمسم ومنتجاتها</label></div></li>
+                                                        <li><div class="form-check"><input class="form-check-input allergen-checkbox" type="checkbox" value="soy" id="allergen-soy"><label class="form-check-label" for="allergen-soy">فول الصويا ومنتجاته</label></div></li>
                                                     </ul>
                                                 </div>
                                                 <div id="selected-allergens" class="form-text mt-2">لم يتم تحديد أي مسببات للحساسية</div>
@@ -587,7 +400,7 @@
                             </div>
                         </div>
                         <!-- أزرار الحفظ والإلغاء -->
-                        <div class="d-flex justify-content-end gap-2 mt-4">
+                        <div class="d-flex justify-content-end gap-2 mt-4 mb-5">
                             <button type="button" class="btn btn-secondary" id="cancel-product-btn">
                                 <i class="fas fa-times me-1"></i> إلغاء
                             </button>
@@ -601,129 +414,90 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmModalLabel">تأكيد العملية</h5>
-            <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="إغلاق"></button>
-          </div>
-          <div class="modal-body" id="confirmModalBody">
-            <!-- سيتم تعبئة النص برمجياً -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-            <button type="button" class="btn btn-primary" id="confirmModalYesBtn">تأكيد</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- دمج ملف JavaScript -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // صورة المنتج: عرض المعاينة وتغيير/حذف الصورة
-        const imageInput = document.getElementById('product-image-upload');
-        const imagePreview = document.querySelector('.product-image-container');
+        // صورة المنتج
+        const productImagePreview = document.getElementById('product-image-preview');
+        const productImageUpload = document.getElementById('product-image-upload');
         const changeImageBtn = document.getElementById('change-image-btn');
         const removeImageBtn = document.getElementById('remove-image-btn');
-        let imageDataUrl = '';
-
-        function showImagePreview(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imageDataUrl = e.target.result;
-                imagePreview.innerHTML = `<img src="${imageDataUrl}" alt="صورة المنتج">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        imageInput.addEventListener('change', function() {
-            if (this.files && this.files[0]) {
-                showImagePreview(this.files[0]);
-            }
+        
+        // تحميل صورة جديدة
+        productImagePreview.addEventListener('click', function() {
+            productImageUpload.click();
         });
-
-        imagePreview.addEventListener('click', function() {
-            imageInput.click();
-        });
-
+        
         changeImageBtn.addEventListener('click', function() {
-            imageInput.click();
+            productImageUpload.click();
         });
-
+        
+        productImageUpload.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    productImagePreview.innerHTML = `<img src="${e.target.result}" alt="صورة المنتج">`;
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        
+        // حذف الصورة
         removeImageBtn.addEventListener('click', function() {
-            imageInput.value = '';
-            imageDataUrl = '';
-            imagePreview.innerHTML = `<i class="fas fa-cloud-upload-alt"></i>`;
+            productImagePreview.innerHTML = `<i class="fas fa-cloud-upload-alt"></i>`;
+            productImageUpload.value = '';
         });
-
-        // إعادة تعيين النموذج
-        document.getElementById('reset-product-btn').addEventListener('click', function() {
-            document.getElementById('product-form').reset();
-            imagePreview.innerHTML = `<i class="fas fa-cloud-upload-alt"></i>`;
-            document.getElementById('selected-allergens').textContent = 'لم يتم تحديد أي مسببات للحساسية';
-            document.getElementById('options-container').innerHTML = '';
-            document.getElementById('addons-container').innerHTML = '';
-            document.getElementById('removals-container').innerHTML = '';
-        });
-
-        // إلغاء (نفس إعادة التعيين)
-        document.getElementById('cancel-product-btn').addEventListener('click', function() {
-            document.getElementById('reset-product-btn').click();
-        });
-
-        // تحديث نص مسببات الحساسية المحددة
-        function updateSelectedAllergensText() {
-            const selectedCheckboxes = document.querySelectorAll('.allergen-checkbox:checked');
-            const selectedAllergensText = document.getElementById('selected-allergens');
-            if (selectedCheckboxes.length > 0) {
-                const allergenNames = Array.from(selectedCheckboxes).map(checkbox =>
-                    checkbox.nextElementSibling.textContent.trim()
-                );
-                if (allergenNames.length <= 3) {
-                    selectedAllergensText.textContent = `المسببات المحددة: ${allergenNames.join('، ')}`;
-                } else {
-                    const firstThree = allergenNames.slice(0, 3);
-                    const remaining = allergenNames.length - 3;
-                    selectedAllergensText.textContent = `المسببات المحددة: ${firstThree.join('، ')} و${remaining} أخرى`;
-                }
+        
+        // إصلاح وظيفة مسببات الحساسية
+        const allergenCheckboxes = document.querySelectorAll('.allergen-checkbox');
+        const selectedAllergensDisplay = document.getElementById('selected-allergens');
+        const selectAllAllergensBtn = document.getElementById('select-all-allergens');
+        const deselectAllAllergensBtn = document.getElementById('deselect-all-allergens');
+        
+        // تحديث عرض مسببات الحساسية المحددة
+        function updateSelectedAllergensDisplay() {
+            const selectedAllergens = Array.from(allergenCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.nextElementSibling.textContent.trim());
+            
+            if (selectedAllergens.length > 0) {
+                selectedAllergensDisplay.textContent = selectedAllergens.join('، ');
             } else {
-                selectedAllergensText.textContent = 'لم يتم تحديد أي مسببات للحساسية';
+                selectedAllergensDisplay.textContent = 'لم يتم تحديد أي مسببات للحساسية';
             }
         }
-
-        // تحديد الكل/إلغاء التحديد
-        document.getElementById('select-all-allergens').addEventListener('click', function() {
-            document.querySelectorAll('.allergen-checkbox').forEach(cb => cb.checked = true);
-            updateSelectedAllergensText();
+        
+        // ضافة مستمع الحدث لكل مربع اختيار
+        allergenCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSelectedAllergensDisplay);
         });
-        document.getElementById('deselect-all-allergens').addEventListener('click', function() {
-            document.querySelectorAll('.allergen-checkbox').forEach(cb => cb.checked = false);
-            updateSelectedAllergensText();
+        
+        // تحديد الكل
+        selectAllAllergensBtn.addEventListener('click', function() {
+            allergenCheckboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateSelectedAllergensDisplay();
         });
-        document.querySelectorAll('.allergen-checkbox').forEach(cb => {
-            cb.addEventListener('change', updateSelectedAllergensText);
+        
+        // إلغاء تحديد الكل
+        deselectAllAllergensBtn.addEventListener('click', function() {
+            allergenCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSelectedAllergensDisplay();
         });
-
-        // إضافة اختيار/إضافة/إزالة (نفس الكود السابق)
+        
+        // إضافة اختيار جديد
         document.getElementById('add-option-btn').addEventListener('click', function() {
             const optionsContainer = document.getElementById('options-container');
             const optionId = 'option-' + Date.now();
             const optionHTML = `
                 <div class="option-card mb-3 fade-in" id="${optionId}">
-                    <div class="row align-items-center">
-                        <div class="col-md-5 mb-2 mb-md-0">
-                            <select class="form-select option-select">
-                                <option value="" selected disabled>اختر العنصر</option>
-                                <option value="size">الحجم</option>
-                                <option value="spice">مستوى الحرارة</option>
-                                <option value="cooking">طريقة الطهي</option>
-                                <option value="bread">نوع الخبز</option>
-                                <option value="sauce">الصلصة</option>
-                            </select>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control option-title" placeholder="عنوان الاختيار (مثال: اختر الحجم)">
                         </div>
-                        <div class="col-md-5 mb-2 mb-md-0">
+                        <div class="col-md-5">
                             <div class="input-group">
                                 <input type="number" class="form-control option-price" min="0" step="0.01" placeholder="السعر الإضافي">
                                 <span class="input-group-text">ريال</span>
@@ -735,14 +509,50 @@
                             </button>
                         </div>
                     </div>
+                    <div class="option-items-container">
+                        <!-- سيتم إضافة عناصر الاختيار هنا -->
+                    </div>
                 </div>
             `;
             optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
+            
+            // حذف الاختيار
             document.querySelector(`#${optionId} .delete-option-btn`).addEventListener('click', function() {
                 document.getElementById(optionId).remove();
             });
+            
+            // إضافة عنصر للاختيار
+            document.querySelector(`#${optionId} .add-option-item-btn`).addEventListener('click', function() {
+                const optionItemsContainer = document.querySelector(`#${optionId} .option-items-container`);
+                const optionItemId = 'option-item-' + Date.now();
+                const optionItemHTML = `
+                    <div class="row mb-2 align-items-center option-item" id="${optionItemId}">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control option-item-name" placeholder="اسم العنصر">
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input type="number" class="form-control option-item-price" min="0" step="0.01" placeholder="السعر الإضافي">
+                                <span class="input-group-text">ريال</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <button type="button" class="btn btn-outline-danger btn-sm delete-option-item-btn" data-item-id="${optionItemId}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                optionItemsContainer.insertAdjacentHTML('beforeend', optionItemHTML);
+                
+                // حذف عنصر الاختيار
+                document.querySelector(`#${optionItemId} .delete-option-item-btn`).addEventListener('click', function() {
+                    document.getElementById(optionItemId).remove();
+                });
+            });
         });
-
+        
+        // إضافة إضافة جديدة
         document.getElementById('add-addon-btn').addEventListener('click', function() {
             const addonsContainer = document.getElementById('addons-container');
             const addonId = 'addon-' + Date.now();
@@ -750,18 +560,11 @@
                 <div class="option-card mb-3 fade-in" id="${addonId}">
                     <div class="row align-items-center">
                         <div class="col-md-5 mb-2 mb-md-0">
-                            <select class="form-select addon-select">
-                                <option value="" selected disabled>اختر الإضافة</option>
-                                <option value="cheese">جبنة إضافية</option>
-                                <option value="sauce">صلصة إضافية</option>
-                                <option value="meat">لحم إضافي</option>
-                                <option value="vegetables">خضروات إضافية</option>
-                                <option value="fries">بطاطس</option>
-                            </select>
+                            <input type="text" class="form-control addon-name" placeholder="اسم الإضافة (مثال: جبنة إضافية)">
                         </div>
                         <div class="col-md-5 mb-2 mb-md-0">
                             <div class="input-group">
-                                <input type="number" class="form-control addon-price" min="0" step="0.01" placeholder="سعر الإضافة">
+                                <input type="number" class="form-control addon-price" min="0" step="0.01" placeholder="السعر">
                                 <span class="input-group-text">ريال</span>
                             </div>
                         </div>
@@ -786,7 +589,7 @@
                 <div class="removal-card mb-3 fade-in" id="${removalId}">
                     <div class="row align-items-center">
                         <div class="col-md-10 mb-2 mb-md-0">
-                            <input type="text" class="form-control removal-name" placeholder="اسم العنصر المراد إزالته (مثال: بدون بصل)">
+                            <input type="text" class="form-control removal-name" placeholder="اسم العنصر القابل للإزالة (مثال: البصل، الطماطم)">
                         </div>
                         <div class="col-md-2 text-end">
                             <button type="button" class="btn btn-outline-danger delete-removal-btn" data-removal-id="${removalId}">
@@ -802,72 +605,98 @@
             });
         });
 
-        // تحديث السعر النهائي مع الضريبة
-        function updateFinalPrice() {
-            const basePrice = parseFloat(document.getElementById('base-price').value) || 0;
-            const taxRate = parseFloat(document.getElementById('tax-rate').value) || 0;
-            const finalPrice = basePrice * (1 + taxRate / 100);
-            document.getElementById('final-price-display').textContent =
-                `السعر المعروض في القائمة سيكون ${finalPrice.toFixed(2)} ريال شامل الضريبة`;
+        // حساب السعر النهائي مع الضريبة
+        const basePriceInput = document.getElementById('base-price');
+        const taxRateInput = document.getElementById('tax-rate');
+        const finalPriceDisplay = document.getElementById('final-price-display');
+
+        function calculateFinalPrice() {
+            const basePrice = parseFloat(basePriceInput.value) || 0;
+            const taxRate = parseFloat(taxRateInput.value) || 0;
+            const taxAmount = basePrice * (taxRate / 100);
+            const finalPrice = basePrice + taxAmount;
+            finalPriceDisplay.textContent = `السعر المعروض في القائمة سيكون ${finalPrice.toFixed(2)} ريال شامل الضريبة`;
         }
-        document.getElementById('base-price').addEventListener('input', updateFinalPrice);
-        document.getElementById('tax-rate').addEventListener('input', updateFinalPrice);
 
-        // منع إرسال النموذج الافتراضي (للتجربة فقط)
-        document.getElementById('product-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('تم حفظ المنتج (محاكاة)');
-        });
+        basePriceInput.addEventListener('input', calculateFinalPrice);
+        taxRateInput.addEventListener('input', calculateFinalPrice);
 
-        // Confirmation Modal Logic
-        let confirmAction = null;
-        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-        const confirmModalBody = document.getElementById('confirmModalBody');
-        const confirmModalYesBtn = document.getElementById('confirmModalYesBtn');
-
-        // Save Product Button
+        // تأكيد الحفظ
         document.getElementById('save-product-btn').addEventListener('click', function(e) {
             e.preventDefault();
-            confirmModalBody.textContent = 'هل أنت متأكد أنك تريد حفظ المنتج؟';
-            confirmAction = 'save';
-            confirmModal.show();
-        });
-
-        // Cancel Product Button
-        document.getElementById('cancel-product-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            confirmModalBody.textContent = 'هل أنت متأكد أنك تريد إلغاء العملية؟ سيتم فقدان جميع البيانات غير المحفوظة.';
-            confirmAction = 'cancel';
-            confirmModal.show();
-        });
-
-        // Modal Confirm Button
-        confirmModalYesBtn.addEventListener('click', function() {
-            if (confirmAction === 'save') {
-                // Submit the form (simulate submit)
-                // You can replace this with actual form submission logic
-                confirmModal.hide();
-                setTimeout(function() {
-                    // alert('تم حفظ المنتج (محاكاة)'); // <--- Removed as requested
-                    // document.getElementById('product-form').submit(); // Uncomment for real submit
-                }, 200);
-            } else if (confirmAction === 'cancel') {
-                confirmModal.hide();
-                setTimeout(function() {
-                    document.getElementById('reset-product-btn').click();
-                }, 200);
+            
+            // التحقق من الحقول المطلوبة فقط (اسم المنتج AR، اسم المنتج EN، التصنيف، سعر المنتج)
+            const requiredFields = [
+                document.getElementById('product-name-ar'),
+                document.getElementById('product-name-en'),
+                document.getElementById('product-category'),
+                document.getElementById('base-price')
+            ];
+            
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!isValid) {
+                showNotification('يرجى ملء جميع الحقول المطلوبة', 'error');
+                return;
             }
+            
+            // إظهار مربع حوار التأكيد
+            const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            document.getElementById('confirmModalBody').textContent = 'هل أنت متأكد من حفظ المنتج؟';
+            
+            // زر التأكيد
+            document.getElementById('confirmModalYesBtn').onclick = function() {
+                // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
+                confirmModal.hide();
+                showNotification('تم حفظ المنتج بنجاح', 'success');
+                
+                // يمكن إضافة تأخير قبل إعادة التوجيه
+                setTimeout(() => {
+                    // window.location.href = 'products-list.html'; // إعادة التوجيه إلى صفحة قائمة المنتجات
+                }, 1500);
+            };
+            
+            confirmModal.show();
         });
+
+        // دالة عرض الإشعارات
+        function showNotification(message, type) {
+            const toast = document.getElementById('notification-toast');
+            toast.classList.remove('bg-success', 'bg-danger');
+            toast.classList.add(type === 'success' ? 'bg-success' : 'bg-danger');
+            toast.querySelector('.toast-body').textContent = message;
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
     });
     </script>
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <p>جميع الحقوق محفوظة © 2024</p>
-                <p>نظام إدارة المطعم</p>
-            </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmModalLabel">تأكيد العملية</h5>
+            <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+          </div>
+          <div class="modal-body" id="confirmModalBody">
+            <!-- سيتم تعبئة النص برمجياً -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            <button type="button" class="btn btn-primary" id="confirmModalYesBtn">تأكيد</button>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
 </body>
 </html>
