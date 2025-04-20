@@ -258,6 +258,14 @@
                                                 </div>
                                             </div>
                                             <p class="text-muted small mb-0">يمكن للعميل طلب توصيل طلبه إليه</p>
+                                            <div class="mt-3">
+                                                <button type="button" class="btn btn-outline-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#deliverySettingsModal">
+                                                    <i class="fas fa-cog me-1"></i> إعدادات التوصيل
+                                                </button>
+                                            </div>
+                                            <div class="mt-2 text-center">
+                                                <small class="text-muted" id="selectedDeliveryPrice">سعر التوصيل سيكون 0.00 ريال شامل الضريبة</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -265,34 +273,87 @@
                             
                             <hr class="my-4">
                             
+                            <!-- في قسم إعدادات المالية، نحذف حقلي رسوم التوصيل والضريبة والتنبيه ونبقي فقط على الرقم الضريبي -->
                             <div class="card-header bg-transparent px-0 mb-3">
                                 <i class="fas fa-money-bill-wave me-2"></i> إعدادات المالية
                             </div>
                             
                             <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label for="deliveryFees" class="form-label">رسوم التوصيل (ر.س)</label>
-                                    <input type="number" class="form-control" id="deliveryFees" placeholder="أدخل رسوم التوصيل" value="0" min="0" step="0.01">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="deliveryTax" class="form-label">الضريبة على التوصيل (%)</label>
-                                    <input type="number" class="form-control" id="deliveryTax" placeholder="أدخل نسبة الضريبة" value="15" min="0" max="100" step="0.01">
-                                </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="taxNumber" class="form-label">الرقم الضريبي</label>
                                     <input type="text" class="form-control" id="taxNumber" placeholder="أدخل الرقم الضريبي" value="300000000000003">
                                 </div>
                             </div>
                             
-                            <!-- إضافة حقل لعرض ناتج رسوم التوصيل مع الضريبة -->
-                            <div class="row mb-3">
-                                <div class="col-md-8">
-                                    <div class="alert alert-info" role="alert">
-                                        <i class="fas fa-info-circle me-2"></i>
-                                        <span id="deliveryTotalDisplay">سعر التوصيل سيكون 0.00 ريال شامل الضريبة</span>
+                            <!-- إضافة النافذة المنبثقة في نهاية الصفحة قبل إغلاق body -->
+                            <!-- Modal -->
+                            <div class="modal fade" id="deliverySettingsModal" tabindex="-1" aria-labelledby="deliverySettingsModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deliverySettingsModalLabel">
+                                                <i class="fas fa-motorcycle me-2"></i>
+                                                إعدادات التوصيل
+                                            </h5>
+                                            <button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="modalDeliveryFees" class="form-label">رسوم التوصيل (ر.س)</label>
+                                                <input type="number" class="form-control" id="modalDeliveryFees" placeholder="أدخل رسوم التوصيل" value="0" min="0" step="0.01">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="modalDeliveryTax" class="form-label">الضريبة على التوصيل (%)</label>
+                                                <input type="number" class="form-control" id="modalDeliveryTax" placeholder="أدخل نسبة الضريبة" value="15" min="0" max="100" step="0.01">
+                                            </div>
+                                            <div class="alert alert-info" role="alert">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                <span id="modalDeliveryTotalDisplay">سعر التوصيل سيكون 0.00 ريال شامل الضريبة</span>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                                            <button type="button" class="btn btn-primary" id="saveDeliverySettings">حفظ التغييرات</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            
+                            <!-- تحديث السكربت لإضافة وظيفة حفظ سعر التوصيل -->
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const modalDeliveryFees = document.getElementById('modalDeliveryFees');
+                                const modalDeliveryTax = document.getElementById('modalDeliveryTax');
+                                const modalDeliveryTotalDisplay = document.getElementById('modalDeliveryTotalDisplay');
+                                const selectedDeliveryPrice = document.getElementById('selectedDeliveryPrice');
+                                const saveDeliverySettings = document.getElementById('saveDeliverySettings');
+                                
+                                function updateModalDeliveryTotal() {
+                                    const fees = parseFloat(modalDeliveryFees.value) || 0;
+                                    const taxRate = parseFloat(modalDeliveryTax.value) || 0;
+                                    const taxAmount = fees * (taxRate / 100);
+                                    const total = fees + taxAmount;
+                                    modalDeliveryTotalDisplay.textContent = `سعر التوصيل سيكون ${total.toFixed(2)} ريال شامل الضريبة`;
+                                }
+                                
+                                modalDeliveryFees.addEventListener('input', updateModalDeliveryTotal);
+                                modalDeliveryTax.addEventListener('input', updateModalDeliveryTotal);
+                                
+                                // تحديث وظيفة حفظ الإعدادات
+                                saveDeliverySettings.addEventListener('click', function() {
+                                    const fees = parseFloat(modalDeliveryFees.value) || 0;
+                                    const taxRate = parseFloat(modalDeliveryTax.value) || 0;
+                                    const taxAmount = fees * (taxRate / 100);
+                                    const total = fees + taxAmount;
+                                    selectedDeliveryPrice.textContent = `سعر التوصيل سيكون ${total.toFixed(2)} ريال شامل الضريبة`;
+                                    
+                                    const modal = bootstrap.Modal.getInstance(document.getElementById('deliverySettingsModal'));
+                                    modal.hide();
+                                });
+                                
+                                updateModalDeliveryTotal();
+                            });
+                            </script>
                             
                             <!-- تم حذف أزرار الحفظ والإلغاء من هنا -->
                         </form>
@@ -623,6 +684,17 @@
     <script>
         // تحديث حالة حقول الإدخال عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
+            // تحديث الوقت الحالي
+            function updateCurrentTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('ar-SA');
+                document.getElementById('currentTime').textContent = timeString;
+            }
+            
+            // تحديث الوقت كل ثانية
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            
             // العثور على جميع أزرار التبديل
             const toggles = document.querySelectorAll('.social-toggle');
             
@@ -702,25 +774,40 @@
                 });
             }
             
-            // إضافة وظيفة حساب إجمالي رسوم التوصيل مع الضريبة
-            const deliveryFeesInput = document.getElementById('deliveryFees');
-            const deliveryTaxInput = document.getElementById('deliveryTax');
-            const deliveryTotalDisplay = document.getElementById('deliveryTotalDisplay');
+            // إضافة وظيفة لتبديل حقول ساعات العمل عند تحديد يوم عطلة
+            const dayClosedCheckboxes = document.querySelectorAll('input[type="checkbox"][id$="Closed"]');
             
-            function updateDeliveryTotal() {
-                const fees = parseFloat(deliveryFeesInput.value) || 0;
-                const taxRate = parseFloat(deliveryTaxInput.value) || 0;
-                const taxAmount = fees * (taxRate / 100);
-                const total = fees + taxAmount;
-                deliveryTotalDisplay.textContent = `سعر التوصيل سيكون ${total.toFixed(2)} ريال شامل الضريبة`;
-            }
-            
-            // تحديث عند تغيير القيم
-            deliveryFeesInput.addEventListener('input', updateDeliveryTotal);
-            deliveryTaxInput.addEventListener('input', updateDeliveryTotal);
-            
-            // تحديث القيمة الأولية
-            updateDeliveryTotal();
+            dayClosedCheckboxes.forEach(checkbox => {
+                const day = checkbox.id.replace('Closed', '');
+                const startInput = document.getElementById(`${day}Start`);
+                const endInput = document.getElementById(`${day}End`);
+                
+                // تحديث حالة حقول الوقت عند تحميل الصفحة
+                if (startInput && endInput) {
+                    startInput.disabled = checkbox.checked;
+                    endInput.disabled = checkbox.checked;
+                    
+                    // تحديث مظهر حقول الوقت
+                    startInput.style.backgroundColor = checkbox.checked ? '#e9ecef' : '#ffffff';
+                    endInput.style.backgroundColor = checkbox.checked ? '#e9ecef' : '#ffffff';
+                    startInput.style.cursor = checkbox.checked ? 'not-allowed' : 'text';
+                    endInput.style.cursor = checkbox.checked ? 'not-allowed' : 'text';
+                }
+                
+                // إضافة مستمع لحدث التغيير
+                checkbox.addEventListener('change', function() {
+                    if (startInput && endInput) {
+                        startInput.disabled = this.checked;
+                        endInput.disabled = this.checked;
+                        
+                        // تحديث مظهر حقول الوقت
+                        startInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
+                        endInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
+                        startInput.style.cursor = this.checked ? 'not-allowed' : 'text';
+                        endInput.style.cursor = this.checked ? 'not-allowed' : 'text';
+                    }
+                });
+            });
 
             // ===== إضافة التحقق من الحقول =====
             
@@ -859,7 +946,31 @@
                 // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
             });
             
+            // إضافة وظائف التحقق من صحة البريد الإلكتروني ورقم الهاتف
+            function validateEmail(email) {
+                const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return re.test(email);
+            }
+            
+            function validatePhone(phone) {
+                // التحقق من أن رقم الهاتف يتكون من أرقام فقط ويبدأ بـ 966 (كود السعودية)
+                const re = /^(966|\+966|00966)?[0-9]{9}$/;
+                return re.test(phone);
+            }
+            
             // إضافة عرض الوقت الحالي وتحديثه كل ثانية
+            function updateCurrentTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('ar-SA');
+                const currentTimeElement = document.getElementById('currentTime');
+                if (currentTimeElement) {
+                    currentTimeElement.textContent = timeString;
+                }
+            }
+            
+            // تحديث الوقت كل ثانية
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
             function updateCurrentTime() {
                 const currentTimeElement = document.getElementById('currentTime');
                 if (currentTimeElement) {
