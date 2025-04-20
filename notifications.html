@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإشعارات</title>
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- iziToast CSS - المكتبة الوحيدة المستخدمة -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .page-title {
+            text-align: center;
+            margin: 25px 0;
+        }
+        .demo-buttons {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .notification-section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="page-title">الإشعارات</h1>
+                <div class="card p-3 mb-4">
+                    <h5>iziToast</h5>
+                    <p>مكتبة إشعارات جميلة وسريعة مع العديد من الخيارات والتأثيرات.</p>
+                    <div>
+                        <span class="badge bg-primary me-1 mb-1">تأثيرات حركية</span>
+                        <span class="badge bg-primary me-1 mb-1">تخصيص متقدم</span>
+                        <span class="badge bg-primary me-1 mb-1">متعددة المواضع</span>
+                        <span class="badge bg-primary me-1 mb-1">دعم RTL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo buttons to trigger notifications -->
+        <div class="row notification-section">
+            <div class="col-12 text-center">
+                <h4>عرض أمثلة على الإشعارات:</h4>
+                <div class="mb-3">
+                    <button class="btn btn-primary" onclick="showInfoNotification()">إشعار معلومات</button>
+                    <button class="btn btn-success" onclick="showSuccessNotification()">إشعار نجاح</button>
+                    <button class="btn btn-warning" onclick="showWarningNotification()">إشعار تحذير</button>
+                    <button class="btn btn-danger" onclick="showErrorNotification()">إشعار خطأ</button>
+                </div>
+            </div>
+        </div>
+                
+        <!-- أنواع إشعارات iziToast الإضافية -->
+        <div class="row notification-section">
+            <div class="col-12 text-center">
+                <h5>أنواع إشعارات إضافية:</h5>
+                <div class="mb-3">
+                    <button class="btn btn-secondary" onclick="showQuestionNotification()">إشعار سؤال</button>
+                    <button class="btn btn-dark" onclick="showDarkNotification()">إشعار داكن</button>
+                    <button class="btn btn-light border" onclick="showLightNotification()">إشعار فاتح</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- إشعارات التحقق من البيانات -->
+        <div class="row notification-section">
+            <div class="col-12 text-center">
+                <h5>إشعارات التحقق من البيانات:</h5>
+                <div class="mb-3">
+                    <button class="btn btn-outline-danger" onclick="showRequiredFieldNotification()">حقل مطلوب</button>
+                    <button class="btn btn-outline-warning" onclick="showInvalidEmailNotification()">بريد إلكتروني غير صالح</button>
+                    <button class="btn btn-outline-warning" onclick="showPasswordMismatchNotification()">كلمات المرور غير متطابقة</button>
+                    <button class="btn btn-outline-warning" onclick="showInvalidPhoneNotification()">رقم هاتف غير صالح</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- إشعارات متقدمة -->
+        <div class="row notification-section">
+            <div class="col-12 text-center">
+                <h5>إشعارات متقدمة:</h5>
+                <div class="mb-3">
+                    <button class="btn btn-info" onclick="showRTLNotification()">إشعار RTL</button>
+                    <button class="btn btn-info" onclick="showImageNotification()">إشعار مع صورة</button>
+                    <button class="btn btn-info" onclick="showProgressNotification()">إشعار مع شريط تقدم</button>
+                    <button class="btn btn-info" onclick="showButtonsNotification()">إشعار مع أزرار</button>
+                    <button class="btn btn-info" onclick="showInputNotification()">إشعار مع حقل إدخال</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- iziToast JS - المكتبة الوحيدة المستخدمة -->
+    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+    
+    <script>
+        // تهيئة إعدادات iziToast
+        iziToast.settings({
+            position: 'topCenter',
+            timeout: 5000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            displayMode: 2,
+            rtl: true
+        });
+        
+        // إشعار معلومات
+        function showInfoNotification() {
+            iziToast.info({
+                title: 'معلومات',
+                message: 'تم تحديث النظام بنجاح',
+                position: 'topCenter',
+                transitionIn: 'fadeInDown',
+                icon: 'fas fa-info-circle'
+            });
+        }
+
+        // إشعار نجاح
+        function showSuccessNotification() {
+            iziToast.success({
+                title: 'نجاح',
+                message: 'تمت العملية بنجاح!',
+                position: 'topCenter',
+                transitionIn: 'bounceInDown',
+                progressBar: true,
+                icon: 'fas fa-check-circle'
+            });
+        }
+
+        // إشعار تحذير
+        function showWarningNotification() {
+            iziToast.warning({
+                title: 'تحذير',
+                message: 'سينتهي اشتراكك قريبًا',
+                position: 'topCenter',
+                icon: 'fas fa-exclamation-triangle'
+            });
+        }
+
+        // إشعار خطأ
+        function showErrorNotification() {
+            iziToast.error({
+                title: 'خطأ',
+                message: 'فشلت العملية، يرجى المحاولة مرة أخرى',
+                position: 'topCenter',
+                icon: 'fas fa-times-circle'
+            });
+        }
+        
+        // إشعار سؤال
+        function showQuestionNotification() {
+            iziToast.question({
+                title: 'سؤال',
+                message: 'هل تريد حفظ التغييرات؟',
+                timeout: 10000,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 999,
+                buttons: [
+                    ['<button>نعم</button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        iziToast.success({
+                            title: 'تم',
+                            message: 'تم حفظ التغييرات بنجاح'
+                        });
+                    }, true],
+                    ['<button>لا</button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    }]
+                ]
+            });
+        }
+        
+        // إشعار داكن
+        function showDarkNotification() {
+            iziToast.show({
+                title: 'إشعار داكن',
+                message: 'هذا مثال على الإشعار بالوضع الداكن',
+                theme: 'dark',
+                icon: 'fas fa-moon'
+            });
+        }
+        
+        // إشعار فاتح
+        function showLightNotification() {
+            iziToast.show({
+                title: 'إشعار فاتح',
+                message: 'هذا مثال على الإشعار بالوضع الفاتح',
+                theme: 'light',
+                icon: 'fas fa-sun'
+            });
+        }
+        
+        // إشعارات التحقق من البيانات
+        
+        // حقل مطلوب
+        function showRequiredFieldNotification() {
+            iziToast.error({
+                title: 'خطأ في النموذج',
+                message: 'الحقل مطلوب، يرجى ملء جميع الحقول المطلوبة',
+                position: 'topRight',
+                icon: 'fas fa-exclamation-circle'
+            });
+        }
+        
+        // بريد إلكتروني غير صالح
+        function showInvalidEmailNotification() {
+            iziToast.warning({
+                title: 'تنسيق غير صالح',
+                message: 'يرجى إدخال عنوان بريد إلكتروني صالح',
+                position: 'topRight',
+                icon: 'fas fa-envelope'
+            });
+        }
+        
+        // كلمات المرور غير متطابقة
+        function showPasswordMismatchNotification() {
+            iziToast.warning({
+                title: 'كلمات المرور غير متطابقة',
+                message: 'تأكد من تطابق كلمة المرور وتأكيد كلمة المرور',
+                position: 'topRight',
+                icon: 'fas fa-lock'
+            });
+        }
+        
+        // رقم هاتف غير صالح
+        function showInvalidPhoneNotification() {
+            iziToast.warning({
+                title: 'رقم هاتف غير صالح',
+                message: 'يرجى إدخال رقم هاتف صالح',
+                position: 'topRight',
+                icon: 'fas fa-phone'
+            });
+        }
+        
+        // إشعارات متقدمة
+        
+        // إشعار RTL
+        function showRTLNotification() {
+            iziToast.info({
+                title: 'إشعار RTL',
+                message: 'هذا إشعار بتنسيق من اليمين إلى اليسار',
+                rtl: true,
+                position: 'topRight'
+            });
+        }
+        
+        // إشعار مع صورة
+        function showImageNotification() {
+            iziToast.info({
+                title: 'إشعار مع صورة',
+                message: 'يمكن إضافة صورة إلى الإشعار',
+                image: 'https://placekitten.com/100/100',
+                position: 'bottomCenter'
+            });
+        }
+        
+        // إشعار مع شريط تقدم
+        function showProgressNotification() {
+            iziToast.info({
+                title: 'إشعار مع شريط تقدم',
+                message: 'يظهر شريط تقدم أسفل الإشعار',
+                progressBar: true,
+                timeout: 8000,
+                position: 'bottomLeft'
+            });
+        }
+        
+        // إشعار مع أزرار
+        function showButtonsNotification() {
+            iziToast.show({
+                title: 'إشعار مع أزرار',
+                message: 'يمكنك إضافة أزرار للتفاعل مع الإشعار',
+                position: 'center',
+                buttons: [
+                    ['<button>موافق</button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        iziToast.success({
+                            message: 'تمت الموافقة'
+                        });
+                    }, true],
+                    ['<button>إلغاء</button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    }]
+                ]
+            });
+        }
+        
+        // إشعار مع حقل إدخال
+        function showInputNotification() {
+            iziToast.show({
+                timeout: 10000,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'inputs',
+                zindex: 999,
+                title: 'إشعار مع حقل إدخال',
+                message: 'أدخل اسمك:',
+                position: 'center',
+                inputs: [
+                    ['<input type="text" placeholder="اسمك">', 'keyup', function (instance, toast, input, e) {
+                        console.info(input.value);
+                    }, true]
+                ],
+                buttons: [
+                    ['<button>إرسال</button>', function (instance, toast, button, e, inputs) {
+                        let name = inputs[0].value;
+                        if (name) {
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                            iziToast.success({
+                                message: 'مرحباً ' + name
+                            });
+                        } else {
+                            iziToast.error({
+                                message: 'الرجاء إدخال اسمك'
+                            });
+                        }
+                    }, true],
+                    ['<button>إلغاء</button>', function (instance, toast, button, e) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    }]
+                ]
+            });
+        }
+    </script>
+</body>
+</html>
