@@ -197,6 +197,74 @@
                             
                             <hr class="my-4">
                             
+                            <!-- إضافة قسم طرق الطلب المتوفرة -->
+                            <div class="card-header bg-transparent px-0 mb-3">
+                                <i class="fas fa-shopping-cart me-2"></i> طرق الطلب المتوفرة
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <!-- طلب محلي -->
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="mb-0">
+                                                    <i class="fas fa-store me-2 text-primary"></i> محلي
+                                                </h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input order-method-toggle" type="checkbox" id="localOrderEnabled" data-target="localWaitingTime" checked>
+                                                </div>
+                                            </div>
+                                            <p class="text-muted small mb-2">يمكن العميل الطلب داخل المحل</p>
+                                            <div class="mt-3">
+                                                <label for="localWaitingTime" class="form-label small">فترة الانتظار (بالدقائق)</label>
+                                                <input type="number" class="form-control form-control-sm" id="localWaitingTime" min="5" max="120" value="10">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب استلام -->
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="mb-0">
+                                                    <i class="fas fa-shopping-bag me-2 text-success"></i> استلام
+                                                </h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input order-method-toggle" type="checkbox" id="pickupOrderEnabled" data-target="pickupWaitingTime" checked>
+                                                </div>
+                                            </div>
+                                            <p class="text-muted small mb-2">يمكن العميل من الطلب مسبقاً قبل وصوله</p>
+                                            <div class="mt-3">
+                                                <label for="pickupWaitingTime" class="form-label small">فترة الانتظار (بالدقائق)</label>
+                                                <input type="number" class="form-control form-control-sm" id="pickupWaitingTime" min="5" max="120" value="15">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- طلب توصيل -->
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="mb-0">
+                                                    <i class="fas fa-motorcycle me-2 text-danger"></i> التوصيل
+                                                </h6>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="deliveryOrderEnabled" checked>
+                                                </div>
+                                            </div>
+                                            <p class="text-muted small mb-0">يمكن للعميل طلب توصيل طلبه إليه</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
                             <div class="card-header bg-transparent px-0 mb-3">
                                 <i class="fas fa-money-bill-wave me-2"></i> إعدادات المالية
                             </div>
@@ -262,7 +330,7 @@
             <div class="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fas fa-share-alt me-2"></i> مواقع التواصل الاجتماعي
+                        <i class="fas fa-share-alt me-1"></i> مواقع التواصل الاجتماعي
                     </div>
                     <div class="card-body">
                         <form id="socialMediaForm">
@@ -587,6 +655,52 @@
                     }
                 });
             });
+            
+            // إضافة وظيفة لتبديل حقل وقت الانتظار للاستلام
+            const pickupToggle = document.getElementById('pickupOrderEnabled');
+            const pickupWaitingTime = document.getElementById('pickupWaitingTime');
+            
+            // تحديث حالة حقل وقت الانتظار عند تحميل الصفحة
+            if (pickupToggle && pickupWaitingTime) {
+                pickupWaitingTime.disabled = !pickupToggle.checked;
+                pickupWaitingTime.style.backgroundColor = pickupToggle.checked ? '#ffffff' : '#e9ecef';
+                pickupWaitingTime.style.cursor = pickupToggle.checked ? 'text' : 'not-allowed';
+                
+                // إضافة مستمع لحدث التغيير
+                pickupToggle.addEventListener('change', function() {
+                    pickupWaitingTime.disabled = !this.checked;
+                    pickupWaitingTime.style.backgroundColor = this.checked ? '#ffffff' : '#e9ecef';
+                    pickupWaitingTime.style.cursor = this.checked ? 'text' : 'not-allowed';
+                    
+                    // إعادة تعيين القيمة الافتراضية عند إعادة التفعيل
+                    if (this.checked) {
+                        pickupWaitingTime.value = '15';
+                    }
+                });
+            }
+            
+            // إضافة وظيفة لتبديل حقل وقت الانتظار للطلب المحلي
+            const localToggle = document.getElementById('localOrderEnabled');
+            const localWaitingTime = document.getElementById('localWaitingTime');
+            
+            // تحديث حالة حقل وقت الانتظار للطلب المحلي عند تحميل الصفحة
+            if (localToggle && localWaitingTime) {
+                localWaitingTime.disabled = !localToggle.checked;
+                localWaitingTime.style.backgroundColor = localToggle.checked ? '#ffffff' : '#e9ecef';
+                localWaitingTime.style.cursor = localToggle.checked ? 'text' : 'not-allowed';
+                
+                // إضافة مستمع لحدث التغيير
+                localToggle.addEventListener('change', function() {
+                    localWaitingTime.disabled = !this.checked;
+                    localWaitingTime.style.backgroundColor = this.checked ? '#ffffff' : '#e9ecef';
+                    localWaitingTime.style.cursor = this.checked ? 'text' : 'not-allowed';
+                    
+                    // إعادة تعيين القيمة الافتراضية عند إعادة التفعيل
+                    if (this.checked) {
+                        localWaitingTime.value = '10';
+                    }
+                });
+            }
             
             // إضافة وظيفة حساب إجمالي رسوم التوصيل مع الضريبة
             const deliveryFeesInput = document.getElementById('deliveryFees');
