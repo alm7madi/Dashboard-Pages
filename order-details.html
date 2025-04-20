@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الطلب</title>
+    <!-- Google Font - Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .order-status-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+        
+        .status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+        
+        .status-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            right: 60%;
+            width: 80%;
+            height: 3px;
+            background-color: #e9ecef;
+            z-index: 1;
+        }
+        
+        .status-step.completed:not(:last-child)::after {
+            background-color: #198754;
+        }
+        
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            z-index: 2;
+            color: #6c757d;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .step-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .status-step.completed .step-icon {
+            background-color: #198754;
+            color: white;
+        }
+        
+        .status-step.active .step-icon {
+            background-color: #0d6efd;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+            text-align: center;
+        }
+        
+        .status-step.completed .step-label,
+        .status-step.active .step-label {
+            color: #212529;
+            font-weight: 600;
+        }
+        
+        .order-cancelled {
+            background-color: #f8d7da;
+            color: #842029;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .order-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        /* تحسينات إضافية للتصميج */
+        .page-header {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .table th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+        }
+        
+        .badge {
+            padding: 6px 10px;
+            font-weight: 500;
+        }
+        
+        .btn-group .btn {
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- المحتوى الرئيسي -->
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-12">
+                <!-- بطاقة العنوان -->
+                <div class="card mb-4">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">تفاصيل الطلب #12345</h4>
+                        <a href="order.html" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-right me-1"></i> العودة للطلبات
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- أزرار الإجراءات -->
+                <div class="order-actions" id="orderActions">
+                    <button class="btn btn-danger" id="cancelOrderBtn">
+                        <i class="fas fa-times me-1"></i> إلغاء الطلب
+                    </button>
+                    <button class="btn btn-success" id="acceptOrderBtn">
+                        <i class="fas fa-check me-1"></i> قبول الطلب
+                    </button>
+                </div>
+                
+                <!-- حالة الطلب الملغي (مخفية بشكل افتراضي) -->
+                <div class="order-cancelled d-none" id="orderCancelled">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    تم إلغاء هذا الطلب
+                </div>
+                
+                <!-- خطوات حالة الطلب (مخفية بشكل افتراضي) -->
+                <div class="card mb-4 d-none" id="orderStatusSteps">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">حالة الطلب</h5>
+                        <span class="badge bg-info">قيد التجهيز</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="order-status-steps">
+                            <div class="status-step" id="stepPreparing">
+                                <div class="step-icon" data-status="preparing">
+                                    <i class="fas fa-blender"></i>
+                                </div>
+                                <div class="step-label">يجهز</div>
+                            </div>
+                            <div class="status-step" id="stepReady">
+                                <div class="step-icon" data-status="ready">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="step-label">جاهز</div>
+                            </div>
+                            <div class="status-step" id="stepDelivery">
+                                <div class="step-icon" data-status="delivery">
+                                    <i class="fas fa-motorcycle"></i>
+                                </div>
+                                <div class="step-label">للتوصيل</div>
+                            </div>
+                            <div class="status-step" id="stepCompleted">
+                                <div class="step-icon" data-status="completed">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="step-label">مكتمل</div>
+                            </div>
+                        </div>
+                        <!-- تم حذف أزرار تغيير الحالة -->
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- جدول ملخص الطلب -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="fas fa-user text-primary me-2"></i>
+                                <h5 class="mb-0">معلومات العميل</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 40%">اسم العميل</th>
+                                            <td class="d-flex justify-content-between align-items-center">
+                                                <span>أحمد محمد علي</span>
+                                                <a href="customer-profile.html" class="btn btn-sm btn-link text-primary p-0">
+                                                    <i class="fas fa-user-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <!-- تم حذف خانة البريد الإلكتروني -->
+                                        <tr>
+                                            <th>رقم الجوال</th>
+                                            <td class="d-flex justify-content-between align-items-center">
+                                                <span>+966 50 123 4567</span>
+                                                <a href="https://wa.me/966501234567" target="_blank" class="btn btn-sm btn-link text-success p-0">
+                                                    <i class="fab fa-whatsapp"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>تاريخ الطلب</th>
+                                            <td>15 أغسطس 2023، 14:30</td>
+                                        </tr>
+                                        <tr>
+                                            <th>طريقة الدفع</th>
+                                            <td class="d-flex justify-content-between align-items-center">
+                                                <span>بطاقة ائتمان</span>
+                                                <button type="button" class="btn btn-sm btn-link text-primary p-0" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- جدول ملاحظات العميل -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="fas fa-sticky-note text-primary me-2"></i>
+                                <h5 class="mb-0">ملاحظات الطلب</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 40%">رقم الجلسة</th>
+                                            <td>9</td>
+                                        </tr>
+                                        <tr>
+                                            <th>ملاحظات إضافية</th>
+                                            <td>اترك الطعام أمام الباب</td>
+                                        </tr>
+                                        <tr>
+                                            <th>نوع التوصيل</th>
+                                            <td>توصيل للمنزل</td>
+                                        </tr>
+                                        <tr>
+                                            <th>العنوان</th>
+                                            <td>الرياض، حي النزهة، شارع الأمير سلطان</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- تفاصيل المنتجات المطلوبة -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center">
+                        <i class="fas fa-shopping-basket text-primary me-2"></i>
+                        <h5 class="mb-0">المنتجات المطلوبة</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>المنتج</th>
+                                        <th>الكمية</th>
+                                        <th>السعر</th>
+                                        <th>الإجمالي</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://placehold.co/50x50" alt="برجر لحم" class="me-2" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+                                                <span>برجر لحم</span>
+                                            </div>
+                                            <div class="mt-2">
+                                                <div class="small mb-1">
+                                                    <i class="fas fa-sliders-h text-primary me-1"></i>
+                                                    <strong>الاختيارات:</strong> الحجم: كبير (+5 ريال)، مستوى الحرارة: متوسط
+                                                </div>
+                                                <div class="small mb-1">
+                                                    <i class="fas fa-plus-circle text-success me-1"></i>
+                                                    <strong>الإضافات:</strong> جبنة إضافية (+3 ريال)
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>2</td>
+                                        <td>35 ريال</td>
+                                        <td>86 ريال</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://placehold.co/50x50" alt="عصير برتقال" class="me-2" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+                                                <span>عصير برتقال</span>
+                                            </div>
+                                            <div class="mt-2">
+                                                <div class="small mb-1">
+                                                    <i class="fas fa-sliders-h text-primary me-1"></i>
+                                                    <strong>الاختيارات:</strong> الحجم: وسط
+                                                </div>
+                                                <div class="small mb-1">
+                                                    <i class="fas fa-minus-circle text-danger me-1"></i>
+                                                    <strong>الإزالات:</strong> بدون سكر
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>2</td>
+                                        <td>15 ريال</td>
+                                        <td>30 ريال</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <th>المجموع الفرعي</th>
+                                        <td>116 ريال</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <th>رسوم التوصيل</th>
+                                        <td>10 ريال</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <th>ضريبة القيمة المضافة (15%)</th>
+                                        <td>18.9 ريال</td>
+                                    </tr>
+                                    <tr class="table-light">
+                                        <td colspan="3"></td>
+                                        <th>الإجمالي</th>
+                                        <td class="fw-bold">144.9 ريال</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تأكيد إلغاء الطلب -->
+    <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelOrderModalLabel">تأكيد إلغاء الطلب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    هل أنت متأكد من رغبتك في إلغاء هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancelBtn">تأكيد الإلغاء</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تأكيد قبول الطلب -->
+    <div class="modal fade" id="acceptOrderModal" tabindex="-1" aria-labelledby="acceptOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="acceptOrderModalLabel">تأكيد قبول الطلب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    هل أنت متأكد من رغبتك في قبول هذا الطلب؟ سيتم البدء في تجهيزه.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-success" id="confirmAcceptBtn">تأكيد القبول</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الدفع -->
+    <div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-labelledby="paymentDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentDetailsModalLabel">تفاصيل عملية الدفع</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th style="width: 40%">رقم المعاملة</th>
+                                <td>TXN123456789</td>
+                            </tr>
+                            <tr>
+                                <th>تاريخ العملية</th>
+                                <td>15 أغسطس 2023، 14:32</td>
+                            </tr>
+                            <tr>
+                                <th>نوع البطاقة</th>
+                                <td>فيزا</td>
+                            </tr>
+                            <tr>
+                                <th>آخر 4 أرقام</th>
+                                <td>**** **** **** 5678</td>
+                            </tr>
+                            <tr>
+                                <th>حالة الدفع</th>
+                                <td><span class="badge bg-success">ناجحة</span></td>
+                            </tr>
+                            <tr>
+                                <th>بوابة الدفع</th>
+                                <td>مدى</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تعريف المتغيرات
+            const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+            const acceptOrderBtn = document.getElementById('acceptOrderBtn');
+            const orderActions = document.getElementById('orderActions');
+            const orderCancelled = document.getElementById('orderCancelled');
+            const orderStatusSteps = document.getElementById('orderStatusSteps');
+            const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+            const confirmAcceptBtn = document.getElementById('confirmAcceptBtn');
+            
+            // تعريف نوافذ التأكيد
+            const cancelOrderModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+            const acceptOrderModal = new bootstrap.Modal(document.getElementById('acceptOrderModal'));
+            
+            // تعريف خطوات حالة الطلب
+            const stepPreparing = document.getElementById('stepPreparing');
+            const stepReady = document.getElementById('stepReady');
+            const stepDelivery = document.getElementById('stepDelivery');
+            const stepCompleted = document.getElementById('stepCompleted');
+            
+            // الحصول على جميع أيقونات الخطوات
+            const stepIcons = document.querySelectorAll('.step-icon');
+            
+            // متغير لتخزين الحالة الحالية
+            let currentStatus = '';
+            
+            // إضافة مستمع أحداث لكل أيقونة
+            stepIcons.forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const clickedStatus = this.getAttribute('data-status');
+                    
+                    // التحقق مما إذا كان يمكن الانتقال إلى هذه الحالة (فقط للأمام)
+                    if (canMoveToStatus(clickedStatus)) {
+                        updateOrderStatus(clickedStatus);
+                    }
+                });
+            });
+            
+            // التحقق مما إذا كان يمكن الانتقال إلى حالة معينة
+            function canMoveToStatus(status) {
+                // إذا كانت الحالة الحالية فارغة (بداية)، يمكن فقط الانتقال إلى "يجهز"
+                if (currentStatus === '') {
+                    return status === 'preparing';
+                }
+                
+                // تحديد ترتيب الحالات
+                const statusOrder = ['preparing', 'ready', 'delivery', 'completed'];
+                const currentIndex = statusOrder.indexOf(currentStatus);
+                const targetIndex = statusOrder.indexOf(status);
+                
+                // يمكن فقط الانتقال إلى الحالة التالية مباشرة
+                return targetIndex === currentIndex + 1;
+            }
+            
+            // إظهار نافذة تأكيد إلغاء الطلب
+            cancelOrderBtn.addEventListener('click', function() {
+                cancelOrderModal.show();
+            });
+            
+            // إظهار نافذة تأكيد قبول الطلب
+            acceptOrderBtn.addEventListener('click', function() {
+                acceptOrderModal.show();
+            });
+            
+            // تأكيد إلغاء الطلب
+            confirmCancelBtn.addEventListener('click', function() {
+                // إخفاء أزرار الإجراءات
+                orderActions.classList.add('d-none');
+                // إظهار رسالة الإلغاء
+                orderCancelled.classList.remove('d-none');
+                // إخفاء خطوات حالة الطلب إذا كانت ظاهرة
+                orderStatusSteps.classList.add('d-none');
+                // إغلاق نافذة التأكيد
+                cancelOrderModal.hide();
+            });
+            
+            // تأكيد قبول الطلب
+            confirmAcceptBtn.addEventListener('click', function() {
+                // إخفاء أزرار الإجراءات
+                orderActions.classList.add('d-none');
+                // إظهار خطوات حالة الطلب
+                orderStatusSteps.classList.remove('d-none');
+                // تعيين الحالة الأولى (يجهز) كنشطة
+                updateOrderStatus('preparing');
+                // إغلاق نافذة التأكيد
+                acceptOrderModal.hide();
+            });
+            
+            // تحديث حالة الطلب
+            function updateOrderStatus(status) {
+                // تحديث الحالة الحالية
+                currentStatus = status;
+                
+                // إزالة جميع الحالات
+                stepPreparing.classList.remove('active', 'completed');
+                stepReady.classList.remove('active', 'completed');
+                stepDelivery.classList.remove('active', 'completed');
+                stepCompleted.classList.remove('active', 'completed');
+                
+                // تعيين الحالة الجديدة
+                switch(status) {
+                    case 'preparing':
+                        stepPreparing.classList.add('active');
+                        break;
+                    case 'ready':
+                        stepPreparing.classList.add('completed');
+                        stepReady.classList.add('active');
+                        break;
+                    case 'delivery':
+                        stepPreparing.classList.add('completed');
+                        stepReady.classList.add('completed');
+                        stepDelivery.classList.add('active');
+                        break;
+                    case 'completed':
+                        stepPreparing.classList.add('completed');
+                        stepReady.classList.add('completed');
+                        stepDelivery.classList.add('completed');
+                        stepCompleted.classList.add('active', 'completed');
+                        break;
+                }
+                
+                // تحديث شارة الحالة
+                updateStatusBadge(status);
+            }
+            
+            // تحديث شارة الحالة
+            function updateStatusBadge(status) {
+                const statusBadge = document.querySelector('.card-header .badge');
+                
+                // إزالة جميع فئات الألوان
+                statusBadge.classList.remove('bg-info', 'bg-primary', 'bg-warning', 'bg-success');
+                
+                // تعيين النص والفئة المناسبة
+                switch(status) {
+                    case 'preparing':
+                        statusBadge.textContent = 'قيد التجهيز';
+                        statusBadge.classList.add('bg-info');
+                        break;
+                    case 'ready':
+                        statusBadge.textContent = 'جاهز';
+                        statusBadge.classList.add('bg-primary');
+                        break;
+                    case 'delivery':
+                        statusBadge.textContent = 'قيد التوصيل';
+                        statusBadge.classList.add('bg-warning');
+                        break;
+                    case 'completed':
+                        statusBadge.textContent = 'مكتمل';
+                        statusBadge.classList.add('bg-success');
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
