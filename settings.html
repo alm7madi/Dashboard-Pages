@@ -369,6 +369,33 @@
                                 const modalDeliveryTotalDisplay = document.getElementById('modalDeliveryTotalDisplay');
                                 const selectedDeliveryPrice = document.getElementById('selectedDeliveryPrice');
                                 const saveDeliverySettings = document.getElementById('saveDeliverySettings');
+                                const deliveryOrderEnabled = document.getElementById('deliveryOrderEnabled');
+                                const deliverySettingsBtn = document.querySelector('[data-bs-target="#deliverySettingsModal"]');
+
+                                // تحديث حالة حقول الإدخال عند تغيير حالة زر التبديل
+                                function updateDeliveryFields() {
+                                    const isEnabled = deliveryOrderEnabled.checked;
+                                    modalDeliveryFees.disabled = !isEnabled;
+                                    modalDeliveryTax.disabled = !isEnabled;
+                                    saveDeliverySettings.disabled = !isEnabled;
+                                    deliverySettingsBtn.disabled = !isEnabled;
+                                    
+                                    // تحديث مظهر البطاقة
+                                    const deliveryCard = deliveryOrderEnabled.closest('.order-method-card');
+                                    if (!isEnabled) {
+                                        deliveryCard.style.opacity = '0.5';
+                                        selectedDeliveryPrice.textContent = 'خدمة التوصيل غير متاحة';
+                                    } else {
+                                        deliveryCard.style.opacity = '1';
+                                        updateModalDeliveryTotal();
+                                    }
+                                }
+
+                                // تحديث الحالة عند تحميل الصفحة
+                                updateDeliveryFields();
+
+                                // إضافة مستمع الحدث لزر التبديل
+                                deliveryOrderEnabled.addEventListener('change', updateDeliveryFields);
                                 
                                 function updateModalDeliveryTotal() {
                                     const fees = parseFloat(modalDeliveryFees.value) || 0;
