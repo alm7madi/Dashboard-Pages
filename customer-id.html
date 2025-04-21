@@ -45,6 +45,8 @@
         .card-body {
             padding: 20px;
         }
+        
+        /* تحسين حجم صورة الملف الشخصي على الشاشات الصغيرة */
         .profile-image-container {
             width: 150px;
             height: 150px;
@@ -57,6 +59,19 @@
             margin: 0 auto 20px;
             border: 2px solid #e9ecef;
         }
+        @media (max-width: 576px) {
+            .profile-image-container {
+                width: 120px;
+                height: 120px;
+            }
+            .card-body {
+                padding: 15px;
+            }
+            .main-container {
+                padding: 10px 5px;
+            }
+        }
+        
         .profile-image-container i {
             font-size: 3rem;
             color: #adb5bd;
@@ -66,10 +81,22 @@
             height: 100%;
             object-fit: cover;
         }
+        
+        /* تحسين أحجام الأزرار للمس على الموبايل */
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
         }
+        @media (max-width: 576px) {
+            .btn-sm {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.9rem;
+            }
+            .btn {
+                padding: 0.5rem 0.75rem;
+            }
+        }
+        
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
@@ -94,10 +121,19 @@
         .profile-info .badge {
             margin-top: 10px;
         }
+        
+        /* تحسين حجم شارات الحالة */
         .customer-status {
             padding: 0.35em 0.65em;
             font-size: 0.85rem;
         }
+        @media (max-width: 576px) {
+            .customer-status {
+                padding: 0.4em 0.7em;
+                font-size: 0.9rem;
+            }
+        }
+        
         .status-active {
             background-color: var(--success-color);
         }
@@ -112,6 +148,13 @@
             font-size: 0.75rem;
             border-radius: 4px;
         }
+        @media (max-width: 576px) {
+            .order-status {
+                padding: 0.4em 0.7em;
+                font-size: 0.8rem;
+            }
+        }
+        
         .order-pending {
             background-color: #ffc107;
             color: #212529;
@@ -128,6 +171,8 @@
             background-color: #dc3545;
             color: #fff;
         }
+        
+        /* تحسين عرض الجدول على الشاشات الصغيرة */
         .table-responsive {
             overflow-x: auto;
         }
@@ -137,6 +182,49 @@
         }
         .table td {
             vertical-align: middle;
+        }
+        
+        /* تحسينات إضافية للموبايل */
+        @media (max-width: 767.98px) {
+            .table th, .table td {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+            
+            /* تحسين عرض الأعمدة في الجدول على الموبايل */
+            .mobile-hide {
+                display: none;
+            }
+            
+            /* تحسين عرض بطاقات المعلومات على الموبايل */
+            .card-header {
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+            
+            /* تحسين عرض الأزرار على الموبايل */
+            .pagination .page-link {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.9rem;
+            }
+            
+            /* تحسين عرض العناوين على الموبايل */
+            h4 {
+                font-size: 1.2rem;
+            }
+            
+            h6 {
+                font-size: 0.9rem;
+            }
+            
+            /* تحسين عرض بطاقات الإحصائيات */
+            .card-body .rounded-circle {
+                padding: 0.5rem !important;
+            }
+            
+            .card-body .fs-4 {
+                font-size: 1.1rem !important;
+            }
         }
     </style>
 </head>
@@ -156,7 +244,7 @@
                     
                     <div class="row">
                         <!-- العمود الأيمن - معلومات الحساب -->
-                        <div class="col-lg-4 order-lg-1">
+                        <div class="col-lg-4 order-lg-1 order-2">
                             <!-- بطاقة معلومات الحساب -->
                             <div class="card mb-4">
                                 <div class="card-header">
@@ -184,7 +272,6 @@
                                             <h6 class="text-muted mb-1">تاريخ التسجيل:</h6>
                                             <p class="mb-0 fs-6" id="registration-date">15 يناير 2023</p>
                                         </div>
-                                        <!-- تم نقل عدد الطلبات وإجمالي المشتريات إلى أعلى جدول سجل الطلبات -->
                                     </div>
                                     <hr>
                                     <div class="d-grid gap-2">
@@ -197,13 +284,13 @@
                         </div>
                         
                         <!-- العمود الأيسر - سجل الطلبات -->
-                        <div class="col-lg-8 order-lg-2">
+                        <div class="col-lg-8 order-lg-2 order-1 mb-4">
                             <!-- إضافة بطاقات عدد الطلبات وإجمالي المشتريات -->
                             <div class="row mb-4">
-                                <div class="col-md-6">
+                                <div class="col-6">
                                     <div class="card h-100">
                                         <div class="card-body d-flex align-items-center">
-                                            <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                                            <div class="rounded-circle bg-primary bg-opacity-10 p-3 p-sm-3 me-2 me-sm-3">
                                                 <i class="fas fa-shopping-bag text-primary fs-4"></i>
                                             </div>
                                             <div>
@@ -213,10 +300,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-6">
                                     <div class="card h-100">
                                         <div class="card-body d-flex align-items-center">
-                                            <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+                                            <div class="rounded-circle bg-success bg-opacity-10 p-3 p-sm-3 me-2 me-sm-3">
                                                 <i class="fas fa-money-bill-wave text-success fs-4"></i>
                                             </div>
                                             <div>
@@ -240,55 +327,12 @@
                                                     <th>رقم الطلب</th>
                                                     <th>حالة الطلب</th>
                                                     <th>المبلغ</th>
-                                                    <th>تاريخ الطلب</th>
+                                                    <th class="mobile-hide">تاريخ الطلب</th>
                                                     <th>الإجراءات</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="orders-table-body">
-                                                <tr>
-                                                    <td>#ORD-1001</td>
-                                                    <td><span class="badge order-status order-completed">مكتمل</span></td>
-                                                    <td>250 ريال</td>
-                                                    <td>15 يناير 2023</td>
-                                                    <td>
-                                                        <a href="order-details.html?id=1001" class="btn btn-sm btn-outline-primary">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#ORD-1002</td>
-                                                    <td><span class="badge order-status order-processing">قيد التنفيذ</span></td>
-                                                    <td>350 ريال</td>
-                                                    <td>20 فبراير 2023</td>
-                                                    <td>
-                                                        <a href="order-details.html?id=1002" class="btn btn-sm btn-outline-primary">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#ORD-1003</td>
-                                                    <td><span class="badge order-status order-pending">قيد الانتظار</span></td>
-                                                    <td>150 ريال</td>
-                                                    <td>5 مارس 2023</td>
-                                                    <td>
-                                                        <a href="order-details.html?id=1003" class="btn btn-sm btn-outline-primary">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#ORD-1004</td>
-                                                    <td><span class="badge order-status order-cancelled">ملغي</span></td>
-                                                    <td>500 ريال</td>
-                                                    <td>10 أبريل 2023</td>
-                                                    <td>
-                                                        <a href="order-details.html?id=1004" class="btn btn-sm btn-outline-primary">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                <!-- سيتم ملء هذا الجزء بواسطة JavaScript -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -438,7 +482,7 @@
                         <td>#${order.id}</td>
                         <td><span class="badge order-status order-${order.status}">${order.statusText}</span></td>
                         <td>${order.amount}</td>
-                        <td>${order.date}</td>
+                        <td class="mobile-hide">${order.date}</td>
                         <td>
                             <a href="order-details.html?id=${order.id}" class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-eye"></i>
@@ -488,6 +532,19 @@
                 loadCustomerData('1');
                 loadCustomerOrders('1');
             }
+            
+            // تعديل ترتيب العناصر على الشاشات الصغيرة
+            function adjustLayoutForMobile() {
+                if (window.innerWidth < 992) {
+                    // تطبيق تغييرات إضافية للموبايل إذا لزم الأمر
+                } else {
+                    // إعادة التخطيط للشاشات الكبيرة
+                }
+            }
+            
+            // تنفيذ الدالة عند تحميل الصفحة وعند تغيير حجم النافذة
+            adjustLayoutForMobile();
+            window.addEventListener('resize', adjustLayoutForMobile);
         });
     </script>
 </body>
