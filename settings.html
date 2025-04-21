@@ -83,35 +83,11 @@
             margin-bottom: 20px; /* تم تقليل الهامش من 80px إلى 20px */
         }
         
-        /* أنماط عرض الوقت الحالي */
-        .current-time-container {
-            border: 1px solid rgba(0, 0, 0, 0.125);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .current-time-container:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .time-display {
-            font-size: 1.2rem;
-            font-family: monospace;
-            color: #3498db;
-            display: inline-block;
-            min-width: 80px;
-        }
+
         
         /* تحسين التجاوب للموبايل */
         @media (max-width: 767.98px) {
-            .current-time-container {
-                margin-top: 15px;
-                margin-bottom: 15px;
-            }
-            
-            .time-display {
-                font-size: 1.1rem;
-            }
+
             
             /* تحسين المسافات بين العناصر */
             .card {
@@ -233,11 +209,7 @@
                     <i class="fas fa-share-alt me-1"></i> التواصل الاجتماعي
                 </button>
             </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="working-hours-tab" data-bs-toggle="tab" data-bs-target="#working-hours" type="button" role="tab" aria-controls="working-hours" aria-selected="false">
-                    <i class="fas fa-clock me-1"></i> ساعات العمل
-                </button>
-            </li>
+
         </ul>
         
         <div class="tab-content" id="settingsTabsContent">
@@ -604,138 +576,8 @@
                 </div>
             </div>
             
-            <!-- Working Hours Tab -->
-            <div class="tab-pane fade" id="working-hours" role="tabpanel" aria-labelledby="working-hours-tab">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-clock me-2"></i> ساعات العمل
-                    </div>
-                    <div class="card-body">
-                        <form id="workingHoursForm">
-                            <!-- اختيار البلد -->
-                            <div class="mb-4">
-                                <div class="row align-items-center">
-                                    <div class="col-md-6">
-                                        <label for="storeCountry" class="form-label">بلد المتجر</label>
-                                        <select class="form-select" id="storeCountry">
-                                            <option value="SA">المملكة العربية السعودية</option>
-                                            <option value="EG">مصر</option>
-                                            <option value="BH">البحرين</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="current-time-container bg-light rounded p-3 text-center">
-                                            <i class="fas fa-clock me-2 text-primary"></i>
-                                            <span>الوقت الحالي: </span>
-                                            <strong id="currentTime" class="time-display">--:--:--</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- جدول ساعات العمل -->
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>اليوم</th>
-                                            <th>من</th>
-                                            <th>إلى</th>
-                                            <th>يوم عطلة</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>الأحد</td>
-                                            <td><input type="time" class="form-control" id="sundayStart" value="09:00"></td>
-                                            <td><input type="time" class="form-control" id="sundayEnd" value="22:00"></td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="sundayClosed">
-                                                    <label class="form-check-label" for="sundayClosed">عطلة</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>الإثنين</td>
-                                            <td><input type="time" class="form-control" id="mondayStart" value="09:00"></td>
-                                            <td><input type="time" class="form-control" id="mondayEnd" value="22:00"></td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="mondayClosed">
-                                                    <label class="form-check-label" for="mondayClosed">عطلة</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>الثلاثاء</td>
-                                            <td><input type="time" class="form-control" id="tuesdayStart" value="09:00"></td>
-                                            <td><input type="time" class="form-control" id="tuesdayEnd" value="22:00"></td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tuesdayClosed">
-                                                    <label class="form-check-label" for="tuesdayClosed">عطلة</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>الأربعاء</td>
-                                            <td><input type="time" class="form-control" id="wednesdayStart" value="09:00"></td>
-                                            <td><input type="time" class="form-control" id="wednesdayEnd" value="22:00"></td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="wednesdayClosed">
-                                                    <label class="form-check-label" for="wednesdayClosed">عطلة</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>الخميس</td>
-                                            <td><input type="time" class="form-control" id="thursdayStart" value="09:00"></td>
-                                            <td><input type="time" class="form-control" id="thursdayEnd" value="22:00"></td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="thursdayClosed">
-                                                    <label class="form-check-label" for="thursdayClosed">عطلة</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>الجمعة</td>
-                                            <td><input type="time" class="form-control" id="fridayStart" value="16:00"></td>
-                                            <td><input type="time" class="form-control" id="fridayEnd" value="22:00"></td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="fridayClosed">
-                                                    <label class="form-check-label" for="fridayClosed">عطلة</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>السبت</td>
-                                            <td><input type="time" class="form-control" id="saturdayStart" value="09:00"></td>
-                                            <td><input type="time" class="form-control" id="saturdayEnd" value="22:00"></td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="saturdayClosed">
-                                                    <label class="form-check-label" for="saturdayClosed">عطلة</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- أزرار الحفظ والإلغاء لساعات العمل - تم نقلها خارج البطاقة -->
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-secondary me-2">إلغاء</button>
-                    <button type="button" class="btn btn-primary" id="saveHoursSettings">
-                        <i class="fas fa-save me-1"></i> حفظ ساعات العمل
-                    </button>
-                </div>
-            </div>
+
         </div>
         
         <!-- حذف شريط الحفظ الثابت -->
@@ -754,16 +596,7 @@
     <script>
         // تحديث حالة حقول الإدخال عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
-            // تحديث الوقت الحالي
-            function updateCurrentTime() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('ar-SA');
-                document.getElementById('currentTime').textContent = timeString;
-            }
-            
-            // تحديث الوقت كل ثانية
-            updateCurrentTime();
-            setInterval(updateCurrentTime, 1000);
+
             
             // العثور على جميع أزرار التبديل
             const toggles = document.querySelectorAll('.social-toggle');
@@ -844,40 +677,7 @@
                 });
             }
             
-            // إضافة وظيفة لتبديل حقول ساعات العمل عند تحديد يوم عطلة
-            const dayClosedCheckboxes = document.querySelectorAll('input[type="checkbox"][id$="Closed"]');
-            
-            dayClosedCheckboxes.forEach(checkbox => {
-                const day = checkbox.id.replace('Closed', '');
-                const startInput = document.getElementById(`${day}Start`);
-                const endInput = document.getElementById(`${day}End`);
-                
-                // تحديث حالة حقول الوقت عند تحميل الصفحة
-                if (startInput && endInput) {
-                    startInput.disabled = checkbox.checked;
-                    endInput.disabled = checkbox.checked;
-                    
-                    // تحديث مظهر حقول الوقت
-                    startInput.style.backgroundColor = checkbox.checked ? '#e9ecef' : '#ffffff';
-                    endInput.style.backgroundColor = checkbox.checked ? '#e9ecef' : '#ffffff';
-                    startInput.style.cursor = checkbox.checked ? 'not-allowed' : 'text';
-                    endInput.style.cursor = checkbox.checked ? 'not-allowed' : 'text';
-                }
-                
-                // إضافة مستمع لحدث التغيير
-                checkbox.addEventListener('change', function() {
-                    if (startInput && endInput) {
-                        startInput.disabled = this.checked;
-                        endInput.disabled = this.checked;
-                        
-                        // تحديث مظهر حقول الوقت
-                        startInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
-                        endInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
-                        startInput.style.cursor = this.checked ? 'not-allowed' : 'text';
-                        endInput.style.cursor = this.checked ? 'not-allowed' : 'text';
-                    }
-                });
-            });
+
             
             // إضافة مستمعي أحداث لأزرار الحفظ
             document.getElementById('saveGeneralSettings').addEventListener('click', function() {
@@ -892,9 +692,7 @@
                 alert('تم حفظ إعدادات مواقع التواصل الاجتماعي بنجاح!');
             });
             
-            document.getElementById('saveHoursSettings').addEventListener('click', function() {
-                alert('تم حفظ ساعات العمل بنجاح!');
-            });
+
             
             // إضافة وظيفة لتبديل حالة أزرار طرق الطلب
             const orderMethodToggles = document.querySelectorAll('.order-method-toggle');
