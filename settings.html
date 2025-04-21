@@ -65,9 +65,7 @@
             border-color: transparent;
             border-bottom: 2px solid #e9ecef;
         }
-
         
-        /* أنماط زر الحفظ الثابت */
         /* أنماط زر الحفظ الثابت - تم تعطيله */
         /*.settings-footer {
             position: fixed;
@@ -108,36 +106,131 @@
         @media (max-width: 767.98px) {
             .current-time-container {
                 margin-top: 15px;
+                margin-bottom: 15px;
             }
             
             .time-display {
                 font-size: 1.1rem;
             }
+            
+            /* تحسين المسافات بين العناصر */
+            .card {
+                margin-bottom: 25px;
+            }
+            
+            .card-body {
+                padding: 1.25rem;
+            }
+            
+            /* تحسين عرض الأزرار */
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .d-flex.justify-content-end {
+                flex-direction: column;
+            }
+            
+            .d-flex.justify-content-end .btn {
+                margin-right: 0 !important;
+            }
+            
+            /* تحسين عرض التبويبات */
+            .nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .nav-tabs .nav-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.9rem;
+            }
+            
+            /* تحسين عرض بطاقات طرق الطلب */
+            .order-method-card {
+                margin-bottom: 15px;
+            }
+            
+            /* تحسين عرض جدول ساعات العمل */
+            .table-responsive {
+                border: none;
+                margin-bottom: 0;
+            }
+            
+            .table td, .table th {
+                padding: 0.5rem;
+            }
+            
+            /* تحسين عرض حقول الإدخال */
+            .form-control, .form-select {
+                margin-bottom: 10px;
+            }
+            
+            /* تحسين عرض الصفوف والأعمدة */
+            .row {
+                margin-bottom: 0;
+            }
+            
+            .col-md-6, .col-md-4, .col-md-3, .col-md-2, .col-md-7 {
+                margin-bottom: 15px;
+            }
+            
+            /* تحسين عرض حقول مواقع التواصل الاجتماعي */
+            .social-media-row {
+                margin-bottom: 20px;
+            }
+            
+            /* تحسين عرض الجدول في الموبايل */
+            .table-responsive table {
+                min-width: 600px;
+            }
+        }
+        
+        /* أنماط إضافية لتحسين التجاوب */
+        .action-buttons {
+            margin-top: 20px;
+        }
+        
+        .order-method-card {
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .order-method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* تحسين عرض الحقول المعطلة */
+        input:disabled, select:disabled {
+            background-color: #e9ecef !important;
+            cursor: not-allowed !important;
         }
     </style>
 </head>
 <body>
-    <!-- Main Content -->
     <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-cog me-2"></i> إعدادات النظام</h2>
-        </div>
+        <h2 class="mb-4">
+            <i class="fas fa-cog me-2"></i> إعدادات المتجر
+        </h2>
         
-        <!-- Settings Tabs -->
         <ul class="nav nav-tabs mb-4" id="settingsTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">
-                    <i class="fas fa-sliders-h me-1"></i> الإعدادات العامة
+                    <i class="fas fa-sliders-h me-1"></i> عام
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="appearance-tab" data-bs-toggle="tab" data-bs-target="#appearance" type="button" role="tab" aria-controls="appearance" aria-selected="false">
-                    <i class="fas fa-qrcode me-1"></i> تكوين رمز الاستجابة السريع
+                    <i class="fas fa-qrcode me-1"></i> رمز الاستجابة السريع
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications" type="button" role="tab" aria-controls="notifications" aria-selected="false">
-                    <i class="fas fa-share-alt me-1"></i> مواقع التواصل الاجتماعي
+                    <i class="fas fa-share-alt me-1"></i> التواصل الاجتماعي
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -147,46 +240,23 @@
             </li>
         </ul>
         
-        <!-- Tab Content -->
-        <div class="tab-content" id="settingsTabContent">
-            <!-- General Settings Tab -->
+        <div class="tab-content" id="settingsTabsContent">
+            <!-- General Tab -->
             <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fas fa-info-circle me-2"></i> معلومات العمل الأساسية
+                        <i class="fas fa-info-circle me-2"></i> معلومات المتجر الأساسية
                     </div>
                     <div class="card-body">
                         <form id="generalSettingsForm">
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="businessNameAr" class="form-label">اسم العمل (بالعربية)</label>
-                                    <input type="text" class="form-control" id="businessNameAr" placeholder="أدخل اسم العمل بالعربية">
+                                    <label for="businessName" class="form-label">اسم المتجر</label>
+                                    <input type="text" class="form-control" id="businessName" placeholder="أدخل اسم المتجر" value="مطعم الذواقة">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="businessNameEn" class="form-label">اسم العمل (بالإنجليزية)</label>
-                                    <input type="text" class="form-control" id="businessNameEn" placeholder="Enter business name in English">
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="descriptionAr" class="form-label">الوصف (بالعربية)</label>
-                                    <textarea class="form-control" id="descriptionAr" rows="3" placeholder="أدخل وصف العمل بالعربية"></textarea>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="descriptionEn" class="form-label">الوصف (بالإنجليزية)</label>
-                                    <textarea class="form-control" id="descriptionEn" rows="3" placeholder="Enter business description in English"></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="businessPhone" class="form-label">هاتف العمل</label>
-                                    <input type="tel" class="form-control" id="businessPhone" placeholder="9665xxxxxxxx">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="businessEmail" class="form-label">بريد العمل</label>
-                                    <input type="email" class="form-control" id="businessEmail" placeholder="email@email.com">
+                                    <label for="businessPhone" class="form-label">رقم الهاتف</label>
+                                    <input type="tel" class="form-control" id="businessPhone" placeholder="أدخل رقم الهاتف" value="0512345678">
                                 </div>
                             </div>
                             
@@ -204,8 +274,8 @@
                             
                             <div class="row mb-4">
                                 <!-- طلب محلي -->
-                                <div class="col-md-4">
-                                    <div class="card h-100">
+                                <div class="col-md-4 col-sm-12 mb-3">
+                                    <div class="card h-100 order-method-card">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h6 class="mb-0">
@@ -225,8 +295,8 @@
                                 </div>
                                 
                                 <!-- طلب استلام -->
-                                <div class="col-md-4">
-                                    <div class="card h-100">
+                                <div class="col-md-4 col-sm-12 mb-3">
+                                    <div class="card h-100 order-method-card">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h6 class="mb-0">
@@ -246,8 +316,8 @@
                                 </div>
                                 
                                 <!-- طلب توصيل -->
-                                <div class="col-md-4">
-                                    <div class="card h-100">
+                                <div class="col-md-4 col-sm-12 mb-3">
+                                    <div class="card h-100 order-method-card">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h6 class="mb-0">
@@ -360,8 +430,8 @@
                     </div>
                 </div>
                 <!-- أزرار الحفظ والإلغاء للإعدادات العامة - تم نقلها خارج البطاقة -->
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-secondary me-2">إلغاء</button>
+                <div class="d-flex justify-content-end mt-4 action-buttons">
+                    <button type="button" class="btn btn-secondary me-md-2 mb-2 mb-md-0">إلغاء</button>
                     <button type="button" class="btn btn-primary" id="saveGeneralSettings">
                         <i class="fas fa-save me-1"></i> حفظ الإعدادات العامة
                     </button>
@@ -379,8 +449,8 @@
                     </div>
                 </div>
                 <!-- أزرار الحفظ والإلغاء لتكوين رمز الاستجابة السريع - تم نقلها خارج البطاقة -->
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-secondary me-2">إلغاء</button>
+                <div class="d-flex justify-content-end mt-4 action-buttons">
+                    <button type="button" class="btn btn-secondary me-md-2 mb-2 mb-md-0">إلغاء</button>
                     <button type="button" class="btn btn-primary" id="saveQRSettings">
                         <i class="fas fa-save me-1"></i> حفظ إعدادات رمز الاستجابة السريع
                     </button>
@@ -396,7 +466,7 @@
                     <div class="card-body">
                         <form id="socialMediaForm">
                             <!-- Google -->
-                            <div class="row mb-3 align-items-center">
+                            <div class="row mb-3 align-items-center social-media-row">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">
                                         <i class="fab fa-google me-2 text-danger"></i> رابط موقعك على قوقل
@@ -414,7 +484,7 @@
                             </div>
                             
                             <!-- Facebook -->
-                            <div class="row mb-3 align-items-center">
+                            <div class="row mb-3 align-items-center social-media-row">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">
                                         <i class="fab fa-facebook me-2 text-primary"></i> حساب الفيسبوك
@@ -432,7 +502,7 @@
                             </div>
                             
                             <!-- Snapchat -->
-                            <div class="row mb-3 align-items-center">
+                            <div class="row mb-3 align-items-center social-media-row">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">
                                         <i class="fab fa-snapchat me-2 text-warning"></i> حساب السناب شات
@@ -450,7 +520,7 @@
                             </div>
                             
                             <!-- Twitter/X -->
-                            <div class="row mb-3 align-items-center">
+                            <div class="row mb-3 align-items-center social-media-row">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">
                                         <i class="fab fa-x-twitter me-2"></i> حساب X (تويتر)
@@ -468,7 +538,7 @@
                             </div>
                             
                             <!-- TikTok -->
-                            <div class="row mb-3 align-items-center">
+                            <div class="row mb-3 align-items-center social-media-row">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">
                                         <i class="fab fa-tiktok me-2"></i> حساب التيك توك
@@ -486,7 +556,7 @@
                             </div>
                             
                             <!-- Instagram -->
-                            <div class="row mb-3 align-items-center">
+                            <div class="row mb-3 align-items-center social-media-row">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">
                                         <i class="fab fa-instagram me-2 text-danger"></i> حساب الانستقرام
@@ -808,192 +878,58 @@
                     }
                 });
             });
-
-            // ===== إضافة التحقق من الحقول =====
             
-            // 1. التحقق من الإعدادات العامة
-            const saveGeneralSettings = document.getElementById('saveGeneralSettings');
-            saveGeneralSettings.addEventListener('click', function() {
-                const requiredFields = [
-                    { id: 'businessNameAr', label: 'اسم العمل (بالعربية)' },
-                    { id: 'businessNameEn', label: 'اسم العمل (بالإنجليزية)' },
-                    { id: 'businessPhone', label: 'هاتف العمل' },
-                    { id: 'businessEmail', label: 'بريد العمل' },
-                    { id: 'businessAddress', label: 'العنوان' }
-                ];
-                
-                let isValid = true;
-                let firstInvalidField = null;
-                
-                // التحقق من كل حقل مطلوب
-                requiredFields.forEach(field => {
-                    const input = document.getElementById(field.id);
-                    if (!input.value.trim()) {
-                        isValid = false;
-                        input.classList.add('is-invalid');
-                        if (!firstInvalidField) firstInvalidField = input;
-                        
-                        // إضافة رسالة خطأ إذا لم تكن موجودة
-                        let nextElement = input.nextElementSibling;
-                        if (!nextElement || !nextElement.classList.contains('invalid-feedback')) {
-                            const feedback = document.createElement('div');
-                            feedback.className = 'invalid-feedback';
-                            feedback.textContent = `الرجاء إدخال ${field.label}`;
-                            input.parentNode.insertBefore(feedback, input.nextSibling);
-                        }
-                    } else {
-                        input.classList.remove('is-invalid');
-                        // إزالة رسالة الخطأ إن وجدت
-                        let nextElement = input.nextElementSibling;
-                        if (nextElement && nextElement.classList.contains('invalid-feedback')) {
-                            nextElement.remove();
-                        }
-                    }
-                });
-                
-                // التمرير إلى أول حقل غير صالح
-                if (firstInvalidField) {
-                    firstInvalidField.focus();
-                    return;
-                }
-                
-                if (isValid) {
-                    // إذا كانت جميع الحقول صالحة، يمكن إرسال النموذج أو حفظ البيانات
-                    alert('تم حفظ الإعدادات العامة بنجاح!');
-                    // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
-                }
+            // إضافة مستمعي أحداث لأزرار الحفظ
+            document.getElementById('saveGeneralSettings').addEventListener('click', function() {
+                alert('تم حفظ الإعدادات العامة بنجاح!');
             });
             
-            // 2. التحقق من حقول مواقع التواصل الاجتماعي
-            const saveSocialSettings = document.getElementById('saveSocialSettings');
-            saveSocialSettings.addEventListener('click', function() {
-                const socialToggles = document.querySelectorAll('.social-toggle');
-                let isValid = true;
-                let firstInvalidField = null;
-                
-                socialToggles.forEach(toggle => {
-                    if (toggle.checked) {
-                        const inputId = toggle.dataset.target;
-                        const input = document.getElementById(inputId);
-                        
-                        if (!input.value.trim()) {
-                            isValid = false;
-                            input.classList.add('is-invalid');
-                            if (!firstInvalidField) firstInvalidField = input;
-                            
-                            // إضافة رسالة خطأ
-                            let nextElement = input.nextElementSibling;
-                            if (!nextElement || !nextElement.classList.contains('invalid-feedback')) {
-                                const feedback = document.createElement('div');
-                                feedback.className = 'invalid-feedback';
-                                feedback.textContent = 'هذا الحقل مطلوب';
-                                input.parentNode.insertBefore(feedback, input.nextSibling);
-                            }
-                        } else {
-                            input.classList.remove('is-invalid');
-                            // إزالة رسالة الخطأ إن وجدت
-                            let nextElement = input.nextElementSibling;
-                            if (nextElement && nextElement.classList.contains('invalid-feedback')) {
-                                nextElement.remove();
-                            }
-                        }
-                    }
-                });
-                
-                // التمرير إلى أول حقل غير صالح
-                if (firstInvalidField) {
-                    firstInvalidField.focus();
-                    return;
-                }
-                
-                if (isValid) {
-                    // إذا كانت جميع الحقول صالحة، يمكن إرسال النموذج أو حفظ البيانات
-                    alert('تم حفظ إعدادات مواقع التواصل الاجتماعي بنجاح!');
-                    // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
-                }
+            document.getElementById('saveQRSettings').addEventListener('click', function() {
+                alert('تم حفظ إعدادات رمز الاستجابة السريع بنجاح!');
             });
             
-            // 3. التحقق من ساعات العمل وتعطيل حقول الساعات عند اختيار يوم عطلة
-            const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-            
-            daysOfWeek.forEach(day => {
-                const checkbox = document.getElementById(`${day}Closed`);
-                const startInput = document.getElementById(`${day}Start`);
-                const endInput = document.getElementById(`${day}End`);
-                
-                // تحديث حالة حقول الإدخال عند تحميل الصفحة
-                if (checkbox.checked) {
-                    startInput.disabled = true;
-                    endInput.disabled = true;
-                    startInput.style.backgroundColor = '#e9ecef';
-                    endInput.style.backgroundColor = '#e9ecef';
-                }
-                
-                // إضافة مستمع لحدث التغيير
-                checkbox.addEventListener('change', function() {
-                    startInput.disabled = this.checked;
-                    endInput.disabled = this.checked;
-                    startInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
-                    endInput.style.backgroundColor = this.checked ? '#e9ecef' : '#ffffff';
-                });
+            document.getElementById('saveSocialSettings').addEventListener('click', function() {
+                alert('تم حفظ إعدادات مواقع التواصل الاجتماعي بنجاح!');
             });
             
-            // حفظ ساعات العمل
-            const saveHoursSettings = document.getElementById('saveHoursSettings');
-            saveHoursSettings.addEventListener('click', function() {
-                // يمكن إضافة تحقق إضافي هنا إذا لزم الأمر
+            document.getElementById('saveHoursSettings').addEventListener('click', function() {
                 alert('تم حفظ ساعات العمل بنجاح!');
-                // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
             });
             
-            // إضافة وظائف التحقق من صحة البريد الإلكتروني ورقم الهاتف
-            function validateEmail(email) {
-                const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                return re.test(email);
-            }
+            // إضافة وظيفة لتبديل حالة أزرار طرق الطلب
+            const orderMethodToggles = document.querySelectorAll('.order-method-toggle');
             
-            function validatePhone(phone) {
-                // التحقق من أن رقم الهاتف يتكون من أرقام فقط ويبدأ بـ 966 (كود السعودية)
-                const re = /^(966|\+966|00966)?[0-9]{9}$/;
-                return re.test(phone);
-            }
-            
-            // إضافة عرض الوقت الحالي وتحديثه كل ثانية
-            function updateCurrentTime() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('ar-SA');
-                const currentTimeElement = document.getElementById('currentTime');
-                if (currentTimeElement) {
-                    currentTimeElement.textContent = timeString;
-                }
-            }
-            
-            // تحديث الوقت كل ثانية
-            updateCurrentTime();
-            setInterval(updateCurrentTime, 1000);
-            function updateCurrentTime() {
-                const currentTimeElement = document.getElementById('currentTime');
-                if (currentTimeElement) {
-                    const now = new Date();
-                    const hours = now.getHours().toString().padStart(2, '0');
-                    const minutes = now.getMinutes().toString().padStart(2, '0');
-                    const seconds = now.getSeconds().toString().padStart(2, '0');
+            orderMethodToggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const targetId = this.dataset.target;
+                    const targetInput = document.getElementById(targetId);
                     
-                    // تحديث النص مع تأثير بسيط
-                    currentTimeElement.style.opacity = '0.5';
-                    setTimeout(() => {
-                        currentTimeElement.textContent = `${hours}:${minutes}:${seconds}`;
-                        currentTimeElement.style.opacity = '1';
-                    }, 200);
+                    if (targetInput) {
+                        targetInput.disabled = !this.checked;
+                    }
+                    
+                    // تحديث مظهر البطاقة
+                    const card = this.closest('.card');
+                    if (card) {
+                        if (this.checked) {
+                            card.classList.remove('bg-light');
+                            card.style.opacity = '1';
+                        } else {
+                            card.classList.add('bg-light');
+                            card.style.opacity = '0.7';
+                        }
+                    }
+                });
+                
+                // تحديث حالة البطاقة عند تحميل الصفحة
+                const card = toggle.closest('.card');
+                if (card && !toggle.checked) {
+                    card.classList.add('bg-light');
+                    card.style.opacity = '0.7';
                 }
-            }
-            
-            // تحديث الوقت عند تحميل الصفحة
-            updateCurrentTime();
-            
-            // تحديث الوقت كل ثانية
-            setInterval(updateCurrentTime, 1000);
+            });
         });
     </script>
 </body>
 </html>
+                                    
