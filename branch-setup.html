@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة فروع المتجر</title>
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- Google Tajawal Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --light-bg: #f8f9fa;
+            --border-radius: 8px;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .main-container {
+            padding: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            font-weight: 600;
+        }
+        .required-field::after {
+            content: "*";
+            color: #dc3545;
+            margin-right: 4px;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* أنماط جدول الفروع */
+        .table-branches {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table-branches th, .table-branches td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+        .table-branches thead th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table-branches tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+        .table-branches tbody td {
+            border-bottom: 1px solid #dee2e6;
+        }
+        .branch-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+        .status-active {
+            background-color: #198754;
+        }
+        .status-inactive {
+            background-color: #dc3545;
+        }
+        
+        /* أنماط عرض الوقت الحالي */
+        .current-time-container {
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .current-time-container:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .time-display {
+            font-size: 1.2rem;
+            font-family: monospace;
+            color: #3498db;
+            display: inline-block;
+            min-width: 80px;
+        }
+        
+        /* تحسين التجاوب للموبايل */
+        @media (max-width: 767.98px) {
+            .table-responsive {
+                border: none;
+                margin-bottom: 0;
+            }
+            .table td, .table th {
+                padding: 0.5rem;
+            }
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .d-flex.justify-content-end {
+                flex-direction: column;
+            }
+            .d-flex.justify-content-end .btn {
+                margin-right: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- نظام الإشعارات -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+        <div id="notification-toast" class="toast align-items-center text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="إغلاق"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">إدارة فروع المتجر</h4>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBranchModal">
+                                <i class="fas fa-plus-circle me-1"></i> إضافة فرع جديد
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- جدول الفروع -->
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-store me-2"></i> قائمة الفروع
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-branches">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>اسم الفرع</th>
+                                            <th>ترتيب الفرع</th>
+                                            <th>رقم الهاتف</th>
+                                            <th>رابط العنوان</th>
+                                            <th>الحالة</th>
+                                            <th>الإجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="branches-table-body">
+                                        <!-- سيتم إضافة الصفوف ديناميًا -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="no-branches-message" class="text-center py-4">
+                                <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">لا توجد فروع مضافة حاليًا. قم بإضافة فرع جديد باستخدام الزر أعلاه.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- نافذة إضافة فرع جديد -->
+    <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBranchModalLabel">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        إضافة فرع جديد
+                    </h5>
+                    <button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="branch-form" autocomplete="off" novalidate>
+                        <!-- معلومات الفرع الأساسية -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-info-circle me-2"></i> معلومات الفرع الأساسية
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="branch-name" class="form-label required-field">اسم الفرع</label>
+                                        <input type="text" class="form-control" id="branch-name" placeholder="أدخل اسم الفرع" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="branch-order" class="form-label required-field">ترتيب الفرع</label>
+                                        <input type="number" class="form-control" id="branch-order" placeholder="أدخل ترتيب الفرع" min="1" value="1" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="branch-phone" class="form-label required-field">رقم الهاتف</label>
+                                        <input type="tel" class="form-control" id="branch-phone" placeholder="أدخل رقم الهاتف" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="branch-status" class="form-label">حالة الفرع</label>
+                                        <select class="form-select" id="branch-status">
+                                            <option value="active" selected>مفعل</option>
+                                            <option value="inactive">غير مفعل</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="branch-address-url" class="form-label">رابط عنوان الفرع</label>
+                                    <input type="url" class="form-control" id="branch-address-url" placeholder="أدخل رابط العنوان (Google Maps)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ساعات العمل -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-clock me-2"></i> ساعات العمل
+                            </div>
+                            <div class="card-body">
+                                <!-- جدول ساعات العمل -->
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>اليوم</th>
+                                                <th>من</th>
+                                                <th>إلى</th>
+                                                <th>يوم عطلة</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>الأحد</td>
+                                                <td><input type="time" class="form-control" id="sundayStart" value="09:00"></td>
+                                                <td><input type="time" class="form-control" id="sundayEnd" value="22:00"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input day-closed" type="checkbox" id="sundayClosed" data-day="sunday">
+                                                        <label class="form-check-label" for="sundayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الإثنين</td>
+                                                <td><input type="time" class="form-control" id="mondayStart" value="09:00"></td>
+                                                <td><input type="time" class="form-control" id="mondayEnd" value="22:00"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input day-closed" type="checkbox" id="mondayClosed" data-day="monday">
+                                                        <label class="form-check-label" for="mondayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الثلاثاء</td>
+                                                <td><input type="time" class="form-control" id="tuesdayStart" value="09:00"></td>
+                                                <td><input type="time" class="form-control" id="tuesdayEnd" value="22:00"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input day-closed" type="checkbox" id="tuesdayClosed" data-day="tuesday">
+                                                        <label class="form-check-label" for="tuesdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الأربعاء</td>
+                                                <td><input type="time" class="form-control" id="wednesdayStart" value="09:00"></td>
+                                                <td><input type="time" class="form-control" id="wednesdayEnd" value="22:00"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input day-closed" type="checkbox" id="wednesdayClosed" data-day="wednesday">
+                                                        <label class="form-check-label" for="wednesdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الخميس</td>
+                                                <td><input type="time" class="form-control" id="thursdayStart" value="09:00"></td>
+                                                <td><input type="time" class="form-control" id="thursdayEnd" value="22:00"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input day-closed" type="checkbox" id="thursdayClosed" data-day="thursday">
+                                                        <label class="form-check-label" for="thursdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الجمعة</td>
+                                                <td><input type="time" class="form-control" id="fridayStart" value="16:00"></td>
+                                                <td><input type="time" class="form-control" id="fridayEnd" value="22:00"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input day-closed" type="checkbox" id="fridayClosed" data-day="friday">
+                                                        <label class="form-check-label" for="fridayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>السبت</td>
+                                                <td><input type="time" class="form-control" id="saturdayStart" value="09:00"></td>
+                                                <td><input type="time" class="form-control" id="saturdayEnd" value="22:00"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input day-closed" type="checkbox" id="saturdayClosed" data-day="saturday">
+                                                        <label class="form-check-label" for="saturdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="save-branch-btn">
+                        <i class="fas fa-save me-1"></i> حفظ الفرع
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- نافذة عرض وتعديل الفرع -->
+    <div class="modal fade" id="editBranchModal" tabindex="-1" aria-labelledby="editBranchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editBranchModalLabel">
+                        <i class="fas fa-edit me-2"></i>
+                        تعديل الفرع
+                    </h5>
+                    <button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-branch-form" autocomplete="off" novalidate>
+                        <!-- معلومات الفرع الأساسية -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-info-circle me-2"></i> معلومات الفرع الأساسية
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="edit-branch-name" class="form-label required-field">اسم الفرع</label>
+                                        <input type="text" class="form-control" id="edit-branch-name" placeholder="أدخل اسم الفرع" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="edit-branch-order" class="form-label required-field">ترتيب الفرع</label>
+                                        <input type="number" class="form-control" id="edit-branch-order" placeholder="أدخل ترتيب الفرع" min="1" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="edit-branch-phone" class="form-label required-field">رقم الهاتف</label>
+                                        <input type="tel" class="form-control" id="edit-branch-phone" placeholder="أدخل رقم الهاتف" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="edit-branch-status" class="form-label">حالة الفرع</label>
+                                        <select class="form-select" id="edit-branch-status">
+                                            <option value="active">مفعل</option>
+                                            <option value="inactive">غير مفعل</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-branch-address-url" class="form-label">رابط عنوان الفرع</label>
+                                    <input type="url" class="form-control" id="edit-branch-address-url" placeholder="أدخل رابط العنوان (Google Maps)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ساعات العمل -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-clock me-2"></i> ساعات العمل
+                            </div>
+                            <div class="card-body">
+                                <!-- جدول ساعات العمل -->
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>اليوم</th>
+                                                <th>من</th>
+                                                <th>إلى</th>
+                                                <th>يوم عطلة</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>الأحد</td>
+                                                <td><input type="time" class="form-control" id="edit-sundayStart"></td>
+                                                <td><input type="time" class="form-control" id="edit-sundayEnd"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input edit-day-closed" type="checkbox" id="edit-sundayClosed" data-day="sunday">
+                                                        <label class="form-check-label" for="edit-sundayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الإثنين</td>
+                                                <td><input type="time" class="form-control" id="edit-mondayStart"></td>
+                                                <td><input type="time" class="form-control" id="edit-mondayEnd"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input edit-day-closed" type="checkbox" id="edit-mondayClosed" data-day="monday">
+                                                        <label class="form-check-label" for="edit-mondayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الثلاثاء</td>
+                                                <td><input type="time" class="form-control" id="edit-tuesdayStart"></td>
+                                                <td><input type="time" class="form-control" id="edit-tuesdayEnd"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input edit-day-closed" type="checkbox" id="edit-tuesdayClosed" data-day="tuesday">
+                                                        <label class="form-check-label" for="edit-tuesdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الأربعاء</td>
+                                                <td><input type="time" class="form-control" id="edit-wednesdayStart"></td>
+                                                <td><input type="time" class="form-control" id="edit-wednesdayEnd"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input edit-day-closed" type="checkbox" id="edit-wednesdayClosed" data-day="wednesday">
+                                                        <label class="form-check-label" for="edit-wednesdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الخميس</td>
+                                                <td><input type="time" class="form-control" id="edit-thursdayStart"></td>
+                                                <td><input type="time" class="form-control" id="edit-thursdayEnd"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input edit-day-closed" type="checkbox" id="edit-thursdayClosed" data-day="thursday">
+                                                        <label class="form-check-label" for="edit-thursdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>الجمعة</td>
+                                                <td><input type="time" class="form-control" id="edit-fridayStart"></td>
+                                                <td><input type="time" class="form-control" id="edit-fridayEnd"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input edit-day-closed" type="checkbox" id="edit-fridayClosed" data-day="friday">
+                                                        <label class="form-check-label" for="edit-fridayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>السبت</td>
+                                                <td><input type="time" class="form-control" id="edit-saturdayStart"></td>
+                                                <td><input type="time" class="form-control" id="edit-saturdayEnd"></td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input edit-day-closed" type="checkbox" id="edit-saturdayClosed" data-day="saturday">
+                                                        <label class="form-check-label" for="edit-saturdayClosed">عطلة</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="update-branch-btn">
+                        <i class="fas fa-save me-1"></i> حفظ التغييرات
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // تهيئة المتغيرات العامة
+    let branches = [
+        {
+            id: 1,
+            name: "الفرع الرئيسي - الرياض",
+            order: 1,
+            phone: "0114567890",
+            addressUrl: "https://goo.gl/maps/example1",
+            status: "active",
+            workingHours: [
+                { day: "sunday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "monday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "tuesday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "wednesday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "thursday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "friday", isClosed: false, start: "16:00", end: "22:00" },
+                { day: "saturday", isClosed: false, start: "09:00", end: "22:00" }
+            ]
+        },
+        {
+            id: 2,
+            name: "فرع جدة - التحلية",
+            order: 2,
+            phone: "0126789012",
+            addressUrl: "https://goo.gl/maps/example2",
+            status: "active",
+            workingHours: [
+                { day: "sunday", isClosed: false, start: "10:00", end: "23:00" },
+                { day: "monday", isClosed: false, start: "10:00", end: "23:00" },
+                { day: "tuesday", isClosed: false, start: "10:00", end: "23:00" },
+                { day: "wednesday", isClosed: false, start: "10:00", end: "23:00" },
+                { day: "thursday", isClosed: false, start: "10:00", end: "23:00" },
+                { day: "friday", isClosed: true, start: "", end: "" },
+                { day: "saturday", isClosed: false, start: "10:00", end: "23:00" }
+            ]
+        },
+        {
+            id: 3,
+            name: "فرع الدمام - الراكة",
+            order: 3,
+            phone: "0138901234",
+            addressUrl: "https://goo.gl/maps/example3",
+            status: "active",
+            workingHours: [
+                { day: "sunday", isClosed: false, start: "09:00", end: "21:00" },
+                { day: "monday", isClosed: false, start: "09:00", end: "21:00" },
+                { day: "tuesday", isClosed: false, start: "09:00", end: "21:00" },
+                { day: "wednesday", isClosed: false, start: "09:00", end: "21:00" },
+                { day: "thursday", isClosed: false, start: "09:00", end: "21:00" },
+                { day: "friday", isClosed: true, start: "", end: "" },
+                { day: "saturday", isClosed: false, start: "09:00", end: "21:00" }
+            ]
+        },
+        {
+            id: 4,
+            name: "فرع المدينة المنورة",
+            order: 4,
+            phone: "0148765432",
+            addressUrl: "https://goo.gl/maps/example4",
+            status: "inactive",
+            workingHours: [
+                { day: "sunday", isClosed: false, start: "08:00", end: "20:00" },
+                { day: "monday", isClosed: false, start: "08:00", end: "20:00" },
+                { day: "tuesday", isClosed: false, start: "08:00", end: "20:00" },
+                { day: "wednesday", isClosed: false, start: "08:00", end: "20:00" },
+                { day: "thursday", isClosed: false, start: "08:00", end: "20:00" },
+                { day: "friday", isClosed: true, start: "", end: "" },
+                { day: "saturday", isClosed: false, start: "08:00", end: "20:00" }
+            ]
+        },
+        {
+            id: 5,
+            name: "فرع مكة المكرمة",
+            order: 5,
+            phone: "0125432109",
+            addressUrl: "https://goo.gl/maps/example5",
+            status: "active",
+            workingHours: [
+                { day: "sunday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "monday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "tuesday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "wednesday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "thursday", isClosed: false, start: "09:00", end: "22:00" },
+                { day: "friday", isClosed: true, start: "", end: "" },
+                { day: "saturday", isClosed: false, start: "09:00", end: "22:00" }
+            ]
+        }
+    ];
+    
+    // دالة لتحديث جدول الفروع
+    function updateBranchesTable() {
+        const tableBody = document.getElementById('branches-table-body');
+        const noBranchesMessage = document.getElementById('no-branches-message');
+        
+        if (branches.length === 0) {
+            tableBody.innerHTML = '';
+            noBranchesMessage.style.display = 'block';
+            return;
+        }
+        
+        noBranchesMessage.style.display = 'none';
+        tableBody.innerHTML = branches
+            .sort((a, b) => a.order - b.order)
+            .map((branch, index) => `
+                <tr class="fade-in">
+                    <td>${index + 1}</td>
+                    <td>
+                        <strong>${branch.name}</strong>
+                    </td>
+                    <td>${branch.order}</td>
+                    <td>
+                        <a href="tel:${branch.phone}" class="text-decoration-none">
+                            <i class="fas fa-phone-alt me-1"></i>${branch.phone}
+                        </a>
+                    </td>
+                    <td>
+                        ${branch.addressUrl ? 
+                            `<a href="${branch.addressUrl}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-map-marker-alt me-1"></i> عرض العنوان
+                            </a>` : 
+                            '<span class="text-muted">-</span>'
+                        }
+                    </td>
+                    <td>
+                        <span class="badge ${branch.status === 'active' ? 'bg-success' : 'bg-danger'}">
+                            ${branch.status === 'active' ? 'مفعل' : 'غير مفعل'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-sm btn-primary" onclick="editBranch(${branch.id})" title="تعديل">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteBranch(${branch.id})" title="حذف">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+    }
+    
+    // دالة لجمع بيانات الفرع من النموذج
+    function getBranchFormData() {
+        const workingHours = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+            .map(day => ({
+                day,
+                isClosed: document.getElementById(`${day}Closed`).checked,
+                start: document.getElementById(`${day}Start`).value,
+                end: document.getElementById(`${day}End`).value
+            }));
+    
+        return {
+            name: document.getElementById('branch-name').value.trim(),
+            order: parseInt(document.getElementById('branch-order').value),
+            phone: document.getElementById('branch-phone').value.trim(),
+            addressUrl: document.getElementById('branch-address-url').value.trim(),
+            status: document.getElementById('branch-status').value,
+            workingHours
+        };
+    }
+    
+    // دالة لإظهار الإشعارات
+    function showNotification(message, type = 'success') {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: 'center',
+            backgroundColor: type === 'success' ? '#198754' : '#dc3545',
+            stopOnFocus: true
+        }).showToast();
+    }
+    
+    // معالجة حدث حفظ الفرع
+    document.getElementById('save-branch-btn').addEventListener('click', () => {
+        const branchData = getBranchFormData();
+        if (!branchData.name || !branchData.phone) {
+            showNotification('يرجى ملء جميع الحقول المطلوبة', 'error');
+            return;
+        }
+        
+        if (currentBranchId) {
+            // تحديث فرع موجود
+            const index = branches.findIndex(b => b.id === currentBranchId);
+            if (index !== -1) {
+                branches[index] = { ...branches[index], ...branchData };
+                showNotification('تم تحديث الفرع بنجاح');
+            }
+        } else {
+            // إضافة فرع جديد
+            addBranch(branchData);
+        }
+        
+        bootstrap.Modal.getInstance(document.getElementById('addBranchModal')).hide();
+        resetForm();
+    });
+    
+    // دالة لإعادة تعيين النموذج
+    function resetForm() {
+        document.getElementById('branch-form').reset();
+        currentBranchId = null;
+    }
+    
+    // دالة لتحرير فرع
+    function editBranch(branchId) {
+        const branch = branches.find(b => b.id === branchId);
+        if (!branch) return;
+        
+        currentBranchId = branchId;
+        document.getElementById('branch-name').value = branch.name;
+        document.getElementById('branch-order').value = branch.order;
+        document.getElementById('branch-phone').value = branch.phone;
+        document.getElementById('branch-address-url').value = branch.addressUrl;
+        document.getElementById('branch-status').value = branch.status;
+        
+        branch.workingHours.forEach(hours => {
+            document.getElementById(`${hours.day}Closed`).checked = hours.isClosed;
+            document.getElementById(`${hours.day}Start`).value = hours.start;
+            document.getElementById(`${hours.day}End`).value = hours.end;
+            
+            // تعطيل/تفعيل حقول الوقت
+            document.getElementById(`${hours.day}Start`).disabled = hours.isClosed;
+            document.getElementById(`${hours.day}End`).disabled = hours.isClosed;
+        });
+        
+        const modal = new bootstrap.Modal(document.getElementById('addBranchModal'));
+        modal.show();
+    }
+    
+    // دالة لحذف فرع
+    function deleteBranch(branchId) {
+        if (confirm('هل أنت متأكد من حذف هذا الفرع؟')) {
+            branches = branches.filter(b => b.id !== branchId);
+            updateBranchesTable();
+            showNotification('تم حذف الفرع بنجاح');
+        }
+    }
+    
+    // تهيئة الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+        updateBranchesTable();
+        
+        // معالجة إغلاق النافذة المنبثقة
+        document.getElementById('addBranchModal').addEventListener('hidden.bs.modal', resetForm);
+        
+        // معالجة تعطيل/تفعيل حقول الوقت عند اختيار يوم عطلة
+        document.querySelectorAll('.day-closed').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const day = this.dataset.day;
+                const startInput = document.getElementById(`${day}Start`);
+                const endInput = document.getElementById(`${day}End`);
+                startInput.disabled = this.checked;
+                endInput.disabled = this.checked;
+                if (this.checked) {
+                    startInput.value = '';
+                    endInput.value = '';
+                } else {
+                    startInput.value = '09:00';
+                    endInput.value = '22:00';
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
