@@ -200,6 +200,11 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab" aria-controls="payment" aria-selected="false">
+                    <i class="fas fa-credit-card me-1"></i> إعداد طرق الدفع
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="appearance-tab" data-bs-toggle="tab" data-bs-target="#appearance" type="button" role="tab" aria-controls="appearance" aria-selected="false">
                     <i class="fas fa-qrcode me-1"></i> رمز الاستجابة السريع
                 </button>
@@ -213,6 +218,77 @@
         </ul>
         
         <div class="tab-content" id="settingsTabsContent">
+            <!-- Payment Methods Tab -->
+            <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-money-bill-wave me-2"></i> طرق الدفع المتاحة
+                    </div>
+                    <div class="card-body">
+                        <!-- Cash Payment -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h6 class="mb-1">
+                                    <i class="fas fa-money-bill me-2 text-success"></i> الدفع النقدي
+                                </h6>
+                                <p class="text-muted small mb-0">السماح للعملاء بالدفع نقداً عند الاستلام</p>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="cashPaymentEnabled" checked>
+                            </div>
+                        </div>
+
+                        <!-- Credit Payment -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">
+                                    <i class="fas fa-credit-card me-2 text-primary"></i> المدفوعات الائتمانية
+                                </h6>
+                                <p class="text-muted small mb-0">إعداد بوابة الدفع للمدفوعات الإلكترونية</p>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#creditPaymentModal">
+                                    <i class="fas fa-cog me-1"></i> تكوين
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credit Payment Settings Modal -->
+            <div class="modal fade" id="creditPaymentModal" tabindex="-1" aria-labelledby="creditPaymentModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="creditPaymentModalLabel">
+                                <i class="fas fa-credit-card me-2"></i>
+                                إعدادات المدفوعات الائتمانية
+                            </h5>
+                            <button type="button" class="btn-close ms-0 me-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="paymentGatewayName" class="form-label">الاسم</label>
+                                <input type="text" class="form-control" id="paymentGatewayName" placeholder="أدخل اسم بوابة الدفع">
+                            </div>
+                            <div class="mb-3">
+                                <label for="accessKey" class="form-label">Access Key</label>
+                                <input type="text" class="form-control" id="accessKey" placeholder="أدخل مفتاح الوصول">
+                            </div>
+                            <div class="mb-3">
+                                <label for="accessToken" class="form-label">Access Token</label>
+                                <input type="text" class="form-control" id="accessToken" placeholder="أدخل رمز الوصول">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                            <button type="button" class="btn btn-primary" id="saveCreditSettings">حفظ التغييرات</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- General Tab -->
             <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
                 <div class="card">
@@ -406,6 +482,35 @@
                                 }
                                 
                                 modalDeliveryFees.addEventListener('input', updateModalDeliveryTotal);
+
+                                // معالجة أحداث طرق الدفع
+                                const cashPaymentEnabled = document.getElementById('cashPaymentEnabled');
+                                const saveCreditSettings = document.getElementById('saveCreditSettings');
+                                const paymentGatewayName = document.getElementById('paymentGatewayName');
+                                const accessKey = document.getElementById('accessKey');
+                                const accessToken = document.getElementById('accessToken');
+
+                                // حفظ إعدادات المدفوعات الائتمانية
+                                saveCreditSettings.addEventListener('click', function() {
+                                    const creditSettings = {
+                                        name: paymentGatewayName.value,
+                                        accessKey: accessKey.value,
+                                        accessToken: accessToken.value
+                                    };
+                                    
+                                    // هنا يمكنك إضافة الكود الخاص بحفظ الإعدادات
+                                    console.log('تم حفظ إعدادات المدفوعات الائتمانية:', creditSettings);
+                                    
+                                    // إغلاق النافذة المنبثقة
+                                    const modal = bootstrap.Modal.getInstance(document.getElementById('creditPaymentModal'));
+                                    modal.hide();
+                                });
+
+                                // معالجة تغيير حالة الدفع النقدي
+                                cashPaymentEnabled.addEventListener('change', function() {
+                                    console.log('تم تغيير حالة الدفع النقدي:', this.checked);
+                                    // هنا يمكنك إضافة الكود الخاص بمعالجة تغيير حالة الدفع النقدي
+                                });
                                 modalDeliveryTax.addEventListener('input', updateModalDeliveryTotal);
                                 
                                 // تحديث وظيفة حفظ الإعدادات
@@ -522,7 +627,7 @@
                             <div class="row mb-3 align-items-center social-media-row">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">
-                                        <i class="fab fa-x-twitter me-2"></i> حساب X (تويتر)
+                                        <i class="fa-brands me-2 fa-twitter"></i> حساب X (تويتر)
                                     </label>
                                 </div>
                                 <div class="col-md-2">
