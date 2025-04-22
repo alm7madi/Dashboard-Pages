@@ -519,6 +519,7 @@
 
     <script>
     // تهيئة المتغيرات العامة
+    let currentBranchId = null;
     let branches = [
         {
             id: 1,
@@ -746,6 +747,22 @@
         
         const modal = new bootstrap.Modal(document.getElementById('addBranchModal'));
         modal.show();
+    }
+    
+    // دالة لإضافة فرع جديد
+    function addBranch(branchData) {
+        // إنشاء معرف فريد للفرع الجديد
+        const newId = branches.length > 0 ? Math.max(...branches.map(b => b.id)) + 1 : 1;
+        
+        // إضافة الفرع الجديد إلى المصفوفة
+        branches.push({
+            id: newId,
+            ...branchData
+        });
+        
+        // تحديث جدول الفروع
+        updateBranchesTable();
+        showNotification('تم إضافة الفرع بنجاح');
     }
     
     // دالة لحذف فرع
