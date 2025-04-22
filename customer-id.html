@@ -364,33 +364,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- iziToast JS -->
     <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+    <!-- Toast Notifications JS الموحد -->
+    <script src="toast-notifications.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // تهيئة إعدادات iziToast
-            iziToast.settings({
-                position: 'topCenter',
-                timeout: 5000,
-                closeOnClick: true,
-                pauseOnHover: true,
-                displayMode: 2,
-                rtl: true
-            });
-            
             // زر العودة
             document.getElementById('back-btn').addEventListener('click', function() {
                 window.history.back();
             });
-            
             // استرجاع معرف العميل من الرابط
             const urlParams = new URLSearchParams(window.location.search);
             const customerId = urlParams.get('id');
-            
             // دالة لتحميل بيانات العميل
             function loadCustomerData(id) {
                 // في الواقع، هنا ستقوم بطلب البيانات من الخادم
                 // لكن سنستخدم بيانات وهمية للعرض
-                
                 // بيانات العميل
                 const customerData = {
                     id: id,
@@ -403,7 +392,6 @@
                     totalPurchases: '1,250 ريال',
                     image: 'https://via.placeholder.com/150'
                 };
-                
                 // تحديث واجهة المستخدم ببيانات العميل
                 document.getElementById('customer-name').textContent = customerData.name;
                 document.getElementById('customer-email').textContent = customerData.email;
@@ -412,11 +400,9 @@
                 document.getElementById('orders-count').textContent = customerData.ordersCount + ' طلب';
                 document.getElementById('total-purchases').textContent = customerData.totalPurchases;
                 document.getElementById('customer-image').src = customerData.image;
-                
                 // تحديث حالة العميل
                 const statusElement = document.getElementById('customer-status');
                 const blockBtn = document.getElementById('block-customer-btn');
-                
                 if (customerData.status === 'active') {
                     statusElement.textContent = 'نشط';
                     statusElement.className = 'badge customer-status status-active';
@@ -434,12 +420,10 @@
                     blockBtn.className = 'btn btn-success';
                 }
             }
-            
             // دالة لتحميل طلبات العميل
             function loadCustomerOrders(id) {
                 // في الواقع، هنا ستقوم بطلب البيانات من الخادم
                 // لكن سنستخدم بيانات وهمية للعرض
-                
                 // بيانات الطلبات
                 const ordersData = [
                     {
@@ -471,11 +455,9 @@
                         date: '10 أبريل 2023'
                     }
                 ];
-                
                 // تحديث جدول الطلبات
                 const tableBody = document.getElementById('orders-table-body');
                 tableBody.innerHTML = '';
-                
                 ordersData.forEach(order => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -492,37 +474,26 @@
                     tableBody.appendChild(row);
                 });
             }
-            
             // زر حظر/إلغاء حظر العميل
             document.getElementById('block-customer-btn').addEventListener('click', function() {
                 const statusElement = document.getElementById('customer-status');
                 const currentStatus = statusElement.textContent;
-                
                 if (currentStatus === 'محظور') {
                     // إلغاء حظر العميل
                     statusElement.textContent = 'نشط';
                     statusElement.className = 'badge customer-status status-active';
                     this.innerHTML = '<i class="fas fa-ban me-1"></i> حظر العميل';
                     this.className = 'btn btn-danger';
-                    
-                    iziToast.success({
-                        title: 'تم',
-                        message: 'تم إلغاء حظر العميل بنجاح'
-                    });
+                    showSuccessToast('تم إلغاء حظر العميل بنجاح');
                 } else {
                     // حظر العميل
                     statusElement.textContent = 'محظور';
                     statusElement.className = 'badge customer-status status-blocked';
                     this.innerHTML = '<i class="fas fa-unlock me-1"></i> إلغاء الحظر';
                     this.className = 'btn btn-success';
-                    
-                    iziToast.success({
-                        title: 'تم',
-                        message: 'تم حظر العميل بنجاح'
-                    });
+                    showSuccessToast('تم حظر العميل بنجاح');
                 }
             });
-            
             // تحميل بيانات العميل وطلباته
             if (customerId) {
                 loadCustomerData(customerId);
@@ -532,7 +503,6 @@
                 loadCustomerData('1');
                 loadCustomerOrders('1');
             }
-            
             // تعديل ترتيب العناصر على الشاشات الصغيرة
             function adjustLayoutForMobile() {
                 if (window.innerWidth < 992) {
@@ -541,7 +511,6 @@
                     // إعادة التخطيط للشاشات الكبيرة
                 }
             }
-            
             // تنفيذ الدالة عند تحميل الصفحة وعند تغيير حجم النافذة
             adjustLayoutForMobile();
             window.addEventListener('resize', adjustLayoutForMobile);

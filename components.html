@@ -16,6 +16,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- iziToast CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    
     <style>
         :root {
             --primary-color: #0d6efd;
@@ -230,6 +233,12 @@
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
+    <!-- iziToast JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+    
+    <!-- Toast Notifications JS -->
+    <script src="toast-notifications.js"></script>
+    
     <!-- Custom JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -238,6 +247,7 @@
             if (resetButton) {
                 resetButton.addEventListener('click', function() {
                     document.getElementById('component-form').reset();
+                    showInfoToast('تم إعادة تعيين النموذج');
                 });
             }
             
@@ -248,12 +258,43 @@
                     // التحقق من صحة النموذج
                     const form = document.getElementById('component-form');
                     if (form.checkValidity()) {
-                        // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
-                        alert('تم حفظ المكون بنجاح!');
+                        // محاكاة إرسال البيانات إلى الخادم
+                        simulateServerRequest()
+                            .then(() => {
+                                showSuccessToast('تم حفظ المكون بنجاح!');
+                            })
+                            .catch(() => {
+                                showErrorToast('حدث خطأ أثناء حفظ البيانات، يرجى المحاولة مرة أخرى');
+                            });
                     } else {
                         // تفعيل التحقق من الصحة في النموذج
                         form.classList.add('was-validated');
+                        showErrorToast('يرجى ملء جميع الحقول المطلوبة');
                     }
+                });
+            }
+            
+            // إضافة مستمع الأحداث لزر الإلغاء
+            const cancelButton = document.querySelector('.btn-secondary');
+            if (cancelButton) {
+                cancelButton.addEventListener('click', function() {
+                    showConfirmationToast('هل أنت متأكد من إلغاء العملية؟', function() {
+                        // يمكن إضافة كود للعودة للصفحة السابقة هنا
+                        showInfoToast('تم إلغاء العملية');
+                    });
+                });
+            }
+            
+            /**
+             * محاكاة طلب إلى الخادم (للعرض التوضيحي فقط)
+             * @returns {Promise} - وعد يتم حله بعد فترة زمنية قصيرة
+             */
+            function simulateServerRequest() {
+                return new Promise((resolve) => {
+                    // محاكاة تأخير الشبكة
+                    setTimeout(() => {
+                        resolve();
+                    }, 1000);
                 });
             }
         });
