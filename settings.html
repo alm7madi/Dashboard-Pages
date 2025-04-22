@@ -299,18 +299,40 @@
                         <form id="generalSettingsForm">
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="businessName" class="form-label">اسم المتجر</label>
+                                    <label for="businessName" class="form-label">اسم المتجر - عربي</label>
                                     <input type="text" class="form-control" id="businessName" placeholder="أدخل اسم المتجر" value="مطعم الذواقة">
                                 </div>
                                 <div class="col-md-6">
+                                    <label for="businessNameEN" class="form-label">اسم المتجر - انجليزي</label>
+                                    <input type="text" class="form-control" id="businessNameEN" placeholder="أدخل اسم المتجر بالإنجليزية" value="Al Thawaka Restaurant">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
                                     <label for="businessPhone" class="form-label">رقم الهاتف</label>
                                     <input type="tel" class="form-control" id="businessPhone" placeholder="أدخل رقم الهاتف" value="0512345678">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="taxNumber" class="form-label">الرقم الضريبي</label>
+                                    <input type="text" class="form-control" id="taxNumber" placeholder="أدخل الرقم الضريبي" value="300000000000003">
                                 </div>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="businessAddress" class="form-label">العنوان</label>
                                 <textarea class="form-control" id="businessAddress" rows="2" placeholder="أدخل عنوان العمل"></textarea>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="businessDescAr" class="form-label">وصف المتجر - عربي</label>
+                                    <textarea class="form-control" id="businessDescAr" rows="3" placeholder="أدخل وصف المتجر بالعربية"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="businessDescEn" class="form-label">وصف المتجر - انجليزي</label>
+                                    <textarea class="form-control" id="businessDescEn" rows="3" placeholder="أدخل وصف المتجر بالإنجليزية"></textarea>
+                                </div>
                             </div>
                             
                             <hr class="my-4">
@@ -391,17 +413,7 @@
                             
                             <hr class="my-4">
                             
-                            <!-- في قسم إعدادات المالية، نحذف حقلي رسوم التوصيل والضريبة والتنبيه ونبقي فقط على الرقم الضريبي -->
-                            <div class="card-header bg-transparent px-0 mb-3">
-                                <i class="fas fa-money-bill-wave me-2"></i> إعدادات المالية
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="taxNumber" class="form-label">الرقم الضريبي</label>
-                                    <input type="text" class="form-control" id="taxNumber" placeholder="أدخل الرقم الضريبي" value="300000000000003">
-                                </div>
-                            </div>
+
                             
                             <!-- إضافة النافذة المنبثقة في نهاية الصفحة قبل إغلاق body -->
                             <!-- Modal -->
