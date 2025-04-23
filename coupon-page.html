@@ -89,7 +89,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="row mb-3">
-                                    <div class="col-md-6">
+                                    <div class="col-12">
                                         <label for="couponCode" class="form-label required-field">كود الخصم</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="couponCode" required>
@@ -101,6 +101,26 @@
                                             </button>
                                         </div>
                                         <div class="invalid-feedback">يرجى إدخال كود الخصم</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="branchSelect" class="form-label">تحديد الفرع</label>
+                                        <select class="form-select" id="branchSelect">
+                                            <option value="all" selected>جميع الفروع</option>
+                                            <option value="branch1">الفرع الرئيسي</option>
+                                            <option value="branch2">الفرع الثاني</option>
+                                            <option value="branch3">الفرع الثالث</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="deliveryMethod" class="form-label">طرق التوصيل</label>
+                                        <select class="form-select" id="deliveryMethod">
+                                            <option value="all" selected>الجميع</option>
+                                            <option value="local">محلي</option>
+                                            <option value="pickup">استلام</option>
+                                            <option value="delivery">التوصيل</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -254,12 +274,28 @@
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (validateCouponForm(this)) {
+                    // تجميع بيانات النموذج
+                    const formData = {
+                        couponCode: document.getElementById('couponCode').value,
+                        branch: document.getElementById('branchSelect').value,
+                        deliveryMethod: document.getElementById('deliveryMethod').value,
+                        discountType: document.getElementById('discountType').value,
+                        discountValue: document.getElementById('discountValue').value,
+                        maxDiscount: document.getElementById('maxDiscount').value || null,
+                        totalUsage: document.getElementById('totalUsage').value || null,
+                        userUsage: document.getElementById('userUsage').value || null,
+                        startDateTime: document.getElementById('startDateTime').value,
+                        endDateTime: document.getElementById('endDateTime').value,
+                        notes: document.getElementById('notes').value
+                    };
+
                     // محاكاة إرسال البيانات إلى الخادم
-                    simulateServerRequest()
+                    simulateServerRequest(formData)
                         .then(() => {
                             showSuccessToast('تم حفظ الكوبون بنجاح!');
                             this.reset();
                             generateRandomCode();
+                            document.getElementById('branchSelect').value = 'all'; // إعادة تعيين الفرع إلى الافتراضي
                         })
                         .catch(() => {
                             showErrorToast('حدث خطأ أثناء حفظ الكوبون، يرجى المحاولة مرة أخرى');
