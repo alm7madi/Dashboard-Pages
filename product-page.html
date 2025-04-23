@@ -12,10 +12,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Toastify CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <!-- Toastify JS -->
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <!-- iziToast CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+    <!-- iziToast JS -->
+    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+    <!-- Custom Toast Notifications JS -->
+    <script src="toast-notifications.js"></script>
     <style>
         :root {
             --primary-color: #0d6efd;
@@ -119,15 +121,8 @@
     </style>
 </head>
 <body>
-    <!-- نظام الإشعارات -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-        <div id="notification-toast" class="toast align-items-center text-white" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body"></div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="إغلاق"></button>
-            </div>
-        </div>
-    </div>
+    <!-- تم استبدال نظام الإشعارات بمكتبة iziToast -->
+    <!-- نظام الإشعارات يتم التحكم به من خلال ملف toast-notifications.js -->
 
     <div class="main-container">
         <div class="container-fluid">
@@ -418,6 +413,20 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // زر إعادة تعيين النموذج
+        const resetButton = document.getElementById('reset-product-btn');
+        if (resetButton) {
+            resetButton.addEventListener('click', function() {
+                showConfirmationToast('هل أنت متأكد من إعادة تعيين النموذج؟', function() {
+                    document.getElementById('product-form').reset();
+                    // إعادة تعيين صورة المنتج
+                    document.getElementById('product-image-preview').innerHTML = `<i class="fas fa-cloud-upload-alt"></i>`;
+                    document.getElementById('product-image-upload').value = '';
+                    showInfoToast('تم إعادة تعيين النموذج');
+                });
+            });
+        }
+        
         // صورة المنتج
         const productImagePreview = document.getElementById('product-image-preview');
         const productImageUpload = document.getElementById('product-image-upload');
@@ -607,6 +616,20 @@
             });
         });
 
+        // زر الإلغاء
+        document.getElementById('cancel-product-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // استخدام نظام التأكيد الجديد
+            showConfirmationToast('هل أنت متأكد من إلغاء التعديلات؟', function() {
+                showInfoToast('تم إلغاء التعديلات');
+                
+                // يمكن إضافة تأخير قبل إعادة التوجيه
+                setTimeout(() => {
+                    // window.location.href = 'products-list.html'; // إعادة التوجيه إلى صفحة قائمة المنتجات
+                }, 1500);
+            });
+        });
+        
         // حساب السعر النهائي مع الضريبة
         const basePriceInput = document.getElementById('base-price');
         const taxRateInput = document.getElementById('tax-rate');
@@ -647,58 +670,35 @@
             });
             
             if (!isValid) {
-                showNotification('يرجى ملء جميع الحقول المطلوبة', 'error');
+                showErrorToast('يرجى ملء جميع الحقول المطلوبة');
                 return;
             }
             
-            // إظهار مربع حوار التأكيد
-            const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-            document.getElementById('confirmModalBody').textContent = 'هل أنت متأكد من حفظ المنتج؟';
-            
-            // زر التأكيد
-            document.getElementById('confirmModalYesBtn').onclick = function() {
+            // استخدام نظام التأكيد الجديد
+            showConfirmationToast('هل أنت متأكد من حفظ المنتج؟', function() {
                 // هنا يمكن إضافة كود لإرسال البيانات إلى الخادم
-                confirmModal.hide();
-                showNotification('تم حفظ المنتج بنجاح', 'success');
+                showSuccessToast('تم حفظ المنتج بنجاح');
                 
                 // يمكن إضافة تأخير قبل إعادة التوجيه
                 setTimeout(() => {
                     // window.location.href = 'products-list.html'; // إعادة التوجيه إلى صفحة قائمة المنتجات
                 }, 1500);
-            };
-            
-            confirmModal.show();
+            });
         });
 
-        // دالة عرض الإشعارات
+        // دالة عرض الإشعارات باستخدام iziToast
         function showNotification(message, type) {
-            const toast = document.getElementById('notification-toast');
-            toast.classList.remove('bg-success', 'bg-danger');
-            toast.classList.add(type === 'success' ? 'bg-success' : 'bg-danger');
-            toast.querySelector('.toast-body').textContent = message;
-            const bsToast = new bootstrap.Toast(toast);
-            bsToast.show();
+            if (type === 'success') {
+                showSuccessToast(message);
+            } else if (type === 'error' || type === 'danger') {
+                showErrorToast(message);
+            } else {
+                showInfoToast(message);
+            }
         }
     });
     </script>
 
-    <!-- Confirmation Modal -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmModalLabel">تأكيد العملية</h5>
-            <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="إغلاق"></button>
-          </div>
-          <div class="modal-body" id="confirmModalBody">
-            <!-- سيتم تعبئة النص برمجياً -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-            <button type="button" class="btn btn-primary" id="confirmModalYesBtn">تأكيد</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- تم استبدال مربع الحوار التأكيدي بنظام iziToast -->
 </body>
 </html>
