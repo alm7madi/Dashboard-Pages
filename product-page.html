@@ -392,6 +392,37 @@
                                         <div class="alert alert-info mt-3" id="final-price-display">
                                             السعر المعروض في القائمة سيكون 0.00 ريال شامل الضريبة
                                         </div>
+                                        <div class="border p-3 rounded mt-3">
+                                            <label class="form-label mb-2">سعر مخصص</label>
+                                            <div class="form-check form-switch d-flex align-items-center">
+                                                <input class="form-check-input me-2" type="checkbox" id="discount-switch" style="margin-top: 0;">
+                                                <label class="form-check-label" for="discount-switch">
+                                                    تفعيل سعر مخصص لفترة محددة
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div id="discount-fields" class="d-none">
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="discount-price" class="form-label">سعر التخفيض (بدون ضريبة)</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" id="discount-price" min="0" step="0.01" placeholder="0.00">
+                                                        <span class="input-group-text">ريال</span>
+                                                    </div>
+                                                    <div class="alert alert-info mt-2" id="discount-price-display">
+                                                        سعر التخفيض سيكون 0.00 ريال شامل الضريبة
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="discount-dates" class="form-label">فترة التخفيض</label>
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control" id="discount-start-date" placeholder="تاريخ البداية">
+                                                        <span class="input-group-text">إلى</span>
+                                                        <input type="date" class="form-control" id="discount-end-date" placeholder="تاريخ النهاية">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -634,6 +665,10 @@
         const basePriceInput = document.getElementById('base-price');
         const taxRateInput = document.getElementById('tax-rate');
         const finalPriceDisplay = document.getElementById('final-price-display');
+        const discountSwitch = document.getElementById('discount-switch');
+        const discountFields = document.getElementById('discount-fields');
+        const discountPriceInput = document.getElementById('discount-price');
+        const discountPriceDisplay = document.getElementById('discount-price-display');
 
         function calculateFinalPrice() {
             const basePrice = parseFloat(basePriceInput.value) || 0;
@@ -641,10 +676,28 @@
             const taxAmount = basePrice * (taxRate / 100);
             const finalPrice = basePrice + taxAmount;
             finalPriceDisplay.textContent = `السعر المعروض في القائمة سيكون ${finalPrice.toFixed(2)} ريال شامل الضريبة`;
+
+            // حساب سعر التخفيض مع الضريبة إذا كان مفعلاً
+            if (discountSwitch.checked && discountPriceInput.value) {
+                const discountPrice = parseFloat(discountPriceInput.value) || 0;
+                const discountTaxAmount = discountPrice * (taxRate / 100);
+                const finalDiscountPrice = discountPrice + discountTaxAmount;
+                discountPriceDisplay.textContent = `سعر التخفيض سيكون ${finalDiscountPrice.toFixed(2)} ريال شامل الضريبة`;
+            }
         }
+
+        // إظهار/إخفاء حقول التخفيض
+        discountSwitch.addEventListener('change', function() {
+            discountFields.classList.toggle('d-none', !this.checked);
+            if (!this.checked) {
+                discountPriceInput.value = '';
+                discountPriceDisplay.textContent = 'سعر التخفيض سيكون 0.00 ريال شامل الضريبة';
+            }
+        });
 
         basePriceInput.addEventListener('input', calculateFinalPrice);
         taxRateInput.addEventListener('input', calculateFinalPrice);
+        discountPriceInput.addEventListener('input', calculateFinalPrice);
 
         // تأكيد الحفظ
         document.getElementById('save-product-btn').addEventListener('click', function(e) {
