@@ -26,16 +26,60 @@ document.addEventListener('DOMContentLoaded', function() {
  * يمكن تخصيص هذه الدالة حسب احتياجات كل صفحة
  */
 function initializeEventListeners() {
-    // زر إعادة تعيين النموذج
-    const resetButton = document.getElementById('reset-category-btn');
-    if (resetButton) {
-        resetButton.addEventListener('click', handleFormReset);
+    // التحقق من الصفحة الحالية
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    // إذا كانت الصفحة هي صفحة التصنيفات
+    if (currentPage.includes('category') || currentPage === '') {
+        // زر إعادة تعيين النموذج
+        const resetButton = document.getElementById('reset-category-btn');
+        if (resetButton) {
+            resetButton.addEventListener('click', handleFormReset);
+        }
+        
+        // زر حفظ التصنيف
+        const saveButton = document.getElementById('save-category-btn');
+        if (saveButton) {
+            saveButton.addEventListener('click', handleFormSubmit);
+        }
     }
     
-    // زر حفظ التصنيف
-    const saveButton = document.getElementById('save-category-btn');
-    if (saveButton) {
-        saveButton.addEventListener('click', handleFormSubmit);
+    // إذا كانت الصفحة هي صفحة الكوبونات
+    if (currentPage.includes('coupon')) {
+        // زر إعادة تعيين نموذج الكوبون
+        const resetButton = document.getElementById('reset-coupon-btn');
+        if (resetButton) {
+            resetButton.addEventListener('click', handleFormReset);
+        }
+        
+        // زر حفظ الكوبون
+        const saveButton = document.getElementById('save-coupon-btn');
+        if (saveButton) {
+            saveButton.addEventListener('click', handleFormSubmit);
+        }
+    }
+
+    // إذا كانت الصفحة هي صفحة إعداد الفريق
+    if (currentPage.includes('team-settings')) {
+        // زر إعادة تعيين نموذج الفريق
+        const resetButton = document.getElementById('reset-team-btn');
+        if (resetButton) {
+            resetButton.addEventListener('click', handleFormReset);
+        }
+        
+        // زر حفظ عضو الفريق
+        const saveButton = document.getElementById('save-team-btn');
+        if (saveButton) {
+            saveButton.addEventListener('click', handleFormSubmit);
+        }
+    }
+    
+    // زر العودة في صفحة الملف الشخصي
+    const backButton = document.getElementById('back-btn');
+    if (backButton) {
+        backButton.addEventListener('click', function() {
+            window.history.back();
+        });
     }
 
     // زر الإلغاء
@@ -183,6 +227,47 @@ function showConfirmationToast(message, onConfirm) {
                 }
             }, true],
             ['<button>إلغاء</button>', function (instance, toast) {
+                instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+            }]
+        ]
+    });
+}
+
+/**
+ * عرض مربع حوار لإدخال رمز التحقق
+ * @param {string} title - عنوان مربع الحوار
+ * @param {string} message - نص الرسالة
+ * @param {Function} onConfirm - دالة يتم استدعاؤها عند التأكيد مع إرسال الرمز المدخل
+ */
+function showVerificationDialog(title, message, onConfirm) {
+    iziToast.show({
+        timeout: 0,
+        close: false,
+        overlay: true,
+        displayMode: 'once',
+        id: 'verification-code',
+        zindex: 999,
+        title: title,
+        message: message,
+        position: 'center',
+        inputs: [
+            ['<input type="text" placeholder="رمز التحقق">', 'keyup', function (instance, toast, input, e) {
+                // يمكن إضافة التحقق من الرمز هنا
+            }, true]
+        ],
+        buttons: [
+            ['<button>تأكيد</button>', function (instance, toast, button, e, inputs) {
+                const code = inputs[0].value;
+                if (code) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    if (typeof onConfirm === 'function') {
+                        onConfirm(code);
+                    }
+                } else {
+                    showErrorToast('الرجاء إدخال رمز التحقق');
+                }
+            }, true],
+            ['<button>إلغاء</button>', function (instance, toast, button, e) {
                 instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
             }]
         ]

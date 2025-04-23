@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعداد الفريق</title>
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- Google Tajawal Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- iziToast CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --light-bg: #f8f9fa;
+            --border-radius: 8px;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .main-container {
+            padding: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            font-weight: 600;
+        }
+        .required-field::after {
+            content: "*";
+            color: #dc3545;
+            margin-right: 4px;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .container-fluid {
+            margin-bottom: 50px;
+        }
+        .permissions-list {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .permissions-list .permission-item {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            background-color: #fff;
+            border: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">إضافة عضو جديد للفريق</h4>
+                            <button type="button" class="btn btn-outline-secondary" id="reset-team-btn" aria-label="إعادة تعيين النموذج">
+                                <i class="fas fa-redo-alt me-1"></i> إعادة تعيين
+                            </button>
+                        </div>
+                    </div>
+                    <form id="team-form" class="needs-validation" novalidate>
+                        <!-- معلومات الموظف -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-user-circle me-2"></i> معلومات الموظف
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="username" class="form-label required-field">اسم المستخدم</label>
+                                        <input type="text" class="form-control" id="username" required>
+                                        <div class="invalid-feedback">يرجى إدخال اسم المستخدم</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label required-field">رقم الجوال</label>
+                                        <input type="tel" class="form-control" id="phone" pattern="[0-9]{10}" required>
+                                        <div class="invalid-feedback">يرجى إدخال رقم جوال صحيح (10 أرقام)</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="password" class="form-label required-field">الرقم السري</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="password" required>
+                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback">يرجى إدخال الرقم السري</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="userStatus" class="form-label required-field">حالة المستخدم</label>
+                                        <select class="form-select" id="userStatus" required>
+                                            <option value="" selected disabled>اختر الحالة</option>
+                                            <option value="active">نشط</option>
+                                            <option value="inactive">غير نشط</option>
+                                        </select>
+                                        <div class="invalid-feedback">يرجى اختيار حالة المستخدم</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="position" class="form-label required-field">منصب المستخدم</label>
+                                        <select class="form-select" id="position" required>
+                                            <option value="" selected disabled>اختر المنصب</option>
+                                            <option value="manager">مدير</option>
+                                            <option value="supervisor">مشرف</option>
+                                            <option value="employee">موظف</option>
+                                        </select>
+                                        <div class="invalid-feedback">يرجى اختيار منصب المستخدم</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="notes" class="form-label">ملاحظات</label>
+                                        <textarea class="form-control" id="notes" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- صلاحيات لوحة التحكم -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-lock me-2"></i> صلاحيات لوحة التحكم
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <label for="permissions" class="form-label required-field">تحديد الصلاحيات</label>
+                                        <select class="form-select" id="permissions" multiple required>
+                                            <option value="menu_management">إدارة قائمة الطعام</option>
+                                            <option value="orders_management">إدارة الطلبات</option>
+                                            <option value="users_management">إدارة المستخدمين</option>
+                                            <option value="reports_view">عرض التقارير</option>
+                                            <option value="settings_management">إدارة الإعدادات</option>
+                                        </select>
+                                        <div class="invalid-feedback">يرجى اختيار صلاحية واحدة على الأقل</div>
+                                    </div>
+                                </div>
+                                <div class="permissions-list" id="selectedPermissions">
+                                    <!-- سيتم إضافة الصلاحيات المحددة هنا بشكل ديناميكي -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- أزرار التحكم -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-secondary" id="cancel-btn">
+                                <i class="fas fa-times me-1"></i> إلغاء
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="save-team-btn">
+                                <i class="fas fa-save me-1"></i> حفظ
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- iziToast JS -->
+    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+    <!-- Toast Notifications JS -->
+    <script src="toast-notifications.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تهيئة Select2 للصلاحيات
+            $('#permissions').select2({
+                placeholder: 'اختر الصلاحيات',
+                dir: 'rtl',
+                language: 'ar'
+            });
+
+            // تحديث قائمة الصلاحيات المحددة
+            function updateSelectedPermissions() {
+                const selectedPermissions = $('#permissions').select2('data');
+                const container = document.getElementById('selectedPermissions');
+                container.innerHTML = '';
+
+                if (selectedPermissions.length > 0) {
+                    selectedPermissions.forEach(permission => {
+                        const permissionItem = document.createElement('div');
+                        permissionItem.className = 'permission-item';
+                        permissionItem.innerHTML = `
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            ${permission.text}
+                        `;
+                        container.appendChild(permissionItem);
+                    });
+                } else {
+                    container.innerHTML = '<div class="text-muted">لم يتم تحديد أي صلاحيات</div>';
+                }
+            }
+
+            // مراقبة تغييرات الصلاحيات
+            $('#permissions').on('change', updateSelectedPermissions);
+
+            // زر إظهار/إخفاء كلمة المرور
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+
+            // معالجة تقديم النموذج
+            const form = document.getElementById('team-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validateTeamForm(this)) {
+                    // تجميع بيانات النموذج
+                    const formData = {
+                        username: document.getElementById('username').value,
+                        phone: document.getElementById('phone').value,
+                        password: document.getElementById('password').value,
+                        status: document.getElementById('userStatus').value,
+                        position: document.getElementById('position').value,
+                        notes: document.getElementById('notes').value,
+                        permissions: $('#permissions').val()
+                    };
+
+                    // محاكاة إرسال البيانات إلى الخادم
+                    simulateServerRequest(formData)
+                        .then(() => {
+                            showSuccessToast('تم حفظ بيانات الموظف بنجاح!');
+                            this.reset();
+                            $('#permissions').val(null).trigger('change');
+                            updateSelectedPermissions();
+                        })
+                        .catch(() => {
+                            showErrorToast('حدث خطأ أثناء حفظ البيانات، يرجى المحاولة مرة أخرى');
+                        });
+                }
+            });
+
+            // التحقق من صحة نموذج الفريق
+            function validateTeamForm(form) {
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return false;
+                }
+
+                const permissions = $('#permissions').val();
+                if (!permissions || permissions.length === 0) {
+                    showErrorToast('يرجى اختيار صلاحية واحدة على الأقل');
+                    return false;
+                }
+
+                return true;
+            }
+
+            // زر إعادة التعيين
+            document.getElementById('reset-team-btn').addEventListener('click', function() {
+                form.reset();
+                form.classList.remove('was-validated');
+                $('#permissions').val(null).trigger('change');
+                updateSelectedPermissions();
+                showInfoToast('تم إعادة تعيين النموذج');
+            });
+
+            // زر الإلغاء
+            document.getElementById('cancel-btn').addEventListener('click', function() {
+                showConfirmationToast('هل أنت متأكد من إلغاء العملية؟', function() {
+                    window.history.back();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
