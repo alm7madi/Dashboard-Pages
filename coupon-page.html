@@ -126,12 +126,11 @@
                                 </div>
                                 <div class="row mb-3" id="maxDiscountContainer" style="display: none;">
                                     <div class="col-md-6">
-                                        <label for="maxDiscount" class="form-label required-field">الحد الأقصى للخصم</label>
+                                        <label for="maxDiscount" class="form-label">الحد الأقصى للخصم (اختياري)</label>
                                         <div class="input-group">
-                                            <input type="number" class="form-control" id="maxDiscount" min="0" step="0.01" required>
+                                            <input type="number" class="form-control" id="maxDiscount" min="0" step="0.01" placeholder="اتركه فارغاً لعدم تحديد حد أقصى">
                                             <span class="input-group-text">ر.س</span>
                                         </div>
-                                        <div class="invalid-feedback">يرجى إدخال الحد الأقصى للخصم</div>
                                     </div>
                                 </div>
 
@@ -233,12 +232,10 @@
                         discountValueUnit.textContent = '%';
                         discountValue.max = '100';
                         maxDiscountContainer.style.display = 'block';
-                        maxDiscountInput.setAttribute('required', 'required');
                     } else {
                         discountValueUnit.textContent = 'ر.س';
                         discountValue.removeAttribute('max');
                         maxDiscountContainer.style.display = 'none';
-                        maxDiscountInput.removeAttribute('required');
                     }
                 }
             });
@@ -287,13 +284,16 @@
 
                 if (discountType.value === 'percentage') {
                     const value = parseFloat(discountValue.value);
-                    const maxDiscountValue = parseFloat(maxDiscountInput.value);
-                    const price = 100; // سعر افتراضي للمثال
-                    const calculatedDiscount = (price * value) / 100;
+                    const maxDiscountValue = maxDiscountInput.value ? parseFloat(maxDiscountInput.value) : null;
                     
-                    if (calculatedDiscount > maxDiscountValue) {
-                        showErrorToast(`قيمة الخصم تتجاوز الحد الأقصى المسموح به (${maxDiscountValue} ر.س)`);
-                        return false;
+                    if (maxDiscountValue !== null) {
+                        const price = 100; // سعر افتراضي للمثال
+                        const calculatedDiscount = (price * value) / 100;
+                        
+                        if (calculatedDiscount > maxDiscountValue) {
+                            showErrorToast(`قيمة الخصم تتجاوز الحد الأقصى المسموح به (${maxDiscountValue} ر.س)`);
+                            return false;
+                        }
                     }
                 }
 
