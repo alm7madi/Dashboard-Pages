@@ -366,18 +366,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- iziToast JS -->
     <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+    <!-- Toast Notifications JS -->
+    <script src="toast-notifications.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // تهيئة إعدادات iziToast
-            iziToast.settings({
-                position: 'topCenter',
-                timeout: 5000,
-                closeOnClick: true,
-                pauseOnHover: true,
-                displayMode: 2,
-                rtl: true
-            });
             
             // صورة الملف الشخصي
             const profileImagePreview = document.getElementById('profile-image-preview');
@@ -422,10 +415,7 @@
                 document.getElementById('profile-image-display').src = defaultImage;
                 profileImageUpload.value = '';
                 
-                iziToast.success({
-                    title: 'تم',
-                    message: 'تم حذف الصورة بنجاح'
-                });
+                showSuccessToast('تم حذف الصورة بنجاح');
             });
             
             // إظهار/إخفاء كلمة المرور
@@ -462,10 +452,7 @@
                 document.getElementById('username-display').textContent = '@' + username;
                 document.getElementById('email-display').textContent = email;
                 
-                iziToast.success({
-                    title: 'تم',
-                    message: 'تم تحديث المعلومات الشخصية بنجاح'
-                });
+                showSuccessToast('تم تحديث المعلومات الشخصية بنجاح');
             });
             
             // نموذج تحديث رقم الجوال
@@ -475,58 +462,43 @@
                 const newPhone = document.getElementById('new-phone').value;
                 
                 // عرض إشعار التحقق
-                iziToast.info({
-                    title: 'تحقق',
-                    message: 'تم إرسال رمز التحقق إلى الرقم الجديد',
+                showInfoToast('تم إرسال رمز التحقق إلى الرقم الجديد');
+                
+                // إظهار مربع حوار لإدخال رمز التحقق
+                iziToast.show({
                     timeout: 0,
-                    close: true,
-                    buttons: [
-                        ['<button>إدخال رمز التحقق</button>', function (instance, toast) {
-                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                            
-                            // إظهار مربع حوار لإدخال رمز التحقق
-                            iziToast.show({
-                                timeout: 0,
-                                close: false,
-                                overlay: true,
-                                displayMode: 'once',
-                                id: 'verification-code',
-                                zindex: 999,
-                                title: 'رمز التحقق',
-                                message: 'أدخل رمز التحقق المرسل إلى رقم الجوال الجديد',
-                                position: 'center',
-                                inputs: [
-                                    ['<input type="text" placeholder="رمز التحقق">', 'keyup', function (instance, toast, input, e) {
-                                        // يمكن إضافة التحقق من الرمز هنا
-                                    }, true]
-                                ],
-                                buttons: [
-                                    ['<button>تأكيد</button>', function (instance, toast, button, e, inputs) {
-                                        const code = inputs[0].value;
-                                        if (code) {
-                                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                                            
-                                            // تحديث رقم الجوال في العرض
-                                            document.getElementById('phone-display').textContent = '+966 ' + newPhone;
-                                            document.getElementById('current-phone').value = '+966 ' + newPhone;
-                                            document.getElementById('new-phone').value = '';
-                                            
-                                            iziToast.success({
-                                                title: 'تم',
-                                                message: 'تم تحديث رقم الجوال بنجاح'
-                                            });
-                                        } else {
-                                            iziToast.error({
-                                                message: 'الرجاء إدخال رمز التحقق'
-                                            });
-                                        }
-                                    }, true],
-                                    ['<button>إلغاء</button>', function (instance, toast, button, e) {
-                                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                                    }]
-                                ]
-                            });
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'verification-code',
+                    zindex: 999,
+                    title: 'رمز التحقق',
+                    message: 'أدخل رمز التحقق المرسل إلى رقم الجوال الجديد',
+                    position: 'center',
+                    inputs: [
+                        ['<input type="text" placeholder="رمز التحقق">', 'keyup', function (instance, toast, input, e) {
+                            // يمكن إضافة التحقق من الرمز هنا
                         }, true]
+                    ],
+                    buttons: [
+                        ['<button>تأكيد</button>', function (instance, toast, button, e, inputs) {
+                            const code = inputs[0].value;
+                            if (code) {
+                                instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                                
+                                // تحديث رقم الجوال في العرض
+                                document.getElementById('phone-display').textContent = '+966 ' + newPhone;
+                                document.getElementById('current-phone').value = '+966 ' + newPhone;
+                                document.getElementById('new-phone').value = '';
+                                
+                                showSuccessToast('تم تحديث رقم الجوال بنجاح');
+                            } else {
+                                showErrorToast('الرجاء إدخال رمز التحقق');
+                            }
+                        }, true],
+                        ['<button>إلغاء</button>', function (instance, toast, button, e) {
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        }]
                     ]
                 });
             });
@@ -541,30 +513,21 @@
                 
                 // التحقق من تطابق كلمات المرور
                 if (newPassword !== confirmPassword) {
-                    iziToast.error({
-                        title: 'خطأ',
-                        message: 'كلمة المرور الجديدة وتأكيدها غير متطابقين'
-                    });
+                    showErrorToast('كلمة المرور الجديدة وتأكيدها غير متطابقين');
                     return;
                 }
                 
                 // التحقق من قوة كلمة المرور
                 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
                 if (!passwordRegex.test(newPassword)) {
-                    iziToast.warning({
-                        title: 'تنبيه',
-                        message: 'كلمة المرور ضعيفة. يجب أن تحتوي على 8 أحرف على الأقل وتتضمن حرف كبير وحرف صغير ورقم ورمز خاص.'
-                    });
+                    showWarningToast('كلمة المرور ضعيفة. يجب أن تحتوي على 8 أحرف على الأقل وتتضمن حرف كبير وحرف صغير ورقم ورمز خاص.');
                     return;
                 }
                 
                 // إعادة تعيين النموذج
                 this.reset();
                 
-                iziToast.success({
-                    title: 'تم',
-                    message: 'تم تحديث كلمة المرور بنجاح'
-                });
+                showSuccessToast('تم تحديث كلمة المرور بنجاح');
             });
             
             // زر العودة
