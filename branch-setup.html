@@ -235,6 +235,29 @@
                                     <label for="branch-address-url" class="form-label">رابط عنوان الفرع</label>
                                     <input type="url" class="form-control" id="branch-address-url" placeholder="أدخل رابط العنوان (Google Maps)">
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">طرق الطلب المتوفرة</label>
+                                    <div class="d-flex gap-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="localOrder" checked>
+                                            <label class="form-check-label" for="localOrder">
+                                                <i class="fas fa-store me-1"></i> محلي
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="pickupOrder" checked>
+                                            <label class="form-check-label" for="pickupOrder">
+                                                <i class="fas fa-shopping-bag me-1"></i> استلام
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="deliveryOrder" checked>
+                                            <label class="form-check-label" for="deliveryOrder">
+                                                <i class="fas fa-motorcycle me-1"></i> توصيل
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -395,6 +418,29 @@
                                 <div class="mb-3">
                                     <label for="edit-branch-address-url" class="form-label">رابط عنوان الفرع</label>
                                     <input type="url" class="form-control" id="edit-branch-address-url" placeholder="أدخل رابط العنوان (Google Maps)">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">طرق الطلب المتوفرة</label>
+                                    <div class="d-flex gap-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editLocalOrder">
+                                            <label class="form-check-label" for="editLocalOrder">
+                                                <i class="fas fa-store me-1"></i> محلي
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editPickupOrder">
+                                            <label class="form-check-label" for="editPickupOrder">
+                                                <i class="fas fa-shopping-bag me-1"></i> استلام
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="editDeliveryOrder">
+                                            <label class="form-check-label" for="editDeliveryOrder">
+                                                <i class="fas fa-motorcycle me-1"></i> توصيل
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -664,6 +710,13 @@
                 start: document.getElementById(`${day}Start`).value,
                 end: document.getElementById(`${day}End`).value
             }));
+
+        // جمع بيانات طرق الطلب المتوفرة
+        const orderTypes = {
+            local: document.getElementById('localOrder').checked,
+            pickup: document.getElementById('pickupOrder').checked,
+            delivery: document.getElementById('deliveryOrder').checked
+        };
     
         return {
             name: document.getElementById('branch-name').value.trim(),
@@ -671,7 +724,8 @@
             phone: document.getElementById('branch-phone').value.trim(),
             addressUrl: document.getElementById('branch-address-url').value.trim(),
             status: document.getElementById('branch-status').value,
-            workingHours
+            workingHours,
+            orderTypes
         };
     }
     
@@ -689,6 +743,12 @@
         
         if (!branchData.phone) {
             showErrorToast('يرجى إدخال رقم هاتف الفرع');
+            return;
+        }
+
+        // التحقق من اختيار طريقة طلب واحدة على الأقل
+        if (!branchData.orderTypes.local && !branchData.orderTypes.pickup && !branchData.orderTypes.delivery) {
+            showErrorToast('يرجى اختيار طريقة طلب واحدة على الأقل');
             return;
         }
         
@@ -735,6 +795,13 @@
             document.getElementById(`${hours.day}Start`).disabled = hours.isClosed;
             document.getElementById(`${hours.day}End`).disabled = hours.isClosed;
         });
+
+        // تعيين حالة طرق الطلب
+        if (branch.orderTypes) {
+            document.getElementById('localOrder').checked = branch.orderTypes.local;
+            document.getElementById('pickupOrder').checked = branch.orderTypes.pickup;
+            document.getElementById('deliveryOrder').checked = branch.orderTypes.delivery;
+        }
         
         const modal = new bootstrap.Modal(document.getElementById('addBranchModal'));
         modal.show();
