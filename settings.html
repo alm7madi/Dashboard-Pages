@@ -245,18 +245,29 @@
                         </div>
 
                         <!-- Credit Payment -->
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
                                 <h6 class="mb-1">
                                     <i class="fas fa-credit-card me-2 text-primary"></i> المدفوعات الائتمانية
                                 </h6>
                                 <p class="text-muted small mb-0">السماح للعملاء بالدفع بالبطاقات الائتمانية / مدى</p>
                             </div>
-                            <div>
-                                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#creditPaymentModal">
+                            <div class="d-flex align-items-center">
+                                <!-- زر التكوين أولاً -->
+                                <button type="button" class="btn btn-outline-primary btn-sm me-3" data-bs-toggle="modal" data-bs-target="#creditPaymentModal">
                                     <i class="fas fa-cog me-1"></i> تكوين
                                 </button>
+                                <!-- ثم مفتاح التشغيل -->
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="creditPaymentEnabled" checked>
+                                </div>
                             </div>
+                        </div>
+                        
+                        <!-- أزرار الحفظ والإلغاء -->
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2">إلغاء</button>
+                            <button type="button" class="btn btn-primary">حفظ طرق الدفع</button>
                         </div>
                     </div>
                 </div>
