@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Font - Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1c1c1d;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --border-radius: 0.375rem;
+        }
+        
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .main-container {
+            padding: 2rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Table Design */
+        .table {
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+        
+        .table th {
+            font-weight: 600;
+            border-top: none;
+            background-color: #f8f9fa;
+            padding: 1rem 0.75rem;
+        }
+        
+        .table td {
+            padding: 0.75rem;
+            vertical-align: middle;
+        }
+        
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        /* Customer Image in Table */
+        .customer-img-small {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 1px solid #eee;
+            background-color: #f8f9fa;
+        }
+        
+        .customer-img-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: #f8f9fa;
+            color: #adb5bd;
+            border-radius: 50%;
+            border: 1px solid #eee;
+            font-size: 1.2rem;
+        }
+        
+        /* Customer Status */
+        .status-badge {
+            padding: 0.35rem 0.65rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-inactive {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .status-blocked {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        /* Action Buttons */
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: 0.25rem;
+        }
+        
+        /* Search and Filter Bar */
+        .search-filter-container {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            padding: 0.6rem 1rem;
+            border: 1px solid #ddd;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+        
+        /* Sort Columns */
+        .sortable {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+        
+        .sortable:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+        
+        .sortable.sort-asc .fa-sort:before {
+            content: "\f0de"; /* fa-sort-up */
+        }
+        
+        .sortable.sort-desc .fa-sort:before {
+            content: "\f0dd"; /* fa-sort-down */
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <!-- Title Card -->
+                    <div class="card mb-4">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Customer List</h4>
+                            <a href="customer-new.html" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i> Add New Customer
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Search and Filter Bar -->
+                    <div class="search-filter-container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search customer..." id="search-input">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="status-filter">
+                                    <option value="" selected>All Statuses</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="blocked">Blocked</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="date-filter">
+                                    <option value="" selected>All Dates</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                    <option value="year">This Year</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-primary w-100" id="reset-filters-btn">
+                                    <i class="fas fa-redo-alt me-1"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Customers Table -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-sort="name">Customer Name <i class="fas fa-sort ms-1"></i></th>
+                                    <th class="sortable" data-sort="email">Email <i class="fas fa-sort ms-1"></i></th>
+                                    <th class="sortable" data-sort="phone">Phone <i class="fas fa-sort ms-1"></i></th>
+                                    <th class="sortable" data-sort="date">Join Date <i class="fas fa-sort ms-1"></i></th>
+                                    <th style="width: 100px;">View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Customer Row 1 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Mohammed Ahmed</div>
+                                                <span class="status-badge status-active">Active</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>mohammed@example.com</td>
+                                    <td>+966 50 123 4567</td>
+                                    <td>Jan 15, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=1" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 2 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Sarah Khaled</div>
+                                                <span class="status-badge status-active">Active</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>sarah@example.com</td>
+                                    <td>+966 55 987 6543</td>
+                                    <td>Feb 20, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=2" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 3 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Abdullah Mohammed</div>
+                                                <span class="status-badge status-inactive">Inactive</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>abdullah@example.com</td>
+                                    <td>+966 54 111 2222</td>
+                                    <td>Mar 5, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=3" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 4 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Noura Saad</div>
+                                                <span class="status-badge status-active">Active</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>noura@example.com</td>
+                                    <td>+966 56 333 4444</td>
+                                    <td>Apr 12, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=4" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 5 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Fahad Abdulaziz</div>
+                                                <span class="status-badge status-blocked">Blocked</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>fahad@example.com</td>
+                                    <td>+966 59 555 6666</td>
+                                    <td>May 25, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=5" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Additional 5 customers to make it 10 -->
+                                <!-- Customer Row 6 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Layla Omar</div>
+                                                <span class="status-badge status-active">Active</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>layla@example.com</td>
+                                    <td>+966 58 777 8888</td>
+                                    <td>Jun 8, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=6" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 7 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Khaled Nasser</div>
+                                                <span class="status-badge status-active">Active</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>khaled@example.com</td>
+                                    <td>+966 53 999 0000</td>
+                                    <td>Jul 17, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=7" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 8 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Mona Sulaiman</div>
+                                                <span class="status-badge status-inactive">Inactive</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>mona@example.com</td>
+                                    <td>+966 57 123 4567</td>
+                                    <td>Aug 22, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=8" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 9 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Hassan Ali</div>
+                                                <span class="status-badge status-active">Active</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>hassan@example.com</td>
+                                    <td>+966 50 888 9999</td>
+                                    <td>Sep 3, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=9" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Customer Row 10 -->
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-img-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">Amal Ibrahim</div>
+                                                <span class="status-badge status-active">Active</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>amal@example.com</td>
+                                    <td>+966 55 777 8888</td>
+                                    <td>Oct 15, 2023</td>
+                                    <td>
+                                        <a href="customer-details.html?id=10" class="btn btn-sm btn-outline-primary action-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

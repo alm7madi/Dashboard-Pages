@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Restaurant Management System</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Google Cairo Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        /* Adjust container to fixed width 1200px */
+        .container {
+            max-width: 1200px;
+            width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Container responsiveness for small screens */
+        @media (max-width: 1200px) {
+            .container {
+                width: 100%;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+        
+        /* Card Styles */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            font-weight: 600;
+        }
+        
+        /* Stats Card Styles */
+        .stat-card {
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-icon {
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        /* Table Styles */
+        .table th {
+            font-weight: 600;
+        }
+        .table-responsive {
+            max-height: 300px; 
+            overflow-y: auto;
+        }
+        thead {
+            position: sticky; 
+            top: 0; 
+            background-color: white; 
+            z-index: 1;
+        }
+        
+        /* Badge Styles */
+        .badge-pending, .badge-preparing {
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+            border-radius: 0.25rem;
+            display: inline-block;
+        }
+        .badge-pending {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+        }
+        .badge-preparing {
+            background-color: #17a2b8 !important;
+            color: #fff !important;
+        }
+        
+        /* Button Styles */
+        .btn-view {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-view:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+        
+        /* Chart Styles */
+        .chart-container {
+            height: 300px;
+            max-height: 300px;
+            position: relative;
+            width: 100%;
+        }
+        
+        /* Other Icons and Elements */
+        .navbar-brand {
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="container py-4">
+        <h2 class="mb-4">Dashboard</h2>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <!-- Statistics Cards -->
+            <div class="col-md-3">
+                <div class="card stat-card text-center h-100">
+                    <div class="card-body">
+                        <div class="text-primary stat-icon mb-2">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-value">128</div>
+                        <div class="stat-label">Total Orders Today</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card text-center h-100">
+                    <div class="card-body">
+                        <div class="text-success stat-icon mb-2">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-value">4,250 SAR</div>
+                        <div class="stat-label">Total Sales Today</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card text-center h-100">
+                    <div class="card-body">
+                        <div class="text-warning stat-icon mb-2">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Orders in Progress</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card text-center h-100">
+                    <div class="card-body">
+                        <div class="text-info stat-icon mb-2">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value">45</div>
+                        <div class="stat-label">New Customers This Week</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Orders in Progress Table -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-tasks me-2"></i> Orders in Progress</span>
+                <button class="btn btn-sm btn-outline-secondary">Refresh <i class="fas fa-sync-alt ms-1"></i></button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Delivery Method</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>QR25040001</td>
+                                <td>Ahmed Mohammed</td>
+                                <td>Delivery</td>
+                                <td>
+                                    <div>2023/04/25</div>
+                                    <small class="text-muted">10:15 AM</small>
+                                </td>
+                                <td><span class="badge bg-info text-white">Preparing</span></td>
+                                <td><button class="btn btn-sm btn-view">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>QR25040002</td>
+                                <td>Sarah Abdullah</td>
+                                <td>Pickup</td>
+                                <td>
+                                    <div>2023/04/25</div>
+                                    <small class="text-muted">10:30 AM</small>
+                                </td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                <td><button class="btn btn-sm btn-view">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>QR25040003</td>
+                                <td>Mohammed Khalid</td>
+                                <td>Dine-in</td>
+                                <td>
+                                    <div>2023/04/25</div>
+                                    <small class="text-muted">10:45 AM</small>
+                                </td>
+                                <td><span class="badge bg-info text-white">Preparing</span></td>
+                                <td><button class="btn btn-sm btn-view">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>QR25040004</td>
+                                <td>Fatima Ali</td>
+                                <td>Delivery</td>
+                                <td>
+                                    <div>2023/04/25</div>
+                                    <small class="text-muted">11:00 AM</small>
+                                </td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                <td><button class="btn btn-sm btn-view">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>QR25040005</td>
+                                <td>Abdulrahman Saeed</td>
+                                <td>Pickup</td>
+                                <td>
+                                    <div>2023/04/25</div>
+                                    <small class="text-muted">11:15 AM</small>
+                                </td>
+                                <td><span class="badge bg-info text-white">Preparing</span></td>
+                                <td><button class="btn btn-sm btn-view">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reports and Indicators -->
+        <div class="row">
+            <!-- Sales by Category -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-chart-pie me-2"></i> Sales by Category</span>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="categoryTimeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Daily
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="categoryTimeDropdown">
+                                <li><a class="dropdown-item active" href="#" data-period="daily">Daily</a></li>
+                                <li><a class="dropdown-item" href="#" data-period="weekly">Weekly</a></li>
+                                <li><a class="dropdown-item" href="#" data-period="monthly">Monthly</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="categoryChart" class="chart-container"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sales Trend -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-chart-line me-2"></i> Sales Trend</span>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="salesTrendDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Last 7 Days
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="salesTrendDropdown">
+                                <li><a class="dropdown-item active" href="#" data-trend-period="weekly">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-trend-period="monthly">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="#" data-trend-period="quarterly">Last 3 Months</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="salesTrendChart" class="chart-container"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top Selling Items -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-trophy me-2"></i> Top Selling Items</span>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="topItemsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Daily
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="topItemsDropdown">
+                                <li><a class="dropdown-item active" href="#" data-items-period="daily">Daily</a></li>
+                                <li><a class="dropdown-item" href="#" data-items-period="weekly">Weekly</a></li>
+                                <li><a class="dropdown-item" href="#" data-items-period="monthly">Monthly</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Category</th>
+                                        <th>Sales</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topItemsTable">
+                                    <tr>
+                                        <td>Beef Burger</td>
+                                        <td>Burgers</td>
+                                        <td>85</td>
+                                        <td>1,275 SAR</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Veggie Pizza</td>
+                                        <td>Pizza</td>
+                                        <td>64</td>
+                                        <td>1,152 SAR</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lemonade</td>
+                                        <td>Beverages</td>
+                                        <td>58</td>
+                                        <td>290 SAR</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Caesar Salad</td>
+                                        <td>Salads</td>
+                                        <td>42</td>
+                                        <td>630 SAR</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Chicken Burger</td>
+                                        <td>Burgers</td>
+                                        <td>40</td>
+                                        <td>600 SAR</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Delivery Statistics -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-truck me-2"></i> Delivery Statistics</span>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="deliveryStatsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Daily
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="deliveryStatsDropdown">
+                                <li><a class="dropdown-item active" href="#" data-delivery-period="daily">Daily</a></li>
+                                <li><a class="dropdown-item" href="#" data-delivery-period="weekly">Weekly</a></li>
+                                <li><a class="dropdown-item" href="#" data-delivery-period="monthly">Monthly</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="deliveryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Initialize charts when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chart data for different time periods
+            const chartData = {
+                category: {
+                    daily: {
+                        labels: ['Burgers', 'Pizza', 'Beverages', 'Salads', 'Desserts', 'Main Dishes'],
+                        data: [25, 20, 15, 10, 15, 15]
+                    },
+                    weekly: {
+                        labels: ['Burgers', 'Pizza', 'Beverages', 'Salads', 'Desserts', 'Main Dishes'],
+                        data: [150, 120, 90, 60, 80, 100]
+                    },
+                    monthly: {
+                        labels: ['Burgers', 'Pizza', 'Beverages', 'Salads', 'Desserts', 'Main Dishes'],
+                        data: [600, 480, 350, 250, 320, 400]
+                    }
+                },
+                salesTrend: {
+                    weekly: {
+                        labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                        data: [3200, 3800, 3500, 4200, 4500, 5200, 4250]
+                    },
+                    monthly: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        data: [15000, 17500, 16800, 19200]
+                    },
+                    quarterly: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        data: [45000, 48000, 52000, 49000, 53000, 57000, 55000, 58000, 56000, 59000, 62000, 65000]
+                    }
+                }
+            };
+
+            // Initialize Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            const categoryChart = new Chart(categoryCtx, {
+                type: 'pie',
+                data: {
+                    labels: chartData.category.daily.labels,
+                    datasets: [{
+                        data: chartData.category.daily.data,
+                        backgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#4BC0C0',
+                            '#9966FF',
+                            '#FF9F40'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Initialize Sales Trend Chart
+            const salesTrendCtx = document.getElementById('salesTrendChart').getContext('2d');
+            const salesTrendChart = new Chart(salesTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: chartData.salesTrend.weekly.labels,
+                    datasets: [{
+                        label: 'Sales (SAR)',
+                        data: chartData.salesTrend.weekly.data,
+                        borderColor: '#36A2EB',
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Initialize Delivery Chart
+            const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+            const deliveryChart = new Chart(deliveryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Delivery', 'Pickup', 'Dine-in'],
+                    datasets: [{
+                        label: 'Orders',
+                        data: [45, 35, 20],
+                        backgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
